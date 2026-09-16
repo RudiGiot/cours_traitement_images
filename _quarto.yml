@@ -1,0 +1,39 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Traitement d'Images"
+  subtitle: "Master 2 Informatique"
+  author: "Rudi GIOT" # À modifier avec votre nom
+  date: "Septembre 2026"
+  
+  # C'est ici que l'on définit l'ordre du menu de navigation à gauche
+  chapters:
+    - index.qmd
+    - part: "I. Fondamentaux"
+      chapters: 
+        - 01_introduction.qmd
+        - 02_filtrage_spatial.qmd
+    - part: "II. Cas pratiques"
+      chapters:
+        - 03_segmentation.qmd
+        - 04_use_cases_industrie.qmd
+
+format:
+  html:
+    theme: cosmo        # Un thème sobre, très lisible et moderne
+    toc: true           # Active la table des matières sur la droite
+    toc-depth: 2        # Profondeur de la table des matières
+    number-sections: true 
+    code-fold: false    # Permet de masquer/afficher les longs blocs de code si on le passe à "true"
+    code-tools: true    # Ajoute un bouton pour que les étudiants puissent copier le code
+  
+  pdf:
+    documentclass: scrreprt
+    number-sections: true
+    toc: true
+    colorlinks: true
+
+
+

@@ -1,0 +1,18 @@
+# Fichiers générés par Quarto
+/.quarto/
+_book/
+_site/
+_freeze/
+
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+
+# Fichiers système macOS
+.DS_Store
+
+# Données lourdes (pour le traitement d'images)
+/data/
+*.mp4
+*.avi
