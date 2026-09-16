@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d3f7f8e73c8d287b30bcf59c2b563615.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-ed7344add5f1663e434276306a2aa159.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -241,7 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction-à-lacquisition-dimages" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Introduction à l’acquisition d’images</h1>
-<p>En milieu industriel, l’image parfaite n’existe pas. Les variations d’éclairage, les vibrations des convoyeurs et le bruit thermique des capteurs nécessitent toujours un prétraitement avant de lancer une analyse de conformité.</p>
+<p>Test de modification ! En milieu industriel, l’image parfaite n’existe pas. Les variations d’éclairage, les vibrations des convoyeurs et le bruit thermique des capteurs nécessitent toujours un prétraitement avant de lancer une analyse de conformité.</p>
 <section id="simulation-dun-capteur" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="simulation-dun-capteur"><span class="header-section-number">2.1</span> 1. Simulation d’un capteur</h2>
 <p>Plutôt que d’utiliser une image existante, simulons une pièce mécanique percée (un disque) acquise par un capteur générant du bruit thermique.</p>
@@ -754,40 +754,41 @@ Figure&nbsp;2.1: Simulation d’une acquisition caméra bruitée sur une ligne d
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction à l'acquisition d'images</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>En milieu industriel, l'image parfaite n'existe pas. Les variations d'éclairage, les vibrations des convoyeurs et le bruit thermique des capteurs nécessitent toujours un prétraitement avant de lancer une analyse de conformité.</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Simulation d'un capteur</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>Plutôt que d'utiliser une image existante, simulons une pièce mécanique percée (un disque) acquise par un capteur générant du bruit thermique.</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>C'est ici que la puissance de Python et des librairies comme <span class="in">`NumPy`</span> et <span class="in">`OpenCV`</span> entre en jeu. </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-acquisition</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Simulation d'une acquisition caméra bruitée sur une ligne de production."</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Création d'une image noire 200x200</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>image_nette <span class="op">=</span> np.zeros((<span class="dv">200</span>, <span class="dv">200</span>), dtype<span class="op">=</span>np.uint8)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Dessin d'un trou percé (cercle blanc au centre)</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>cv2.circle(image_nette, (<span class="dv">100</span>, <span class="dv">100</span>), <span class="dv">50</span>, <span class="dv">255</span>, <span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Ajout d'un bruit thermique (typique des caméras à gain élevé)</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>bruit <span class="op">=</span> np.random.randint(<span class="dv">0</span>, <span class="dv">70</span>, (<span class="dv">200</span>, <span class="dv">200</span>), dtype<span class="op">=</span>np.uint8)</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>image_bruitee <span class="op">=</span> cv2.add(image_nette, bruit)</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Affichage avec Matplotlib</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>plt.imshow(image_bruitee, cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>)</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>Comme le montre la @fig-acquisition, la première étape d'un algorithme de vision consistera souvent à lisser ce signal avant d'en extraire les contours.</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>Test de modification !</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>En milieu industriel, l'image parfaite n'existe pas. Les variations d'éclairage, les vibrations des convoyeurs et le bruit thermique des capteurs nécessitent toujours un prétraitement avant de lancer une analyse de conformité.</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Simulation d'un capteur</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>Plutôt que d'utiliser une image existante, simulons une pièce mécanique percée (un disque) acquise par un capteur générant du bruit thermique.</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>C'est ici que la puissance de Python et des librairies comme <span class="in">`NumPy`</span> et <span class="in">`OpenCV`</span> entre en jeu. </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-acquisition</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Simulation d'une acquisition caméra bruitée sur une ligne de production."</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Création d'une image noire 200x200</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>image_nette <span class="op">=</span> np.zeros((<span class="dv">200</span>, <span class="dv">200</span>), dtype<span class="op">=</span>np.uint8)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Dessin d'un trou percé (cercle blanc au centre)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>cv2.circle(image_nette, (<span class="dv">100</span>, <span class="dv">100</span>), <span class="dv">50</span>, <span class="dv">255</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Ajout d'un bruit thermique (typique des caméras à gain élevé)</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>bruit <span class="op">=</span> np.random.randint(<span class="dv">0</span>, <span class="dv">70</span>, (<span class="dv">200</span>, <span class="dv">200</span>), dtype<span class="op">=</span>np.uint8)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>image_bruitee <span class="op">=</span> cv2.add(image_nette, bruit)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Affichage avec Matplotlib</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>plt.imshow(image_bruitee, cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>Comme le montre la @fig-acquisition, la première étape d'un algorithme de vision consistera souvent à lisser ce signal avant d'en extraire les contours.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
