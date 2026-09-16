@@ -1,0 +1,87 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Traitement d’Images",
+    "section": "",
+    "text": "Accueil\nBienvenue dans le support du cours de Traitement d’Images, destiné aux étudiants de 2ème Master en Informatique de l’ISIB-HE2B.\nL’objectif de ce cours est de faire le pont entre les fondements théoriques de la vision par ordinateur et le déploiement d’algorithmes robustes dans un contexte industriel (contrôle qualité, vision robotique, mesure de pièces).",
+    "crumbs": [
+      "Accueil"
+    ]
+  },
+  {
+    "objectID": "index.html#approche-pédagogique",
+    "href": "index.html#approche-pédagogique",
+    "title": "Traitement d’Images",
+    "section": "Approche Pédagogique",
+    "text": "Approche Pédagogique\nCe support suit la philosophie du Docs as Code. Il ne s’agit pas d’un simple recueil de diapositives, mais d’une documentation technique vivante comprenant :\n\nLe cadre théorique : Les principes mathématiques et algorithmiques.\nL’implémentation Python : Du code basé sur les standards de l’industrie (OpenCV, scikit-image, NumPy).\nDes Use Cases : Des cas concrets avec des jeux de données.",
+    "crumbs": [
+      "Accueil"
+    ]
+  },
+  {
+    "objectID": "index.html#environnement-de-travail",
+    "href": "index.html#environnement-de-travail",
+    "title": "Traitement d’Images",
+    "section": "Environnement de Travail",
+    "text": "Environnement de Travail\nPour les séances d’exercices et la réalisation de vos projets, vous aurez besoin de configurer votre environnement local.\n\n\n\n\n\n\nNotePrérequis d’installation\n\n\n\nAssurez-vous de disposer des éléments suivants sur votre machine : 1. Python 3.10+ avec un environnement virtuel configuré (venv ou conda). 2. Les bibliothèques listées dans le requirements.txt du cours (fourni au premier cours). 3. VS Code avec l’extension Jupyter pour exécuter les notebooks fournis.",
+    "crumbs": [
+      "Accueil"
+    ]
+  },
+  {
+    "objectID": "01_introduction.html",
+    "href": "01_introduction.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "2 Introduction à l’acquisition d’images\nEn milieu industriel, l’image parfaite n’existe pas. Les variations d’éclairage, les vibrations des convoyeurs et le bruit thermique des capteurs nécessitent toujours un prétraitement avant de lancer une analyse de conformité.",
+    "crumbs": [
+      "I. Fondamentaux",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01_introduction.html#simulation-dun-capteur",
+    "href": "01_introduction.html#simulation-dun-capteur",
+    "title": "1  Introduction",
+    "section": "2.1 1. Simulation d’un capteur",
+    "text": "2.1 1. Simulation d’un capteur\nPlutôt que d’utiliser une image existante, simulons une pièce mécanique percée (un disque) acquise par un capteur générant du bruit thermique.\nC’est ici que la puissance de Python et des librairies comme NumPy et OpenCV entre en jeu.\n\nimport cv2\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n# 1. Création d'une image noire 200x200\nimage_nette = np.zeros((200, 200), dtype=np.uint8)\n\n# 2. Dessin d'un trou percé (cercle blanc au centre)\ncv2.circle(image_nette, (100, 100), 50, 255, -1)\n\n# 3. Ajout d'un bruit thermique (typique des caméras à gain élevé)\nbruit = np.random.randint(0, 70, (200, 200), dtype=np.uint8)\nimage_bruitee = cv2.add(image_nette, bruit)\n\n# 4. Affichage avec Matplotlib\nplt.imshow(image_bruitee, cmap='gray')\nplt.axis('off')\nplt.show()\n\n\n\n\n\n\n\nFigure 2.1: Simulation d’une acquisition caméra bruitée sur une ligne de production.\n\n\n\n\n\nComme le montre la Figure 2.1, la première étape d’un algorithme de vision consistera souvent à lisser ce signal avant d’en extraire les contours.",
+    "crumbs": [
+      "I. Fondamentaux",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "02_filtrage_spatial.html",
+    "href": "02_filtrage_spatial.html",
+    "title": "2  Filtrage",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee @knuth84 for additional discussion of literate programming.",
+    "crumbs": [
+      "I. Fondamentaux",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Filtrage</span>"
+    ]
+  },
+  {
+    "objectID": "03_segmentation.html",
+    "href": "03_segmentation.html",
+    "title": "3  Segmentation",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee @knuth84 for additional discussion of literate programming.",
+    "crumbs": [
+      "II. Cas pratiques",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Segmentation</span>"
+    ]
+  },
+  {
+    "objectID": "04_use_cases_industrie.html",
+    "href": "04_use_cases_industrie.html",
+    "title": "4  Use cases",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee @knuth84 for additional discussion of literate programming.",
+    "crumbs": [
+      "II. Cas pratiques",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Use cases</span>"
+    ]
+  }
+]
