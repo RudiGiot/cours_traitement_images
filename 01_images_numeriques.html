@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Images numériques – Traitement d'Images</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02_codage_couleurs.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-ed7344add5f1663e434276306a2aa159.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_images_numeriques.html">I. Fondamentaux</a></li><li class="breadcrumb-item"><a href="./01_images_numeriques.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Images numériques</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Traitement d’Images</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Accueil</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">I. Fondamentaux</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_images_numeriques.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Images numériques</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_codage_couleurs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Filtrage</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">II. Cas pratiques</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Segmentation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#loeil" id="toc-loeil" class="nav-link active" data-scroll-target="#loeil"><span class="header-section-number">1.1</span> L’oeil</a></li>
+  <li><a href="#champs-de-vision" id="toc-champs-de-vision" class="nav-link" data-scroll-target="#champs-de-vision"><span class="header-section-number">1.2</span> Champs de vision</a></li>
+  <li><a href="#la-lumière" id="toc-la-lumière" class="nav-link" data-scroll-target="#la-lumière"><span class="header-section-number">1.3</span> La lumière</a></li>
+  <li><a href="#la-couleur" id="toc-la-couleur" class="nav-link" data-scroll-target="#la-couleur"><span class="header-section-number">1.4</span> La couleur</a></li>
+  <li><a href="#création-et-manipulation-dune-image-en-python" id="toc-création-et-manipulation-dune-image-en-python" class="nav-link" data-scroll-target="#création-et-manipulation-dune-image-en-python"><span class="header-section-number">1.5</span> Création et manipulation d’une image en Python</a></li>
+  <li><a href="#la-bibliothèque-opencv-le-standard-industriel" id="toc-la-bibliothèque-opencv-le-standard-industriel" class="nav-link" data-scroll-target="#la-bibliothèque-opencv-le-standard-industriel"><span class="header-section-number">1.6</span> La bibliothèque OpenCV : le standard industriel</a></li>
+  <li><a href="#exercices-de-réflexion" id="toc-exercices-de-réflexion" class="nav-link" data-scroll-target="#exercices-de-réflexion"><span class="header-section-number">1.7</span> Exercices de réflexion</a></li>
+  <li><a href="#exercices-de-programmation-création-dimages-matricielles" id="toc-exercices-de-programmation-création-dimages-matricielles" class="nav-link" data-scroll-target="#exercices-de-programmation-création-dimages-matricielles"><span class="header-section-number">1.8</span> Exercices de programmation : Création d’images matricielles</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_images_numeriques.html">I. Fondamentaux</a></li><li class="breadcrumb-item"><a href="./01_images_numeriques.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Images numériques</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Images numériques</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Dans le monde numérique une image est représentée par une grille, un tableau de pixels.</p>
+<div id="fig-pixel" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pixel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/pixel.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pixel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Le pixel dans une image numérique
+</figcaption>
+</figure>
+</div>
+<p>Le pixel est le plus petit élément constitutif d’une image, il est indivisible et est souvent stocké comme élément numérique dans une matrice. Le ou les nombres associés au pixel représente une caractéristique de cette partie de l’image, souvent sa couleur. Pour caractériser ces couleurs, il faut d’abord commencer à étudier les caractéristiques de la lumières et de l’oeil.</p>
+<section id="loeil" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="loeil"><span class="header-section-number">1.1</span> L’oeil</h2>
+<p>La compréhension des couleurs et de leur système de codage, de classification, requière une étude préalable du fonctionnement de l’oeil. Nous distinguerons deux parties dans cette section, la première traitera du champs de vision et de son importance dans la détermination de la résolution d’une image, la seconde expliquera comment les couleurs sont perçues, captées, interprétées par une oeil humain et codée dans un système numérique.</p>
+</section>
+<section id="champs-de-vision" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="champs-de-vision"><span class="header-section-number">1.2</span> Champs de vision</h2>
+</section>
+<section id="la-lumière" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="la-lumière"><span class="header-section-number">1.3</span> La lumière</h2>
+<p>La lumière est un rayonnement électromagnétique composé de photons, c’est-à-dire de particules élémentaires sans masse. Cette énergie est soumise à toutes les lois physiques correspondantes. La vitesse de la lumière dans le vide est une constante, notée <span class="math inline">\(c\)</span> et approximativement égale à <span class="math inline">\(300~000\)</span> km/s. La vitesse de propagation varie en fonction du milieu traversé :</p>
+<p><span id="eq-vitesse-propagation"><span class="math display">\[
+v = \frac{c}{n}
+\tag{1.1}\]</span></span></p>
+<p><span class="math inline">\(n\)</span> » dépend des milieux, il est égal à 1 dans le vide.</p>
+<p>Une lumière monochromatique possède une fréquence <span class="math inline">\(f\)</span> indépendante du milieu, mais sa longueur d’onde <span class="math inline">\(\lambda\)</span> dépend du milieu.</p>
+<p><span id="eq-longueur-onde"><span class="math display">\[
+\lambda = \frac{v}{f}
+\tag{1.2}\]</span></span></p>
+<p>Il semble donc évident de caractériser une lumière monochromatique par sa fréquence puisqu’il s’agit d’une constante. Néanmoins, c’est généralement la longueur d’onde (supposée dans le vide) qui est choisie pour la définir.</p>
+<div id="fig-pixel" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pixel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/prisme.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pixel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Dispersion de la lumière dans le prisme de Newton
+</figcaption>
+</figure>
+</div>
+<p>Physiquement, la lumière blanche n’existe pas. Le “blanc” n’est pas une longueur d’onde unique, c’est une perception purement biologique et colorimétrique. Elle est le résultat d’une combinaison d’un ensemble de rayonnements. Le prisme de Newton (Figure 1) facilite l’observation de cette dispersion lumineuse : émise par le soleil ou par une lampe à incandescence, la lumière traverse le prisme avec un angle d’incidence α par rapport à la normale. Lorsque le rayon lumineux passe de l’air au verre, sa vitesse diminue et sa longueur d’onde se comprime, mais sa fréquence (sa “couleur” fondamentale) reste strictement identique car elle ne dépend que de la source d’émission. Le faisceau change alors de direction et se rapproche de la normale au niveau de la surface de séparation, au point d’incidence. C’est le phénomène de réfraction. Le même phénomène s’observe à la sortie du prisme, lors, par exemple, d’une transition verre-air.</p>
+<p>L’angle total de réfraction varie en fonction des longueurs d’onde des rayonnements incidents (la valeur de <span class="math inline">\(\lambda\)</span> la plus élevée correspond aux déviations les plus faibles). Sur un écran blanc situé à la sortie du prisme, on peut observer une bande lumineuse dont la couleur varie progressivement du rouge au violet. À chacun de ces rayonnements (appelés « monochromatiques ») est associée une longueur d’onde (de 400 nm pour le violet jusqu’à 780 nm pour le rouge).</p>
+<p>L’œil perçoit donc des mélanges de lumières monochromatiques dans des proportions différentes. C’est ce qui donne la sensation de couleur.Le spectre électromagnétique des longueurs d’onde s’étend de <span class="math inline">\(10^{-10}\)</span> µm à <span class="math inline">\(10^5\)</span> km.</p>
+<p>Ce spectre est détaillé dans le tableau suivant :</p>
+<p>Tableau 1 : Le spectre électromagnétiqueLa lumière peut être représentée par la courbe de distribution spectrale de son énergie lumineuse (répartition du flux énergétique en fonction de la longueur d’onde).</p>
+<p>Figure 2 : Courbe de distribution spectrale de l’énergie lumineuse dans un ciel bleu</p>
+</section>
+<section id="la-couleur" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="la-couleur"><span class="header-section-number">1.4</span> La couleur</h2>
+<p>La sensation de couleur d’un objet provient du fait qu’une partie de la lumière incidente est réfléchie. On peut donc dire qu’un objet ne possède pas de couleur propre. La couleur perçue dépend effectivement de :</p>
+<ul>
+<li>la source lumineuse</li>
+<li>la manière dont la lumière se propage</li>
+<li>la sensibilité différentielle de l’œil</li>
+</ul>
+<p>Néanmoins, la couleur d’un objet pourrait être complètement définie par sa courbe de réflectance. Cette courbe représente en pourcentage l’énergie lumineuse réfléchie en fonction de la longueur d’onde incidente.</p>
+<section id="les-différents-blancs" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="les-différents-blancs"><span class="header-section-number">1.4.1</span> Les différents blancs</h3>
+<p>Il est nécessaire, dans toute tentative de modélisation, de définir des références.</p>
+<p>Légende</p>
+<p>Le blanc produit par une puissance constante de chacun des rayonnements du spectre visible (BLANC E) est sans doute celui qui semblait le plus logique pour définir ce point de référence. Pourtant, il n’est pas considéré comme tel car il est difficile à produire.</p>
+<p>Légende</p>
+<p>Trois sources standards ont été définies par la Commission Internationale de l’Éclairage (CIE). Celles-ci peuvent être obtenues par un corps noir chauffé jusqu’à incandescence à une certaine température :</p>
+<ul>
+<li><strong>le blanc A</strong> (éclairage d’une lampe à filament de tungstène) correspond à une température du corps noir de 2848 °K.</li>
+<li><strong>le blanc B</strong> (lumière du jour à midi en été) correspond à la température du corps noir de 4800 °K.</li>
+<li><strong>le blanc C</strong> (lumière du soleil filtrée par les nuages) correspond à la température du corps noir de 6500 °K. C’est celui-ci qui a été choisi comme référence.</li>
+</ul>
+</section>
+<section id="synthèse-additive" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="synthèse-additive"><span class="header-section-number">1.4.2</span> Synthèse additive</h3>
+<p>Une expérience simple et pratique consiste à éclairer un support quelconque avec une lumière donnée. Un observateur doit ensuite reproduire la même valeur, sous la forme d’une tache colorée adjacente, à l’aide d’une ou plusieurs sources monochromatiques (une seule longueur d’onde) dont il peut faire varier l’intensité. De nombreuses expériences de ce type ont mis en évidence plusieurs propriétés intéressantes du système visuel humain.</p>
+<p>Si l’observateur ne dispose que d’une seule source monochromatique, il ne pourra apparier son test lumineux avec la référence que si elle possède la même longueur d’onde. Il sera toutefois toujours en mesure d’obtenir une intensité lumineuse équivalente. En revanche, l’utilisation exclusive de trois sources différentes lui permettra d’apparier pratiquement toutes les lumières testées, à condition que les lumières de référence soient suffisamment éloignées les unes des autres dans le spectre visible. Cela correspond donc respectivement à des sources de longueur d’onde faible (bleu), moyenne (vert) et élevée (rouge).</p>
+<p><strong>Synthèse additive des couleurs</strong></p>
+<p>Si le mélange est réalisé entre les rayonnements extrêmes du spectre, on obtient une plage subjective (qui n’existe pas dans le spectre visible) que l’on appelle « la gamme des pourpres ».</p>
+<p>La combinaison de ces paramètres offre plus d’un million de possibilités. Cette différenciation est moins visible dans certaines conditions (lumière faible). On admet généralement que l’œil distingue environ 400 000 couleurs différentes.</p>
+</section>
+<section id="principes-de-base-et-lois" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="principes-de-base-et-lois"><span class="header-section-number">1.4.3</span> Principes de base et lois</h3>
+<p>Le principe du procédé trichrome a été formulé par YOUNG, MAXWELL et HELMHOLTZ : « Toute sensation colorée peut être obtenue à partir d’un mélange de trois couleurs judicieusement sélectionnées. Ce mélange peut être soit additif (comme dans l’expérience), soit soustractif (utilisation de filtres). »</p>
+<p>Les lois de GRASSMANN ont la même origine. Si <span class="math inline">\(S_1\)</span>, <span class="math inline">\(S_2\)</span> et <span class="math inline">\(S_3\)</span> sont les trois sources standards et « <span class="math inline">\(m\)</span> » la couleur à reproduire, alors :</p>
+<ol type="1">
+<li><p>Toute couleur peut résulter de la somme de quantités positives ou négatives des trois couleurs primaires. Ces quantités sont uniques. <span id="eq-grassmann-1"><span class="math display">\[
+m = a \cdot S_1 + b \cdot S_2 + c \cdot S_3
+\tag{1.3}\]</span></span></p></li>
+<li><p>Si <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span> et <span class="math inline">\(c\)</span> (l’énergie de chaque source) varient dans les mêmes proportions (par un facteur <span class="math inline">\(k\)</span>), l’équation de la première règle reste valide (loi de proportionnalité). <span id="eq-grassmann-2"><span class="math display">\[
+k \cdot m = (k \cdot a) \cdot S_1 + (k \cdot b) \cdot S_2 + (k \cdot c) \cdot S_3
+\tag{1.4}\]</span></span></p></li>
+</ol>
+<p><strong>Pour les mélanges additifs (loi d’additivité) :</strong></p>
+<p>Si la couleur <span class="math inline">\(m_1\)</span> est définie par : <span id="eq-grassmann-add-1"><span class="math display">\[
+m_1 = a_1 \cdot S_1 + b_1 \cdot S_2 + c_1 \cdot S_3
+\tag{1.5}\]</span></span></p>
+<p>Et que la couleur <span class="math inline">\(m_2\)</span> est définie par : <span id="eq-grassmann-add-2"><span class="math display">\[
+m_2 = a_2 \cdot S_1 + b_2 \cdot S_2 + c_2 \cdot S_3
+\tag{1.6}\]</span></span></p>
+<p>Alors, le mélange de ces deux couleurs donne : <span id="eq-grassmann-add-resultat"><span class="math display">\[
+m_1 + m_2 = (a_1 + a_2) \cdot S_1 + (b_1 + b_2) \cdot S_2 + (c_1 + c_2) \cdot S_3
+\tag{1.7}\]</span></span></p>
+</section>
+<section id="les-différents-modèles" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="les-différents-modèles"><span class="header-section-number">1.4.4</span> Les différents modèles</h3>
+<section id="le-modèle-rgb-rvb" class="level4" data-number="1.4.4.1">
+<h4 data-number="1.4.4.1" class="anchored" data-anchor-id="le-modèle-rgb-rvb"><span class="header-section-number">1.4.4.1</span> Le modèle RGB (RVB)</h4>
+<p>À ce stade, on pourrait penser qu’une couleur donnée résulte simplement de la superposition de ses composantes verte, rouge et bleue.</p>
+<p>Cette conclusion, un peu hâtive, ne serait pas tout à fait complète. D’une part, les différents cônes de l’œil ne sont pas sensibles à une seule longueur d’onde (mais à un intervalle), et d’autre part, l’œil ne constitue qu’un simple récepteur physique. C’est en effet le cerveau qui « produit » la couleur à partir des signaux qu’il reçoit de ses « capteurs ». Ainsi, la méthode d’interprétation qu’il développe contribue considérablement aux caractéristiques de la vision humaine.</p>
+<p>Le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais il n’est pas le seul.</p>
+</section>
+<section id="le-modèle-hsl-tsl-teinte-saturation-luminosité" class="level4" data-number="1.4.4.2">
+<h4 data-number="1.4.4.2" class="anchored" data-anchor-id="le-modèle-hsl-tsl-teinte-saturation-luminosité"><span class="header-section-number">1.4.4.2</span> Le modèle HSL (TSL : Teinte, Saturation, Luminosité)</h4>
+<p>Si vous écoutez une personne décrire une couleur, cela donnera quelque chose comme : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair). Le modèle HSL a été classifié par MUNSELL en 1905.</p>
+<p>Une couleur pure sera saturée à 100 %. Si la saturation atteint 0 % (et non 100 % comme l’erreur de frappe du texte d’origine semble l’indiquer), il n’y a plus de dominante de couleur : la couleur est dite achromatique (absence de couleur). Cela révèle une nuance de gris, allant du blanc au noir selon la luminosité. Le cerveau agit donc comme un intégrateur qui détecte trois grandeurs physiques distinctes :</p>
+<ul>
+<li><strong>La teinte (Hue) :</strong> caractérisée par la longueur d’onde dominante du rayonnement (± 250 teintes monochromatiques détectables par l’œil, plus les pourpres).</li>
+<li><strong>La luminosité ou clarté (Lightness) :</strong> l’énergie lumineuse reçue (± 1000 niveaux de luminosité différents, selon la teinte).</li>
+<li><strong>La saturation (Saturation ou pureté de la couleur) :</strong> contribue à l’intensité de l’ensemble et permet de différencier une couleur vive d’une couleur pastel (atténuée) (± 20 000 différenciations).</li>
+</ul>
+</section>
+<section id="le-modèle-cie-au-lieu-de-icl" class="level4" data-number="1.4.4.3">
+<h4 data-number="1.4.4.3" class="anchored" data-anchor-id="le-modèle-cie-au-lieu-de-icl"><span class="header-section-number">1.4.4.3</span> Le modèle CIE (au lieu de ICL)</h4>
+<p>En 1931, la Commission Internationale de l’Éclairage (CIE) a fixé un modèle universel pour la représentation des couleurs afin de permettre la comparaison entre les indications fournies par différents colorimètres.</p>
+<p>Le système choisi comme référence (RGB) est défini par les trois primaires suivantes :</p>
+<ul>
+<li><strong>ROUGE :</strong> 700 nm</li>
+<li><strong>VERT :</strong> 546,1 nm</li>
+<li><strong>BLEU :</strong> 435,8 nm</li>
+</ul>
+<p>Si l’on calcule les quantités primaires de rouge, de vert et de bleu que l’on doit mélanger pour obtenir l’égalisation d’une lumière blanche E, on obtient les coefficients trichromatiques <span class="math inline">\((R, V, B)\)</span>.</p>
+<p>Par définition (pour normaliser l’énergie lumineuse et s’affranchir de la luminance), on calcule les coordonnées chromatiques <span class="math inline">\(r, v, b\)</span> :</p>
+<p><span class="math display">\[r = \frac{R}{R+V+B} \quad ; \quad v = \frac{V}{R+V+B} \quad ; \quad b = \frac{B}{R+V+B}\]</span></p>
+<p>{#eq-coefficients-rvb}</p>
+<p>Ce qui implique la relation fondamentale :</p>
+<p><span class="math display">\[r + v + b = 1\]</span></p>
+<p>{#eq-unite-rvb}</p>
+<p>Ensuite, nous pouvons calculer ces coefficients pour chacun des rayonnements monochromatiques du spectre (avec les mêmes primaires et le même éclairage) et tracer les courbes d’égalisation du spectre équi-énergétique.</p>
+<p>Cependant, on préfère une représentation par projection sur un plan donné d’un système à trois axes avec les coordonnées <span class="math inline">\(R\)</span>, <span class="math inline">\(V\)</span> et <span class="math inline">\(B\)</span>. Si l’on associe à chacune des longueurs d’onde (de 400 nm à 700 nm) un vecteur <span class="math inline">\(OC\)</span> ayant pour composantes les coefficients trichromatiques, on visualise alors une courbe gauche (tridimensionnelle) dans un repère orthonormé standard. Cette courbe est le lieu des extrémités de ces vecteurs. À partir de cette courbe, nous allons délimiter une partie de l’espace colorimétrique.</p>
+<p>Les limites de ce sous-espace sont :</p>
+<ul>
+<li>La surface conique formée par le rayon <span class="math inline">\(OC\)</span> (<span class="math inline">\(C\)</span> appartenant à la courbe gauche).</li>
+<li>La surface plane <span class="math inline">\(Od\)</span> (où <span class="math inline">\(d\)</span> est la droite des pourpres).</li>
+</ul>
+<p>Tous les points de cet espace représentent l’ensemble des couleurs réelles. Les points extérieurs seront associés à des couleurs irréelles (non physiques).</p>
+<p><strong>Figure X : Courbe du spectre équi-énergétique avec les couleurs primaires</strong></p>
+<p>En coupant cet espace par le plan <span class="math inline">\(r + v + b = 1\)</span> et en le projetant sur le plan <span class="math inline">\(rv\)</span>, on obtient le diagramme de chromaticité. La trace du cône délimitant les couleurs réelles est une courbe concave, fermée, sur laquelle se situent les couleurs réelles. La partie curviligne de cette courbe représente les couleurs monochromatiques et est graduée en longueurs d’onde. C’est ce qu’on appelle le « lieu spectral » (spectrum locus).</p>
+<p>Si l’on place cette courbe dans le standard défini par la CIE (le fameux espace XYZ) :</p>
+<ul>
+<li>les trois axes primaires <span class="math inline">\(Ox\)</span>, <span class="math inline">\(Oy\)</span>, <span class="math inline">\(Oz\)</span> sont trirectangles,</li>
+<li>les plans <span class="math inline">\(Ox\)</span> et <span class="math inline">\(Oz\)</span> sont dans le plan de luminosité nulle (la luminance est entièrement portée par <span class="math inline">\(Y\)</span>).</li>
+</ul>
+<p>Nous changeons alors de coordonnées (passage aux coordonnées chromatiques <span class="math inline">\(x, y, z\)</span>) :</p>
+<p><span class="math display">\[x = \frac{X}{X+Y+Z} \quad ; \quad y = \frac{Y}{X+Y+Z} \quad ; \quad z = \frac{Z}{X+Y+Z}\]</span></p>
+<p>{#eq-coefficients-xyz}</p>
+<p><span class="math display">\[x + y + z = 1\]</span></p>
+<p>{#eq-unite-xyz}</p>
+<p>Ensuite, on procède comme dans le cas précédent. On coupe l’espace par un plan <span class="math inline">\((x + y + z) = 1\)</span> et on effectue une projection sur le plan <span class="math inline">\(xOy\)</span>.</p>
+<p>Ce diagramme est également appelé le triangle des couleurs.</p>
+<p><strong>Figure X : Sous-espace des couleurs réelles</strong></p>
+<p><strong>Figure X : Diagramme de chromaticité (x,y) de la CIE</strong></p>
+<p>En 1960, la CIE a adopté un diagramme de chromaticité uniforme (UCS - 1960) basé sur une transformation des points de référence (coordonnées <span class="math inline">\(u, v\)</span>). En 1976, ce même diagramme a de nouveau été modifié pour améliorer le calcul des écarts chromatiques (coordonnées <span class="math inline">\(u', v'\)</span>).</p>
+<p><strong>Figure X : Diagramme de chromaticité de la CIE</strong></p>
+<hr>
+</section>
+</section>
+<section id="les-ellipses-de-macadam" class="level3" data-number="1.4.5">
+<h3 data-number="1.4.5" class="anchored" data-anchor-id="les-ellipses-de-macadam"><span class="header-section-number">1.4.5</span> Les ellipses de MacAdam</h3>
+<p>Si, dans le diagramme, on trace autour d’une multitude de points <span class="math inline">\(C\)</span> (représentant différentes couleurs) la courbe fermée correspondant au seuil des couleurs tout juste discernables par l’œil humain, on obtient une distribution d’ellipses telle qu’illustrée dans la figure suivante.</p>
+<p>Les études de MacAdam fournissent également les paramètres de ces « cellules de confusion » (dimension des deux axes et orientation du grand axe) pour un très grand nombre de points, couvrant une grande partie du diagramme de chromaticité.</p>
+<p>On observe sur le diagramme que les dimensions des ellipses sont variables (grandes dans les zones vertes, réduites dans les zones bleues), que leur excentricité est forte et que l’orientation de leur grand axe converge globalement vers le blanc E, l’une des directions suivant l’axe jaune-bleu.</p>
+<p><strong>Figure X : Ellipses de MacAdam</strong></p>
+<hr>
+</section>
+<section id="couleurs-naturelles" class="level3" data-number="1.4.6">
+<h3 data-number="1.4.6" class="anchored" data-anchor-id="couleurs-naturelles"><span class="header-section-number">1.4.6</span> Couleurs naturelles</h3>
+<p>En pratique, très peu de couleurs naturelles, lorsqu’elles sont éclairées par le soleil, possèdent une forte saturation. Leur pureté d’excitation est généralement inférieure à 0,5. En revanche, les couleurs artificielles peuvent être beaucoup plus saturées (en particulier les teintes orange, jaune et rouge).</p>
+<p><strong>Figure X : Couleurs naturelles dans le diagramme (x,y)</strong></p>
+<p>Dans le diagramme chromatique <span class="math inline">\(x,y\)</span>, la majorité des teintes courantes se situe dans une zone regroupée autour des blancs. Cette zone représente plus ou moins la moitié du diagramme total.</p>
+<p>On remarquera également qu’une plage de teintes « chair » (couleur de peau) a été rigoureusement définie afin d’obtenir un meilleur rendu colorimétrique lors des diffusions. L’Union Européenne de Radio-Télévision (UER) centre cette zone de référence sur les coordonnées <span class="math inline">\(x = 0,38\)</span> ; <span class="math inline">\(y = 0,36\)</span>.</p>
+<p>Ces notions sont particulièrement intéressantes pour le choix et la conception de palettes de couleurs en traitement d’images.</p>
+</section>
+</section>
+<section id="création-et-manipulation-dune-image-en-python" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="création-et-manipulation-dune-image-en-python"><span class="header-section-number">1.5</span> Création et manipulation d’une image en Python</h2>
+<p>Maintenant que nous avons défini les fondements théoriques des modèles colorimétriques (et en particulier le modèle RGB), nous pouvons faire le lien avec l’informatique. En Python, et plus spécifiquement avec la bibliothèque <strong>NumPy</strong>, une image numérique n’est rien d’autre qu’une matrice mathématique multidimensionnelle (un tableau à 3 dimensions ou <em>tensor</em>).</p>
+<p>Pour une image couleur standard, cette matrice possède trois dimensions : <span class="math inline">\((H, W, C)\)</span> * <strong><span class="math inline">\(H\)</span> (Height / Hauteur) :</strong> le nombre de lignes (l’axe Y). * <strong><span class="math inline">\(W\)</span> (Width / Largeur) :</strong> le nombre de colonnes (l’axe X). * <strong><span class="math inline">\(C\)</span> (Channels / Canaux) :</strong> la profondeur de la couleur (3 au total, une pour le Rouge, une pour le Vert et une pour le Bleu).</p>
+<p>Chaque élément de cette matrice est codé sur 8 bits (type <code>uint8</code>), ce qui signifie que l’intensité lumineuse de chaque canal peut varier de 0 (absence de lumière) à 255 (intensité maximale).</p>
+<p><strong>Attention au piège OpenCV : RGB vs BGR</strong> Dans la majorité des systèmes modernes (et dans la bibliothèque d’affichage <code>matplotlib</code>), les canaux sont lus dans l’ordre historique <strong>RGB</strong> (Rouge, Vert, Bleu). Cependant, pour des raisons historiques liées aux anciens fabricants de matériel vidéo, la bibliothèque <strong>OpenCV</strong> lit et écrit les images dans l’ordre inverse : <strong>BGR</strong> (Bleu, Vert, Rouge). Il faut toujours garder cette inversion à l’esprit lors du passage d’une bibliothèque à l’autre.</p>
+<p>Voici un exemple simple permettant de créer numériquement une image entièrement rouge de <span class="math inline">\(200 \times 300\)</span> pixels, en utilisant <strong>NumPy</strong>, puis de l’afficher avec Matplotlib :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importation des bibliothèques nécessaires</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Définition des dimensions de l'image</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>hauteur <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>largeur <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>canaux <span class="op">=</span> <span class="dv">3</span>  <span class="co"># (R, G, B)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Initialisation d'une matrice noire (remplie de zéros)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Le type np.uint8 est obligatoire pour que l'image soit reconnue correctement</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>image_rouge <span class="op">=</span> np.zeros((hauteur, largeur, canaux), dtype<span class="op">=</span>np.uint8)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Modification des pixels</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># En RGB, le rouge pur s'écrit (255, 0, 0)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Grâce à NumPy, on modifie tous les pixels [:, :] simultanément (vectorisation)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>image_rouge[:, :] <span class="op">=</span> [<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Affichage de l'image avec Matplotlib (qui attend du RGB)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>plt.imshow(image_rouge)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>) <span class="co"># Masque les axes X et Y pour un rendu plus propre</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Création d</span><span class="ch">\'</span><span class="st">une image rouge (RGB)'</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="la-bibliothèque-opencv-le-standard-industriel" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="la-bibliothèque-opencv-le-standard-industriel"><span class="header-section-number">1.6</span> La bibliothèque OpenCV : le standard industriel</h2>
+<p>Jusqu’ici, nous avons conceptualisé une image numérique comme une matrice mathématique pure à l’aide de NumPy. Pour des opérations basiques, cela suffit. Cependant, pour le traitement d’images avancé, la lecture de formats complexes (JPEG, PNG, TIFF) ou l’analyse vidéo, le monde académique et industriel s’appuie sur une bibliothèque incontournable : <strong>OpenCV</strong>.</p>
+<p><strong>Qu’est-ce qu’OpenCV ?</strong> OpenCV (<em>Open Source Computer Vision Library</em>) est une bibliothèque open-source de vision par ordinateur extrêmement puissante, initialement développée par Intel en 1999. Bien que nous l’utilisions en Python, OpenCV est codée nativement en C et C++. Le module Python (<code>cv2</code>) n’est en réalité qu’une “passerelle” (un <em>wrapper</em>) qui permet d’appeler ces fonctions C++ ultra-optimisées. C’est ce qui permet à OpenCV de traiter des images et des flux vidéo en temps réel de manière extrêmement rapide.</p>
+<p>Dans l’écosystème Python, OpenCV est intelligemment conçu pour interagir directement avec <strong>NumPy</strong> : lorsqu’OpenCV charge une image depuis votre disque dur, il la convertit instantanément en un tableau matriciel NumPy (un <em>ndarray</em>).</p>
+<p><strong>Le piège historique de l’espace colorimétrique (BGR vs RGB)</strong> Il y a une particularité cruciale à mémoriser lors de l’utilisation d’OpenCV. Pour des raisons historiques liées aux standards des fabricants d’écrans et de caméras à la fin des années 90, <strong>OpenCV lit et écrit les images couleur dans l’ordre BGR (Bleu, Vert, Rouge)</strong>, et non dans l’ordre RGB classique utilisé par la quasi-totalité des autres outils informatiques modernes (comme les navigateurs web ou Matplotlib).</p>
+<p>Il faut donc toujours adapter ses canaux lors de la création ou de la sauvegarde d’une image avec OpenCV.</p>
+<p><strong>Exemple : Création et sauvegarde d’une image rouge avec OpenCV</strong></p>
+<p>L’exemple suivant montre comment générer une image rouge et l’enregistrer physiquement sur le disque dur à l’aide de la fonction <code>cv2.imwrite()</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Définition des dimensions (Hauteur, Largeur, Canaux)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>hauteur <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>largeur <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>canaux <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Création de la matrice noire (remplie de zéros)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Le type uint8 (entier non signé sur 8 bits : 0-255) est requis par OpenCV</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> np.zeros((hauteur, largeur, canaux), dtype<span class="op">=</span>np.uint8)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Colorisation de l'image (Attention à l'ordre BGR !)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Pour obtenir du rouge pur, on définit : Bleu = 0, Vert = 0, Rouge = 255</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Le vecteur s'écrit donc [0, 0, 255]</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>image[:, :] <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">255</span>]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Sauvegarde de l'image sur le disque dur</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># La fonction imwrite prend en paramètre le nom du fichier (avec son extension) et la matrice</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>succes <span class="op">=</span> cv2.imwrite(<span class="st">'mon_image_rouge.png'</span>, image)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> succes:</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"L'image a été sauvegardée avec succès dans le dossier courant."</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Erreur lors de la sauvegarde de l'image."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Vous remarquerez que Matplotlib n’est pas utilisé dans ce code, pour bien montrer que l’environnement matriciel NumPy couplé directement à l’I/O (Input/Output) d’OpenCV suffit parfois. Vous devez bien dissocier “l’outil qui calcule et sauvegarde” (OpenCV) de “l’outil qui dessine des graphiques à l’écran” (Matplotlib).</p>
+</section>
+<section id="exercices-de-réflexion" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="exercices-de-réflexion"><span class="header-section-number">1.7</span> Exercices de réflexion</h2>
+<p>Pour consolider les notions d’espace colorimétrique et de représentation matricielle, répondez aux questions suivantes.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 1 : Calcul de taille théorique
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Déterminez la place qu’occupe une image de 653 lignes sur 657 colonnes si elle est sauvegardée sans compression de données. Expliquez votre calcul.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la réponse et l’explication
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Calcul du nombre de pixels :</strong> L’image possède <span class="math inline">\(653 \times 657 = 429~021\)</span> pixels.</p>
+<p><strong>Calcul du poids en mémoire :</strong> La taille dépend de la profondeur de couleur (le nombre de canaux) : * <strong>En niveaux de gris (1 canal, 8 bits/pixel) :</strong> <span class="math inline">\(429~021 \times 1 = 429~021\)</span> octets (soit environ <span class="math inline">\(419\)</span> Ko). * <strong>En couleur RGB (3 canaux, 24 bits/pixel) :</strong> <span class="math inline">\(429~021 \times 3 = 1~287~063\)</span> octets (soit environ <span class="math inline">\(1,23\)</span> Mo).</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 2 &amp; 3 : Pratique et réalité physique
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Vérifiez la taille trouvée précédemment avec la place réellement occupée par le fichier <code>cat.bmp</code> sur votre ordinateur.</li>
+<li>Expliquez pourquoi la taille théorique calculée n’est pas <em>exactement</em> la taille affichée sur le disque dur.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la réponse et l’explication
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Si vous inspectez les propriétés du fichier <code>cat.bmp</code>, vous constaterez une légère différence avec le calcul théorique. Cela s’explique par trois facteurs informatiques :</p>
+<ol type="1">
+<li><strong>L’en-tête du fichier (Header) :</strong> Un fichier image ne contient pas que des pixels. Le format BMP, par exemple, inclut un en-tête (généralement de 54 octets) qui stocke les métadonnées (largeur, hauteur, type d’encodage) indispensables pour que le logiciel sache comment lire la matrice.</li>
+<li><strong>L’alignement en mémoire (Padding) :</strong> Le format BMP exige que la taille de chaque ligne d’une image soit un multiple de 4 octets. Si ce n’est pas le cas (comme ici avec 657 colonnes), le système ajoute des octets vides (“padding”) à la fin de chaque ligne pour faciliter la lecture par le processeur.</li>
+<li><strong>L’allocation sur le disque (Taille des clusters) :</strong> Votre système d’exploitation (Windows, macOS) découpe le disque dur en “blocs” de taille fixe (souvent 4 Ko). Même si un fichier dépasse d’un seul octet sur un nouveau bloc, l’intégralité du bloc est réservée. La “taille sur le disque” est donc souvent légèrement supérieure à la taille réelle du fichier.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 4 &amp; 5 : Limites de la perception humaine
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Calculez le nombre de couleurs que l’on peut coder sur un format classique 3x8 bits (RGB standard).</li>
+<li>Ce nombre de couleurs est-il « suffisant » par rapport aux capacités de la vision humaine ?</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la réponse et l’explication
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Calcul du nombre de couleurs :</strong> En RGB 3x8 bits, chaque canal (Rouge, Vert, Bleu) peut prendre 256 valeurs (<span class="math inline">\(2^8\)</span>). Le nombre de combinaisons possibles est donc : <span class="math inline">\(256 \times 256 \times 256 = 16~777~216\)</span> de couleurs (environ 16,7 millions).</p>
+<p><strong>Est-ce suffisant ?</strong> Comme vu dans le chapitre sur la colorimétrie, l’œil humain est capable de distinguer environ 400 000 couleurs différentes (jusqu’à 2 millions selon les études et la luminosité). Mathématiquement, 16,7 millions est donc largement suffisant pour tromper notre cerveau. <em>Toutefois</em>, dans des cas très précis comme des dégradés de couleurs très doux (ex: un ciel bleu), l’œil est sensible aux sauts d’intensité, créant un effet d’escalier appelé <em>banding</em> (postérisation). C’est pourquoi les caméras professionnelles et les écrans HDR travaillent souvent en 10 ou 12 bits par canal (plus d’un milliard de couleurs) afin d’assurer des transitions parfaitement fluides.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 6 : Le canal supplémentaire
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lors de vos lectures ou de l’utilisation d’outils de design, vous croiserez souvent le modèle <strong>RGBA</strong>. Recherchez la signification et l’utilité du “A”.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la réponse et l’explication
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Le <strong>A</strong> signifie <strong>Alpha</strong> (le canal Alpha).</p>
+<p>Il ne représente pas une couleur, mais le niveau d’<strong>opacité</strong> (ou de transparence) du pixel. * Si Alpha = 255, le pixel est totalement opaque. * Si Alpha = 0, le pixel est totalement transparent.</p>
+<p>Ce quatrième canal est fondamental dans le traitement d’images pour le <em>compositing</em> (la superposition d’images), le détourage, ou la création d’interfaces graphiques (comme les icônes sur un fond d’écran ou le rendu d’une page web). Un pixel RGBA nécessite donc 4 octets de mémoire (32 bits) au lieu de 3.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercices-de-programmation-création-dimages-matricielles" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="exercices-de-programmation-création-dimages-matricielles"><span class="header-section-number">1.8</span> Exercices de programmation : Création d’images matricielles</h2>
+<p>Dans les exercices suivants, utilisez <strong>NumPy</strong> pour initialiser vos matrices et <strong>OpenCV</strong> (<code>cv2.imwrite</code>) pour sauvegarder le résultat sur votre disque.</p>
+<p><em>Rappel : OpenCV utilise l’espace colorimétrique BGR (Bleu, Vert, Rouge) !</em></p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 1 : Le drapeau national
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom <code>drapeau.png</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 2 : Les 4 quadrants
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). Attribuez les couleurs suivantes aux quadrants : * En haut à gauche : Bleu pur * En haut à droite : Vert pur * En bas à gauche : Rouge pur * En bas à droite : Blanc pur</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 3 : Le cadre coloré
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Créez une image de 500x500 pixels. Le fond de l’image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. <em>Astuce d’optimisation : Pensez à la manière dont un peintre peint une toile pour le faire en seulement 2 lignes de code, sans dessiner 4 rectangles distincts !</em></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice 4 (Défi) : Le dégradé linéaire
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Créez une image de 256 pixels de haut sur 256 pixels de large. Générez un dégradé horizontal allant du Noir pur (à gauche) vers le Rouge pur (à droite). <em>Indice : Renseignez-vous sur la fonction <code>np.linspace</code> ou <code>np.arange</code> de NumPy, et profitez du mécanisme de “broadcasting” pour éviter d’utiliser des boucles <code>for</code>.</em></p>
+</div>
+</div>
+<hr>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Accueil">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Accueil</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./02_codage_couleurs.html" class="pagination-link" aria-label="Filtrage">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Filtrage</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Images numériques</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Dans le monde numérique une image est représentée par une grille, un tableau de pixels.</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="al">![Le pixel dans une image numérique](images_dans_le_cours/pixel.png)</span>{#fig-pixel width="50%" fig-align="center"}</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>Le pixel est le plus petit élément constitutif d'une image, il est indivisible et est souvent stocké comme élément numérique dans une matrice. Le ou les nombres associés au pixel représente une caractéristique de cette partie de l'image, souvent sa couleur. Pour caractériser ces couleurs, il faut d'abord commencer à étudier les caractéristiques de la lumières et de l’oeil.</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## L'oeil</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>La compréhension des couleurs et de leur système de codage, de classification, requière une étude préalable du fonctionnement de l’oeil. Nous distinguerons deux parties dans cette section, la première traitera du champs de vision et de son importance dans la détermination de la résolution d’une image, la seconde expliquera comment les couleurs sont perçues, captées, interprétées par une oeil humain et codée dans un système numérique.</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Champs de vision</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## La lumière</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>La lumière est un rayonnement électromagnétique composé de photons, c'est-à-dire de particules élémentaires sans masse. Cette énergie est soumise à toutes les lois physiques correspondantes. </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>La vitesse de la lumière dans le vide est une constante, notée $c$ et approximativement égale à $300~000$ km/s.</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>La vitesse de propagation varie en fonction du milieu traversé :</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>v = \frac{c}{n}</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>$$ {#eq-vitesse-propagation}</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>$n$ » dépend des milieux, il est égal à 1 dans le vide.</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>Une lumière monochromatique possède une fréquence $f$ indépendante du milieu, mais sa longueur d'onde $\lambda$ dépend du milieu.</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>\lambda = \frac{v}{f}</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>$$ {#eq-longueur-onde}</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>Il semble donc évident de caractériser une lumière monochromatique par sa fréquence puisqu'il s'agit d'une constante. Néanmoins, c'est généralement la longueur d'onde (supposée dans le vide) qui est choisie pour la définir.</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="al">![Dispersion de la lumière dans le prisme de Newton](images_dans_le_cours/prisme.png)</span>{#fig-pixel width="50%" fig-align="center"}</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>Physiquement, la lumière blanche n'existe pas. Le "blanc" n'est pas une longueur d'onde unique, c'est une perception purement biologique et colorimétrique. Elle est le résultat d'une combinaison d'un ensemble de rayonnements. Le prisme de Newton (Figure 1) facilite l'observation de cette dispersion lumineuse : émise par le soleil ou par une lampe à incandescence, la lumière traverse le prisme avec un angle d'incidence α par rapport à la normale. Lorsque le rayon lumineux passe de l'air au verre, sa vitesse diminue et sa longueur d'onde se comprime, mais sa fréquence (sa "couleur" fondamentale) reste strictement identique car elle ne dépend que de la source d'émission. Le faisceau change alors de direction et se rapproche de la normale au niveau de la surface de séparation, au point d'incidence. C'est le phénomène de réfraction. Le même phénomène s'observe à la sortie du prisme, lors, par exemple, d'une transition verre-air.</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>L'angle total de réfraction varie en fonction des longueurs d'onde des rayonnements incidents (la valeur de $\lambda$ la plus élevée correspond aux déviations les plus faibles). Sur un écran blanc situé à la sortie du prisme, on peut observer une bande lumineuse dont la couleur varie progressivement du rouge au violet. À chacun de ces rayonnements (appelés « monochromatiques ») est associée une longueur d'onde (de 400 nm pour le violet jusqu'à 780 nm pour le rouge). </span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>L'œil perçoit donc des mélanges de lumières monochromatiques dans des proportions différentes. C'est ce qui donne la sensation de couleur.Le spectre électromagnétique des longueurs d'onde s'étend de $10^{-10}$ µm à $10^5$ km. </span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>Ce spectre est détaillé dans le tableau suivant :</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>Tableau 1 : Le spectre électromagnétiqueLa lumière peut être représentée par la courbe de distribution spectrale de son énergie lumineuse (répartition du flux énergétique en fonction de la longueur d'onde).</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>Figure 2 : Courbe de distribution spectrale de l'énergie lumineuse dans un ciel bleu</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## La couleur</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>La sensation de couleur d'un objet provient du fait qu'une partie de la lumière incidente est réfléchie. On peut donc dire qu'un objet ne possède pas de couleur propre.</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>La couleur perçue dépend effectivement de :</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>la source lumineuse</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>la manière dont la lumière se propage</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>la sensibilité différentielle de l'œil</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>Néanmoins, la couleur d'un objet pourrait être complètement définie par sa courbe de réflectance. Cette courbe représente en pourcentage l'énergie lumineuse réfléchie en fonction de la longueur d'onde incidente.</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="fu">### Les différents blancs</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>Il est nécessaire, dans toute tentative de modélisation, de définir des références.</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>Légende</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>Le blanc produit par une puissance constante de chacun des rayonnements du spectre visible (BLANC E) est sans doute celui qui semblait le plus logique pour définir ce point de référence. Pourtant, il n'est pas considéré comme tel car il est difficile à produire.</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>Légende</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>Trois sources standards ont été définies par la Commission Internationale de l'Éclairage (CIE). Celles-ci peuvent être obtenues par un corps noir chauffé jusqu'à incandescence à une certaine température :</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**le blanc A** (éclairage d'une lampe à filament de tungstène) correspond à une température du corps noir de 2848 °K.</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**le blanc B** (lumière du jour à midi en été) correspond à la température du corps noir de 4800 °K.</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**le blanc C** (lumière du soleil filtrée par les nuages) correspond à la température du corps noir de 6500 °K. C'est celui-ci qui a été choisi comme référence.</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="fu">### Synthèse additive</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>Une expérience simple et pratique consiste à éclairer un support quelconque avec une lumière donnée. Un observateur doit ensuite reproduire la même valeur, sous la forme d'une tache colorée adjacente, à l'aide d'une ou plusieurs sources monochromatiques (une seule longueur d'onde) dont il peut faire varier l'intensité. De nombreuses expériences de ce type ont mis en évidence plusieurs propriétés intéressantes du système visuel humain.</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>Si l'observateur ne dispose que d'une seule source monochromatique, il ne pourra apparier son test lumineux avec la référence que si elle possède la même longueur d'onde. Il sera toutefois toujours en mesure d'obtenir une intensité lumineuse équivalente.</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>En revanche, l'utilisation exclusive de trois sources différentes lui permettra d'apparier pratiquement toutes les lumières testées, à condition que les lumières de référence soient suffisamment éloignées les unes des autres dans le spectre visible. Cela correspond donc respectivement à des sources de longueur d'onde faible (bleu), moyenne (vert) et élevée (rouge).</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>**Synthèse additive des couleurs**</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>Si le mélange est réalisé entre les rayonnements extrêmes du spectre, on obtient une plage subjective (qui n'existe pas dans le spectre visible) que l'on appelle « la gamme des pourpres ».</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>La combinaison de ces paramètres offre plus d'un million de possibilités. Cette différenciation est moins visible dans certaines conditions (lumière faible). On admet généralement que l'œil distingue environ 400 000 couleurs différentes.</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="fu">### Principes de base et lois</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>Le principe du procédé trichrome a été formulé par YOUNG, MAXWELL et HELMHOLTZ : « Toute sensation colorée peut être obtenue à partir d'un mélange de trois couleurs judicieusement sélectionnées. Ce mélange peut être soit additif (comme dans l'expérience), soit soustractif (utilisation de filtres). »</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>Les lois de GRASSMANN ont la même origine. Si $S_1$, $S_2$ et $S_3$ sont les trois sources standards et « $m$ » la couleur à reproduire, alors :</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Toute couleur peut résulter de la somme de quantités positives ou négatives des trois couleurs primaires. Ces quantités sont uniques.</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>m = a \cdot S_1 + b \cdot S_2 + c \cdot S_3</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>$$ {#eq-grassmann-1}</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Si $a$, $b$ et $c$ (l'énergie de chaque source) varient dans les mêmes proportions (par un facteur $k$), l'équation de la première règle reste valide (loi de proportionnalité).</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>k \cdot m = (k \cdot a) \cdot S_1 + (k \cdot b) \cdot S_2 + (k \cdot c) \cdot S_3</span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>$$ {#eq-grassmann-2}</span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>**Pour les mélanges additifs (loi d'additivité) :**</span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>Si la couleur $m_1$ est définie par : </span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>m_1 = a_1 \cdot S_1 + b_1 \cdot S_2 + c_1 \cdot S_3</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>$$ {#eq-grassmann-add-1}</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>Et que la couleur $m_2$ est définie par : </span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>m_2 = a_2 \cdot S_1 + b_2 \cdot S_2 + c_2 \cdot S_3</span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>$$ {#eq-grassmann-add-2}</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>Alors, le mélange de ces deux couleurs donne :</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>m_1 + m_2 = (a_1 + a_2) \cdot S_1 + (b_1 + b_2) \cdot S_2 + (c_1 + c_2) \cdot S_3</span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>$$ {#eq-grassmann-add-resultat}</span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### Les différents modèles</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Le modèle RGB (RVB)</span></span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>À ce stade, on pourrait penser qu'une couleur donnée résulte simplement de la superposition de ses composantes verte, rouge et bleue.</span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>Cette conclusion, un peu hâtive, ne serait pas tout à fait complète. D'une part, les différents cônes de l'œil ne sont pas sensibles à une seule longueur d'onde (mais à un intervalle), et d'autre part, l'œil ne constitue qu'un simple récepteur physique. C'est en effet le cerveau qui « produit » la couleur à partir des signaux qu'il reçoit de ses « capteurs ». Ainsi, la méthode d'interprétation qu'il développe contribue considérablement aux caractéristiques de la vision humaine.</span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>Le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais il n'est pas le seul.</span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Le modèle HSL (TSL : Teinte, Saturation, Luminosité)</span></span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>Si vous écoutez une personne décrire une couleur, cela donnera quelque chose comme : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair). Le modèle HSL a été classifié par MUNSELL en 1905.</span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>Une couleur pure sera saturée à 100 %. Si la saturation atteint 0 % (et non 100 % comme l'erreur de frappe du texte d'origine semble l'indiquer), il n'y a plus de dominante de couleur : la couleur est dite achromatique (absence de couleur). Cela révèle une nuance de gris, allant du blanc au noir selon la luminosité. Le cerveau agit donc comme un intégrateur qui détecte trois grandeurs physiques distinctes :</span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La teinte (Hue) :** caractérisée par la longueur d'onde dominante du rayonnement (± 250 teintes monochromatiques détectables par l'œil, plus les pourpres).</span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La luminosité ou clarté (Lightness) :** l'énergie lumineuse reçue (± 1000 niveaux de luminosité différents, selon la teinte).</span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La saturation (Saturation ou pureté de la couleur) :** contribue à l'intensité de l'ensemble et permet de différencier une couleur vive d'une couleur pastel (atténuée) (± 20 000 différenciations).</span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Le modèle CIE (au lieu de ICL)</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>En 1931, la Commission Internationale de l'Éclairage (CIE) a fixé un modèle universel pour la représentation des couleurs afin de permettre la comparaison entre les indications fournies par différents colorimètres.</span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>Le système choisi comme référence (RGB) est défini par les trois primaires suivantes :</span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**ROUGE :** 700 nm</span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**VERT :** 546,1 nm</span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**BLEU :** 435,8 nm</span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>Si l'on calcule les quantités primaires de rouge, de vert et de bleu que l'on doit mélanger pour obtenir l'égalisation d'une lumière blanche E, on obtient les coefficients trichromatiques $(R, V, B)$.</span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>Par définition (pour normaliser l'énergie lumineuse et s'affranchir de la luminance), on calcule les coordonnées chromatiques $r, v, b$ :</span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>$$r = \frac{R}{R+V+B} \quad ; \quad v = \frac{V}{R+V+B} \quad ; \quad b = \frac{B}{R+V+B}$$</span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>{#eq-coefficients-rvb}</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>Ce qui implique la relation fondamentale :</span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>$$r + v + b = 1$$</span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>{#eq-unite-rvb}</span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>Ensuite, nous pouvons calculer ces coefficients pour chacun des rayonnements monochromatiques du spectre (avec les mêmes primaires et le même éclairage) et tracer les courbes d'égalisation du spectre équi-énergétique.</span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>Cependant, on préfère une représentation par projection sur un plan donné d'un système à trois axes avec les coordonnées $R$, $V$ et $B$. Si l'on associe à chacune des longueurs d'onde (de 400 nm à 700 nm) un vecteur $OC$ ayant pour composantes les coefficients trichromatiques, on visualise alors une courbe gauche (tridimensionnelle) dans un repère orthonormé standard. Cette courbe est le lieu des extrémités de ces vecteurs. À partir de cette courbe, nous allons délimiter une partie de l'espace colorimétrique.</span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>Les limites de ce sous-espace sont :</span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>La surface conique formée par le rayon $OC$ ($C$ appartenant à la courbe gauche).</span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>La surface plane $Od$ (où $d$ est la droite des pourpres).</span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a>Tous les points de cet espace représentent l'ensemble des couleurs réelles. Les points extérieurs seront associés à des couleurs irréelles (non physiques).</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a>**Figure X : Courbe du spectre équi-énergétique avec les couleurs primaires**</span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>En coupant cet espace par le plan $r + v + b = 1$ et en le projetant sur le plan $rv$, on obtient le diagramme de chromaticité. La trace du cône délimitant les couleurs réelles est une courbe concave, fermée, sur laquelle se situent les couleurs réelles. La partie curviligne de cette courbe représente les couleurs monochromatiques et est graduée en longueurs d'onde. C'est ce qu'on appelle le « lieu spectral » (spectrum locus).</span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>Si l'on place cette courbe dans le standard défini par la CIE (le fameux espace XYZ) :</span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>les trois axes primaires $Ox$, $Oy$, $Oz$ sont trirectangles,</span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>les plans $Ox$ et $Oz$ sont dans le plan de luminosité nulle (la luminance est entièrement portée par $Y$).</span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a>Nous changeons alors de coordonnées (passage aux coordonnées chromatiques $x, y, z$) :</span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a>$$x = \frac{X}{X+Y+Z} \quad ; \quad y = \frac{Y}{X+Y+Z} \quad ; \quad z = \frac{Z}{X+Y+Z}$$</span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a>{#eq-coefficients-xyz}</span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a>$$x + y + z = 1$$</span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a>{#eq-unite-xyz}</span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a>Ensuite, on procède comme dans le cas précédent. On coupe l'espace par un plan $(x + y + z) = 1$ et on effectue une projection sur le plan $xOy$.</span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a>Ce diagramme est également appelé le triangle des couleurs.</span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a>**Figure X : Sous-espace des couleurs réelles**</span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a>**Figure X : Diagramme de chromaticité (x,y) de la CIE**</span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a>En 1960, la CIE a adopté un diagramme de chromaticité uniforme (UCS - 1960) basé sur une transformation des points de référence (coordonnées $u, v$). En 1976, ce même diagramme a de nouveau été modifié pour améliorer le calcul des écarts chromatiques (coordonnées $u', v'$).</span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a>**Figure X : Diagramme de chromaticité de la CIE**</span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### Les ellipses de MacAdam</span></span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a>Si, dans le diagramme, on trace autour d'une multitude de points $C$ (représentant différentes couleurs) la courbe fermée correspondant au seuil des couleurs tout juste discernables par l'œil humain, on obtient une distribution d'ellipses telle qu'illustrée dans la figure suivante.</span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a>Les études de MacAdam fournissent également les paramètres de ces « cellules de confusion » (dimension des deux axes et orientation du grand axe) pour un très grand nombre de points, couvrant une grande partie du diagramme de chromaticité.</span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a>On observe sur le diagramme que les dimensions des ellipses sont variables (grandes dans les zones vertes, réduites dans les zones bleues), que leur excentricité est forte et que l'orientation de leur grand axe converge globalement vers le blanc E, l'une des directions suivant l'axe jaune-bleu.</span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a>**Figure X : Ellipses de MacAdam**</span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a><span class="fu">### Couleurs naturelles</span></span>
+<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a>En pratique, très peu de couleurs naturelles, lorsqu'elles sont éclairées par le soleil, possèdent une forte saturation. Leur pureté d'excitation est généralement inférieure à 0,5. En revanche, les couleurs artificielles peuvent être beaucoup plus saturées (en particulier les teintes orange, jaune et rouge).</span>
+<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-231"><a href="#cb3-231" aria-hidden="true" tabindex="-1"></a>**Figure X : Couleurs naturelles dans le diagramme (x,y)**</span>
+<span id="cb3-232"><a href="#cb3-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-233"><a href="#cb3-233" aria-hidden="true" tabindex="-1"></a>Dans le diagramme chromatique $x,y$, la majorité des teintes courantes se situe dans une zone regroupée autour des blancs. Cette zone représente plus ou moins la moitié du diagramme total.</span>
+<span id="cb3-234"><a href="#cb3-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-235"><a href="#cb3-235" aria-hidden="true" tabindex="-1"></a>On remarquera également qu'une plage de teintes « chair » (couleur de peau) a été rigoureusement définie afin d'obtenir un meilleur rendu colorimétrique lors des diffusions. L'Union Européenne de Radio-Télévision (UER) centre cette zone de référence sur les coordonnées $x = 0,38$ ; $y = 0,36$.</span>
+<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-237"><a href="#cb3-237" aria-hidden="true" tabindex="-1"></a>Ces notions sont particulièrement intéressantes pour le choix et la conception de palettes de couleurs en traitement d'images.</span>
+<span id="cb3-238"><a href="#cb3-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-239"><a href="#cb3-239" aria-hidden="true" tabindex="-1"></a><span class="fu">## Création et manipulation d'une image en Python</span></span>
+<span id="cb3-240"><a href="#cb3-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-241"><a href="#cb3-241" aria-hidden="true" tabindex="-1"></a>Maintenant que nous avons défini les fondements théoriques des modèles colorimétriques (et en particulier le modèle RGB), nous pouvons faire le lien avec l'informatique. </span>
+<span id="cb3-242"><a href="#cb3-242" aria-hidden="true" tabindex="-1"></a>En Python, et plus spécifiquement avec la bibliothèque **NumPy**, une image numérique n'est rien d'autre qu'une matrice mathématique multidimensionnelle (un tableau à 3 dimensions ou *tensor*).</span>
+<span id="cb3-243"><a href="#cb3-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-244"><a href="#cb3-244" aria-hidden="true" tabindex="-1"></a>Pour une image couleur standard, cette matrice possède trois dimensions : $(H, W, C)$</span>
+<span id="cb3-245"><a href="#cb3-245" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**$H$ (Height / Hauteur) :** le nombre de lignes (l'axe Y).</span>
+<span id="cb3-246"><a href="#cb3-246" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**$W$ (Width / Largeur) :** le nombre de colonnes (l'axe X).</span>
+<span id="cb3-247"><a href="#cb3-247" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**$C$ (Channels / Canaux) :** la profondeur de la couleur (3 au total, une pour le Rouge, une pour le Vert et une pour le Bleu).</span>
+<span id="cb3-248"><a href="#cb3-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-249"><a href="#cb3-249" aria-hidden="true" tabindex="-1"></a>Chaque élément de cette matrice est codé sur 8 bits (type <span class="in">`uint8`</span>), ce qui signifie que l'intensité lumineuse de chaque canal peut varier de 0 (absence de lumière) à 255 (intensité maximale).</span>
+<span id="cb3-250"><a href="#cb3-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-251"><a href="#cb3-251" aria-hidden="true" tabindex="-1"></a>**Attention au piège OpenCV : RGB vs BGR**</span>
+<span id="cb3-252"><a href="#cb3-252" aria-hidden="true" tabindex="-1"></a>Dans la majorité des systèmes modernes (et dans la bibliothèque d'affichage <span class="in">`matplotlib`</span>), les canaux sont lus dans l'ordre historique **RGB** (Rouge, Vert, Bleu). Cependant, pour des raisons historiques liées aux anciens fabricants de matériel vidéo, la bibliothèque **OpenCV** lit et écrit les images dans l'ordre inverse : **BGR** (Bleu, Vert, Rouge). Il faut toujours garder cette inversion à l'esprit lors du passage d'une bibliothèque à l'autre.</span>
+<span id="cb3-253"><a href="#cb3-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-254"><a href="#cb3-254" aria-hidden="true" tabindex="-1"></a>Voici un exemple simple permettant de créer numériquement une image entièrement rouge de $200 \times 300$ pixels, en utilisant **NumPy**, puis de l'afficher avec Matplotlib :</span>
+<span id="cb3-255"><a href="#cb3-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-256"><a href="#cb3-256" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb3-257"><a href="#cb3-257" aria-hidden="true" tabindex="-1"></a><span class="co"># Importation des bibliothèques nécessaires</span></span>
+<span id="cb3-258"><a href="#cb3-258" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-259"><a href="#cb3-259" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-260"><a href="#cb3-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-261"><a href="#cb3-261" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Définition des dimensions de l'image</span></span>
+<span id="cb3-262"><a href="#cb3-262" aria-hidden="true" tabindex="-1"></a>hauteur <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb3-263"><a href="#cb3-263" aria-hidden="true" tabindex="-1"></a>largeur <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb3-264"><a href="#cb3-264" aria-hidden="true" tabindex="-1"></a>canaux <span class="op">=</span> <span class="dv">3</span>  <span class="co"># (R, G, B)</span></span>
+<span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Initialisation d'une matrice noire (remplie de zéros)</span></span>
+<span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a><span class="co"># Le type np.uint8 est obligatoire pour que l'image soit reconnue correctement</span></span>
+<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a>image_rouge <span class="op">=</span> np.zeros((hauteur, largeur, canaux), dtype<span class="op">=</span>np.uint8)</span>
+<span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-270"><a href="#cb3-270" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Modification des pixels</span></span>
+<span id="cb3-271"><a href="#cb3-271" aria-hidden="true" tabindex="-1"></a><span class="co"># En RGB, le rouge pur s'écrit (255, 0, 0)</span></span>
+<span id="cb3-272"><a href="#cb3-272" aria-hidden="true" tabindex="-1"></a><span class="co"># Grâce à NumPy, on modifie tous les pixels [:, :] simultanément (vectorisation)</span></span>
+<span id="cb3-273"><a href="#cb3-273" aria-hidden="true" tabindex="-1"></a>image_rouge[:, :] <span class="op">=</span> [<span class="dv">255</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb3-274"><a href="#cb3-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-275"><a href="#cb3-275" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Affichage de l'image avec Matplotlib (qui attend du RGB)</span></span>
+<span id="cb3-276"><a href="#cb3-276" aria-hidden="true" tabindex="-1"></a>plt.imshow(image_rouge)</span>
+<span id="cb3-277"><a href="#cb3-277" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>) <span class="co"># Masque les axes X et Y pour un rendu plus propre</span></span>
+<span id="cb3-278"><a href="#cb3-278" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Création d</span><span class="ch">\'</span><span class="st">une image rouge (RGB)'</span>)</span>
+<span id="cb3-279"><a href="#cb3-279" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb3-280"><a href="#cb3-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-281"><a href="#cb3-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-282"><a href="#cb3-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## La bibliothèque OpenCV : le standard industriel</span></span>
+<span id="cb3-283"><a href="#cb3-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-284"><a href="#cb3-284" aria-hidden="true" tabindex="-1"></a>Jusqu'ici, nous avons conceptualisé une image numérique comme une matrice mathématique pure à l'aide de NumPy. Pour des opérations basiques, cela suffit. Cependant, pour le traitement d'images avancé, la lecture de formats complexes (JPEG, PNG, TIFF) ou l'analyse vidéo, le monde académique et industriel s'appuie sur une bibliothèque incontournable : **OpenCV**.</span>
+<span id="cb3-285"><a href="#cb3-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-286"><a href="#cb3-286" aria-hidden="true" tabindex="-1"></a>**Qu'est-ce qu'OpenCV ?**</span>
+<span id="cb3-287"><a href="#cb3-287" aria-hidden="true" tabindex="-1"></a>OpenCV (*Open Source Computer Vision Library*) est une bibliothèque open-source de vision par ordinateur extrêmement puissante, initialement développée par Intel en 1999. </span>
+<span id="cb3-288"><a href="#cb3-288" aria-hidden="true" tabindex="-1"></a>Bien que nous l'utilisions en Python, OpenCV est codée nativement en C et C++. Le module Python (<span class="in">`cv2`</span>) n'est en réalité qu'une "passerelle" (un *wrapper*) qui permet d'appeler ces fonctions C++ ultra-optimisées. C'est ce qui permet à OpenCV de traiter des images et des flux vidéo en temps réel de manière extrêmement rapide.</span>
+<span id="cb3-289"><a href="#cb3-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-290"><a href="#cb3-290" aria-hidden="true" tabindex="-1"></a>Dans l'écosystème Python, OpenCV est intelligemment conçu pour interagir directement avec **NumPy** : lorsqu'OpenCV charge une image depuis votre disque dur, il la convertit instantanément en un tableau matriciel NumPy (un *ndarray*).</span>
+<span id="cb3-291"><a href="#cb3-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-292"><a href="#cb3-292" aria-hidden="true" tabindex="-1"></a>**Le piège historique de l'espace colorimétrique (BGR vs RGB)**</span>
+<span id="cb3-293"><a href="#cb3-293" aria-hidden="true" tabindex="-1"></a>Il y a une particularité cruciale à mémoriser lors de l'utilisation d'OpenCV. Pour des raisons historiques liées aux standards des fabricants d'écrans et de caméras à la fin des années 90, **OpenCV lit et écrit les images couleur dans l'ordre BGR (Bleu, Vert, Rouge)**, et non dans l'ordre RGB classique utilisé par la quasi-totalité des autres outils informatiques modernes (comme les navigateurs web ou Matplotlib).</span>
+<span id="cb3-294"><a href="#cb3-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-295"><a href="#cb3-295" aria-hidden="true" tabindex="-1"></a>Il faut donc toujours adapter ses canaux lors de la création ou de la sauvegarde d'une image avec OpenCV.</span>
+<span id="cb3-296"><a href="#cb3-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-297"><a href="#cb3-297" aria-hidden="true" tabindex="-1"></a>**Exemple : Création et sauvegarde d'une image rouge avec OpenCV**</span>
+<span id="cb3-298"><a href="#cb3-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-299"><a href="#cb3-299" aria-hidden="true" tabindex="-1"></a>L'exemple suivant montre comment générer une image rouge et l'enregistrer physiquement sur le disque dur à l'aide de la fonction <span class="in">`cv2.imwrite()`</span>. </span>
+<span id="cb3-300"><a href="#cb3-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-301"><a href="#cb3-301" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb3-302"><a href="#cb3-302" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-303"><a href="#cb3-303" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb3-304"><a href="#cb3-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-305"><a href="#cb3-305" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Définition des dimensions (Hauteur, Largeur, Canaux)</span></span>
+<span id="cb3-306"><a href="#cb3-306" aria-hidden="true" tabindex="-1"></a>hauteur <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb3-307"><a href="#cb3-307" aria-hidden="true" tabindex="-1"></a>largeur <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb3-308"><a href="#cb3-308" aria-hidden="true" tabindex="-1"></a>canaux <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb3-309"><a href="#cb3-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-310"><a href="#cb3-310" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Création de la matrice noire (remplie de zéros)</span></span>
+<span id="cb3-311"><a href="#cb3-311" aria-hidden="true" tabindex="-1"></a><span class="co"># Le type uint8 (entier non signé sur 8 bits : 0-255) est requis par OpenCV</span></span>
+<span id="cb3-312"><a href="#cb3-312" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> np.zeros((hauteur, largeur, canaux), dtype<span class="op">=</span>np.uint8)</span>
+<span id="cb3-313"><a href="#cb3-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-314"><a href="#cb3-314" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Colorisation de l'image (Attention à l'ordre BGR !)</span></span>
+<span id="cb3-315"><a href="#cb3-315" aria-hidden="true" tabindex="-1"></a><span class="co"># Pour obtenir du rouge pur, on définit : Bleu = 0, Vert = 0, Rouge = 255</span></span>
+<span id="cb3-316"><a href="#cb3-316" aria-hidden="true" tabindex="-1"></a><span class="co"># Le vecteur s'écrit donc [0, 0, 255]</span></span>
+<span id="cb3-317"><a href="#cb3-317" aria-hidden="true" tabindex="-1"></a>image[:, :] <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">255</span>]</span>
+<span id="cb3-318"><a href="#cb3-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-319"><a href="#cb3-319" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Sauvegarde de l'image sur le disque dur</span></span>
+<span id="cb3-320"><a href="#cb3-320" aria-hidden="true" tabindex="-1"></a><span class="co"># La fonction imwrite prend en paramètre le nom du fichier (avec son extension) et la matrice</span></span>
+<span id="cb3-321"><a href="#cb3-321" aria-hidden="true" tabindex="-1"></a>succes <span class="op">=</span> cv2.imwrite(<span class="st">'mon_image_rouge.png'</span>, image)</span>
+<span id="cb3-322"><a href="#cb3-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-323"><a href="#cb3-323" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> succes:</span>
+<span id="cb3-324"><a href="#cb3-324" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"L'image a été sauvegardée avec succès dans le dossier courant."</span>)</span>
+<span id="cb3-325"><a href="#cb3-325" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb3-326"><a href="#cb3-326" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Erreur lors de la sauvegarde de l'image."</span>)</span>
+<span id="cb3-327"><a href="#cb3-327" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-328"><a href="#cb3-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-329"><a href="#cb3-329" aria-hidden="true" tabindex="-1"></a>Vous remarquerez que Matplotlib n'est pas utilisé dans ce code, pour bien montrer que l'environnement matriciel NumPy couplé directement à l'I/O (Input/Output) d'OpenCV suffit parfois. Vous devez bien dissocier "l'outil qui calcule et sauvegarde" (OpenCV) de "l'outil qui dessine des graphiques à l'écran" (Matplotlib).</span>
+<span id="cb3-330"><a href="#cb3-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-331"><a href="#cb3-331" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercices de réflexion</span></span>
+<span id="cb3-332"><a href="#cb3-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-333"><a href="#cb3-333" aria-hidden="true" tabindex="-1"></a>Pour consolider les notions d'espace colorimétrique et de représentation matricielle, répondez aux questions suivantes.</span>
+<span id="cb3-334"><a href="#cb3-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-335"><a href="#cb3-335" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-336"><a href="#cb3-336" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 1 : Calcul de taille théorique</span></span>
+<span id="cb3-337"><a href="#cb3-337" aria-hidden="true" tabindex="-1"></a>Déterminez la place qu'occupe une image de 653 lignes sur 657 colonnes si elle est sauvegardée sans compression de données. Expliquez votre calcul.</span>
+<span id="cb3-338"><a href="#cb3-338" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-339"><a href="#cb3-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-340"><a href="#cb3-340" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb3-341"><a href="#cb3-341" aria-hidden="true" tabindex="-1"></a><span class="fu">### Voir la réponse et l'explication</span></span>
+<span id="cb3-342"><a href="#cb3-342" aria-hidden="true" tabindex="-1"></a>**Calcul du nombre de pixels :**</span>
+<span id="cb3-343"><a href="#cb3-343" aria-hidden="true" tabindex="-1"></a>L'image possède $653 \times 657 = 429~021$ pixels.</span>
+<span id="cb3-344"><a href="#cb3-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-345"><a href="#cb3-345" aria-hidden="true" tabindex="-1"></a>**Calcul du poids en mémoire :**</span>
+<span id="cb3-346"><a href="#cb3-346" aria-hidden="true" tabindex="-1"></a>La taille dépend de la profondeur de couleur (le nombre de canaux) :</span>
+<span id="cb3-347"><a href="#cb3-347" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**En niveaux de gris (1 canal, 8 bits/pixel) :** </span>
+<span id="cb3-348"><a href="#cb3-348" aria-hidden="true" tabindex="-1"></a>    $429~021 \times 1 = 429~021$ octets (soit environ $419$ Ko).</span>
+<span id="cb3-349"><a href="#cb3-349" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**En couleur RGB (3 canaux, 24 bits/pixel) :** </span>
+<span id="cb3-350"><a href="#cb3-350" aria-hidden="true" tabindex="-1"></a>    $429~021 \times 3 = 1~287~063$ octets (soit environ $1,23$ Mo).</span>
+<span id="cb3-351"><a href="#cb3-351" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-352"><a href="#cb3-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-353"><a href="#cb3-353" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-354"><a href="#cb3-354" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 2 &amp; 3 : Pratique et réalité physique</span></span>
+<span id="cb3-355"><a href="#cb3-355" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Vérifiez la taille trouvée précédemment avec la place réellement occupée par le fichier <span class="in">`cat.bmp`</span> sur votre ordinateur.</span>
+<span id="cb3-356"><a href="#cb3-356" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Expliquez pourquoi la taille théorique calculée n'est pas *exactement* la taille affichée sur le disque dur.</span>
+<span id="cb3-357"><a href="#cb3-357" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-358"><a href="#cb3-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-359"><a href="#cb3-359" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb3-360"><a href="#cb3-360" aria-hidden="true" tabindex="-1"></a><span class="fu">### Voir la réponse et l'explication</span></span>
+<span id="cb3-361"><a href="#cb3-361" aria-hidden="true" tabindex="-1"></a>Si vous inspectez les propriétés du fichier <span class="in">`cat.bmp`</span>, vous constaterez une légère différence avec le calcul théorique. Cela s'explique par trois facteurs informatiques :</span>
+<span id="cb3-362"><a href="#cb3-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-363"><a href="#cb3-363" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**L'en-tête du fichier (Header) :** Un fichier image ne contient pas que des pixels. Le format BMP, par exemple, inclut un en-tête (généralement de 54 octets) qui stocke les métadonnées (largeur, hauteur, type d'encodage) indispensables pour que le logiciel sache comment lire la matrice.</span>
+<span id="cb3-364"><a href="#cb3-364" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**L'alignement en mémoire (Padding) :** Le format BMP exige que la taille de chaque ligne d'une image soit un multiple de 4 octets. Si ce n'est pas le cas (comme ici avec 657 colonnes), le système ajoute des octets vides ("padding") à la fin de chaque ligne pour faciliter la lecture par le processeur.</span>
+<span id="cb3-365"><a href="#cb3-365" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**L'allocation sur le disque (Taille des clusters) :** Votre système d'exploitation (Windows, macOS) découpe le disque dur en "blocs" de taille fixe (souvent 4 Ko). Même si un fichier dépasse d'un seul octet sur un nouveau bloc, l'intégralité du bloc est réservée. La "taille sur le disque" est donc souvent légèrement supérieure à la taille réelle du fichier.</span>
+<span id="cb3-366"><a href="#cb3-366" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-367"><a href="#cb3-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-368"><a href="#cb3-368" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-369"><a href="#cb3-369" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 4 &amp; 5 : Limites de la perception humaine</span></span>
+<span id="cb3-370"><a href="#cb3-370" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Calculez le nombre de couleurs que l'on peut coder sur un format classique 3x8 bits (RGB standard).</span>
+<span id="cb3-371"><a href="#cb3-371" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Ce nombre de couleurs est-il « suffisant » par rapport aux capacités de la vision humaine ?</span>
+<span id="cb3-372"><a href="#cb3-372" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-373"><a href="#cb3-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-374"><a href="#cb3-374" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb3-375"><a href="#cb3-375" aria-hidden="true" tabindex="-1"></a><span class="fu">### Voir la réponse et l'explication</span></span>
+<span id="cb3-376"><a href="#cb3-376" aria-hidden="true" tabindex="-1"></a>**Calcul du nombre de couleurs :**</span>
+<span id="cb3-377"><a href="#cb3-377" aria-hidden="true" tabindex="-1"></a>En RGB 3x8 bits, chaque canal (Rouge, Vert, Bleu) peut prendre 256 valeurs ($2^8$).</span>
+<span id="cb3-378"><a href="#cb3-378" aria-hidden="true" tabindex="-1"></a>Le nombre de combinaisons possibles est donc : </span>
+<span id="cb3-379"><a href="#cb3-379" aria-hidden="true" tabindex="-1"></a>$256 \times 256 \times 256 = 16~777~216$ de couleurs (environ 16,7 millions).</span>
+<span id="cb3-380"><a href="#cb3-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-381"><a href="#cb3-381" aria-hidden="true" tabindex="-1"></a>**Est-ce suffisant ?**</span>
+<span id="cb3-382"><a href="#cb3-382" aria-hidden="true" tabindex="-1"></a>Comme vu dans le chapitre sur la colorimétrie, l'œil humain est capable de distinguer environ 400 000 couleurs différentes (jusqu'à 2 millions selon les études et la luminosité). Mathématiquement, 16,7 millions est donc largement suffisant pour tromper notre cerveau. </span>
+<span id="cb3-383"><a href="#cb3-383" aria-hidden="true" tabindex="-1"></a>*Toutefois*, dans des cas très précis comme des dégradés de couleurs très doux (ex: un ciel bleu), l'œil est sensible aux sauts d'intensité, créant un effet d'escalier appelé *banding* (postérisation). C'est pourquoi les caméras professionnelles et les écrans HDR travaillent souvent en 10 ou 12 bits par canal (plus d'un milliard de couleurs) afin d'assurer des transitions parfaitement fluides.</span>
+<span id="cb3-384"><a href="#cb3-384" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-385"><a href="#cb3-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-386"><a href="#cb3-386" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-387"><a href="#cb3-387" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 6 : Le canal supplémentaire</span></span>
+<span id="cb3-388"><a href="#cb3-388" aria-hidden="true" tabindex="-1"></a>Lors de vos lectures ou de l'utilisation d'outils de design, vous croiserez souvent le modèle **RGBA**. Recherchez la signification et l'utilité du "A".</span>
+<span id="cb3-389"><a href="#cb3-389" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-390"><a href="#cb3-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-391"><a href="#cb3-391" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb3-392"><a href="#cb3-392" aria-hidden="true" tabindex="-1"></a><span class="fu">### Voir la réponse et l'explication</span></span>
+<span id="cb3-393"><a href="#cb3-393" aria-hidden="true" tabindex="-1"></a>Le **A** signifie **Alpha** (le canal Alpha).</span>
+<span id="cb3-394"><a href="#cb3-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-395"><a href="#cb3-395" aria-hidden="true" tabindex="-1"></a>Il ne représente pas une couleur, mais le niveau d'**opacité** (ou de transparence) du pixel. </span>
+<span id="cb3-396"><a href="#cb3-396" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Si Alpha = 255, le pixel est totalement opaque.</span>
+<span id="cb3-397"><a href="#cb3-397" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Si Alpha = 0, le pixel est totalement transparent.</span>
+<span id="cb3-398"><a href="#cb3-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-399"><a href="#cb3-399" aria-hidden="true" tabindex="-1"></a>Ce quatrième canal est fondamental dans le traitement d'images pour le *compositing* (la superposition d'images), le détourage, ou la création d'interfaces graphiques (comme les icônes sur un fond d'écran ou le rendu d'une page web). Un pixel RGBA nécessite donc 4 octets de mémoire (32 bits) au lieu de 3.</span>
+<span id="cb3-400"><a href="#cb3-400" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-401"><a href="#cb3-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-402"><a href="#cb3-402" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercices de programmation : Création d'images matricielles</span></span>
+<span id="cb3-403"><a href="#cb3-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-404"><a href="#cb3-404" aria-hidden="true" tabindex="-1"></a>Dans les exercices suivants, utilisez **NumPy** pour initialiser vos matrices et **OpenCV** (<span class="in">`cv2.imwrite`</span>) pour sauvegarder le résultat sur votre disque. </span>
+<span id="cb3-405"><a href="#cb3-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-406"><a href="#cb3-406" aria-hidden="true" tabindex="-1"></a>*Rappel : OpenCV utilise l'espace colorimétrique BGR (Bleu, Vert, Rouge) !*</span>
+<span id="cb3-407"><a href="#cb3-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-408"><a href="#cb3-408" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-409"><a href="#cb3-409" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 1 : Le drapeau national</span></span>
+<span id="cb3-410"><a href="#cb3-410" aria-hidden="true" tabindex="-1"></a>Créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom <span class="in">`drapeau.png`</span>.</span>
+<span id="cb3-411"><a href="#cb3-411" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-412"><a href="#cb3-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-413"><a href="#cb3-413" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-414"><a href="#cb3-414" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 2 : Les 4 quadrants</span></span>
+<span id="cb3-415"><a href="#cb3-415" aria-hidden="true" tabindex="-1"></a>Créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). </span>
+<span id="cb3-416"><a href="#cb3-416" aria-hidden="true" tabindex="-1"></a>Attribuez les couleurs suivantes aux quadrants :</span>
+<span id="cb3-417"><a href="#cb3-417" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>En haut à gauche : Bleu pur</span>
+<span id="cb3-418"><a href="#cb3-418" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>En haut à droite : Vert pur</span>
+<span id="cb3-419"><a href="#cb3-419" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>En bas à gauche : Rouge pur</span>
+<span id="cb3-420"><a href="#cb3-420" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>En bas à droite : Blanc pur</span>
+<span id="cb3-421"><a href="#cb3-421" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-422"><a href="#cb3-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-423"><a href="#cb3-423" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-424"><a href="#cb3-424" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 3 : Le cadre coloré</span></span>
+<span id="cb3-425"><a href="#cb3-425" aria-hidden="true" tabindex="-1"></a>Créez une image de 500x500 pixels. Le fond de l'image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. </span>
+<span id="cb3-426"><a href="#cb3-426" aria-hidden="true" tabindex="-1"></a>*Astuce d'optimisation : Pensez à la manière dont un peintre peint une toile pour le faire en seulement 2 lignes de code, sans dessiner 4 rectangles distincts !*</span>
+<span id="cb3-427"><a href="#cb3-427" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-428"><a href="#cb3-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-429"><a href="#cb3-429" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb3-430"><a href="#cb3-430" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 4 (Défi) : Le dégradé linéaire</span></span>
+<span id="cb3-431"><a href="#cb3-431" aria-hidden="true" tabindex="-1"></a>Créez une image de 256 pixels de haut sur 256 pixels de large. </span>
+<span id="cb3-432"><a href="#cb3-432" aria-hidden="true" tabindex="-1"></a>Générez un dégradé horizontal allant du Noir pur (à gauche) vers le Rouge pur (à droite). </span>
+<span id="cb3-433"><a href="#cb3-433" aria-hidden="true" tabindex="-1"></a>*Indice : Renseignez-vous sur la fonction `np.linspace` ou `np.arange` de NumPy, et profitez du mécanisme de "broadcasting" pour éviter d'utiliser des boucles `for`.*</span>
+<span id="cb3-434"><a href="#cb3-434" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-435"><a href="#cb3-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-436"><a href="#cb3-436" aria-hidden="true" tabindex="-1"></a>---</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
