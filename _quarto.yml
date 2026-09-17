@@ -14,7 +14,7 @@ book:
     - part: "I. Fondamentaux"
       chapters: 
         - 01_introduction.qmd
-        - 02_filtrage_spatial.qmd
+        - 02_codage_couleurs.qmd
     - part: "II. Cas pratiques"
       chapters:
         - 03_segmentation.qmd
