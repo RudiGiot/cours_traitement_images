@@ -4,13 +4,8 @@ Dans le monde numérique une image est représentée par une grille, un tableau 
 
 ![Le pixel dans une image numérique](images_dans_le_cours/pixel.png){#fig-pixel width="50%" fig-align="center"}
 
-Le pixel est le plus petit élément constitutif d'une image, il est indivisible et est souvent stocké comme élément numérique dans une matrice. Le ou les nombres associés au pixel représente une caractéristique de cette partie de l'image, souvent sa couleur. Pour caractériser ces couleurs, il faut d'abord commencer à étudier les caractéristiques de la lumières et de l’oeil.
+Le pixel est le plus petit élément constitutif d'une image, il est indivisible et est souvent stocké comme élément numérique dans une matrice. Le ou les nombres associés au pixel représente une caractéristique de cette partie de l'image, souvent sa couleur. Pour caractériser ces couleurs, il faut d'abord commencer à étudier les caractéristiques de la lumière.
 
-## L'oeil
-
-La compréhension des couleurs et de leur système de codage, de classification, requière une étude préalable du fonctionnement de l’oeil. Nous distinguerons deux parties dans cette section, la première traitera du champs de vision et de son importance dans la détermination de la résolution d’une image, la seconde expliquera comment les couleurs sont perçues, captées, interprétées par une oeil humain et codée dans un système numérique.
-
-## Champs de vision
 
 ## La lumière
 
@@ -32,10 +27,10 @@ $$ {#eq-longueur-onde}
 
 Il semble donc évident de caractériser une lumière monochromatique par sa fréquence puisqu'il s'agit d'une constante. Néanmoins, c'est généralement la longueur d'onde (supposée dans le vide) qui est choisie pour la définir.
 
-![Dispersion de la lumière dans le prisme de Newton](images_dans_le_cours/prisme.png){#fig-pixel width="50%" fig-align="center"}
+![Dispersion de la lumière dans le prisme de Newton](images_dans_le_cours/prisme.png){#fig-prisme width="50%" fig-align="center"}
 
 
-Physiquement, la lumière blanche n'existe pas. Le "blanc" n'est pas une longueur d'onde unique, c'est une perception purement biologique et colorimétrique. Elle est le résultat d'une combinaison d'un ensemble de rayonnements. Le prisme de Newton (Figure 1) facilite l'observation de cette dispersion lumineuse : émise par le soleil ou par une lampe à incandescence, la lumière traverse le prisme avec un angle d'incidence α par rapport à la normale. Lorsque le rayon lumineux passe de l'air au verre, sa vitesse diminue et sa longueur d'onde se comprime, mais sa fréquence (sa "couleur" fondamentale) reste strictement identique car elle ne dépend que de la source d'émission. Le faisceau change alors de direction et se rapproche de la normale au niveau de la surface de séparation, au point d'incidence. C'est le phénomène de réfraction. Le même phénomène s'observe à la sortie du prisme, lors, par exemple, d'une transition verre-air.
+Physiquement, la lumière blanche n'existe pas. Le "blanc" n'est pas une longueur d'onde unique, c'est une perception purement biologique et colorimétrique. Elle est le résultat d'une combinaison d'un ensemble de rayonnements. Le prisme de Newton (@fig-prisme) facilite l'observation de cette dispersion lumineuse : émise par le soleil ou par une lampe à incandescence, la lumière traverse le prisme avec un angle d'incidence α par rapport à la normale. Lorsque le rayon lumineux passe de l'air au verre, sa vitesse diminue et sa longueur d'onde se comprime, mais sa fréquence (sa "couleur" fondamentale) reste strictement identique car elle ne dépend que de la source d'émission. Le faisceau change alors de direction et se rapproche de la normale au niveau de la surface de séparation, au point d'incidence. C'est le phénomène de réfraction. Le même phénomène s'observe à la sortie du prisme, lors, par exemple, d'une transition verre-air.
 
 L'angle total de réfraction varie en fonction des longueurs d'onde des rayonnements incidents (la valeur de $\lambda$ la plus élevée correspond aux déviations les plus faibles). Sur un écran blanc situé à la sortie du prisme, on peut observer une bande lumineuse dont la couleur varie progressivement du rouge au violet. À chacun de ces rayonnements (appelés « monochromatiques ») est associée une longueur d'onde (de 400 nm pour le violet jusqu'à 780 nm pour le rouge). 
 
@@ -43,9 +38,11 @@ L'œil perçoit donc des mélanges de lumières monochromatiques dans des propor
 
 Ce spectre est détaillé dans le tableau suivant :
 
-Tableau 1 : Le spectre électromagnétiqueLa lumière peut être représentée par la courbe de distribution spectrale de son énergie lumineuse (répartition du flux énergétique en fonction de la longueur d'onde).
+![Le spectre EM](images_dans_le_cours/spectre.png){#fig-spectre width="70%" fig-align="center"}
 
-Figure 2 : Courbe de distribution spectrale de l'énergie lumineuse dans un ciel bleu
+La lumière peut être représentée par la courbe de distribution spectrale de son énergie lumineuse (répartition du flux énergétique en fonction de la longueur d'onde).
+
+![Courbe de distribution spectrale de l'énergie lumineuse dans un ciel bleu](images_dans_le_cours/lumiere.png){#fig-lumiere width="70%" fig-align="center"}
 
 ## La couleur
 
@@ -56,19 +53,21 @@ La couleur perçue dépend effectivement de :
 * la manière dont la lumière se propage
 * la sensibilité différentielle de l'œil
 
-Néanmoins, la couleur d'un objet pourrait être complètement définie par sa courbe de réflectance. Cette courbe représente en pourcentage l'énergie lumineuse réfléchie en fonction de la longueur d'onde incidente.
+Néanmoins, la couleur d'un objet pourrait être complètement définie par sa courbe de réflectance. 
+
+![Courbe de réflectance d'un objet orange](images_dans_le_cours/reflecting_curve.jpg){#fig-reflectance width="60%" fig-align="center"}
+
+Cette courbe représente en pourcentage l'énergie lumineuse réfléchie en fonction de la longueur d'onde incidente.
+
+![Courbe de réflectance de divers environnements](images_dans_le_cours/reflecting_snow.png){#fig-reflectance2 width="70%" fig-align="center"}
 
 ### Les différents blancs
 
 Il est nécessaire, dans toute tentative de modélisation, de définir des références.
 
-Légende
+![Courbe spectrale de différents "blancs"](images_dans_le_cours/whites.png){#fig-whites width="70%" fig-align="center"}
 
-Le blanc produit par une puissance constante de chacun des rayonnements du spectre visible (BLANC E) est sans doute celui qui semblait le plus logique pour définir ce point de référence. Pourtant, il n'est pas considéré comme tel car il est difficile à produire.
-
-Légende
-
-Trois sources standards ont été définies par la Commission Internationale de l'Éclairage (CIE). Celles-ci peuvent être obtenues par un corps noir chauffé jusqu'à incandescence à une certaine température :
+Le blanc produit par une puissance constante de chacun des rayonnements du spectre visible (BLANC E) est sans doute celui qui semblait le plus logique pour définir ce point de référence. Pourtant, il n'est pas considéré comme tel car il est difficile à produire. Il y a donc trois sources standards qui ont été définies par la Commission Internationale de l'Éclairage (CIE). Celles-ci peuvent être obtenues par un corps noir chauffé jusqu'à incandescence à une certaine température :
 
 * **le blanc A** (éclairage d'une lampe à filament de tungstène) correspond à une température du corps noir de 2848 °K.
 * **le blanc B** (lumière du jour à midi en été) correspond à la température du corps noir de 4800 °K.
@@ -78,14 +77,14 @@ Trois sources standards ont été définies par la Commission Internationale de 
 
 Une expérience simple et pratique consiste à éclairer un support quelconque avec une lumière donnée. Un observateur doit ensuite reproduire la même valeur, sous la forme d'une tache colorée adjacente, à l'aide d'une ou plusieurs sources monochromatiques (une seule longueur d'onde) dont il peut faire varier l'intensité. De nombreuses expériences de ce type ont mis en évidence plusieurs propriétés intéressantes du système visuel humain.
 
+![Synthèse additive de couleurs](images_dans_le_cours/additive.png){#fig-additive width="70%" fig-align="center"}
+
 Si l'observateur ne dispose que d'une seule source monochromatique, il ne pourra apparier son test lumineux avec la référence que si elle possède la même longueur d'onde. Il sera toutefois toujours en mesure d'obtenir une intensité lumineuse équivalente.
 En revanche, l'utilisation exclusive de trois sources différentes lui permettra d'apparier pratiquement toutes les lumières testées, à condition que les lumières de référence soient suffisamment éloignées les unes des autres dans le spectre visible. Cela correspond donc respectivement à des sources de longueur d'onde faible (bleu), moyenne (vert) et élevée (rouge).
 
-**Synthèse additive des couleurs**
-
 Si le mélange est réalisé entre les rayonnements extrêmes du spectre, on obtient une plage subjective (qui n'existe pas dans le spectre visible) que l'on appelle « la gamme des pourpres ».
 
-La combinaison de ces paramètres offre plus d'un million de possibilités. Cette différenciation est moins visible dans certaines conditions (lumière faible). On admet généralement que l'œil distingue environ 400 000 couleurs différentes.
+La combinaison de ces paramètres offre une infinité de possibilités. Mais notre oeil ne peut pas toutes les discriminer. De plus, cette différenciation est moins visible dans certaines conditions (lumière faible). On admet généralement que l'œil distingue environ 400.000 couleurs différentes.
 
 ### Principes de base et lois
 
@@ -120,95 +119,214 @@ $$
 m_1 + m_2 = (a_1 + a_2) \cdot S_1 + (b_1 + b_2) \cdot S_2 + (c_1 + c_2) \cdot S_3
 $$ {#eq-grassmann-add-resultat}
 
-### Les différents modèles
+### Le modèle colorimétrique de la CIE (1931)
 
-#### Le modèle RGB (RVB)
+Comme nous l'avons vu précédemment, le modèle RVB classique pose un problème majeur : il est dépendant du matériel (caméra, écran). Pour pallier ce problème de dérive colorimétrique, la Commission Internationale de l'Éclairage (CIE) a défini en 1931 un modèle mathématique universel. L'objectif était de créer un standard absolu basé sur la perception de l'œil humain, indépendant de tout capteur.
 
-À ce stade, on pourrait penser qu'une couleur donnée résulte simplement de la superposition de ses composantes verte, rouge et bleue.
+#### 1. L'espace CIE RGB original
 
-Cette conclusion, un peu hâtive, ne serait pas tout à fait complète. D'une part, les différents cônes de l'œil ne sont pas sensibles à une seule longueur d'onde (mais à un intervalle), et d'autre part, l'œil ne constitue qu'un simple récepteur physique. C'est en effet le cerveau qui « produit » la couleur à partir des signaux qu'il reçoit de ses « capteurs ». Ainsi, la méthode d'interprétation qu'il développe contribue considérablement aux caractéristiques de la vision humaine.
+Le système a d'abord été défini à partir de trois sources lumineuses primaires monochromatiques de référence :
+* **ROUGE :** $700 \, \text{nm}$
+* **VERT :** $546,1 \, \text{nm}$
+* **BLEU :** $435,8 \, \text{nm}$
 
-Le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais il n'est pas le seul.
+Pour une couleur donnée, on détermine les quantités d'énergie $(R, V, B)$ de ces trois primaires nécessaires pour recréer cette couleur (spectre équi-énergétique). 
 
-#### Le modèle HSL (TSL : Teinte, Saturation, Luminosité)
+Cependant, en traitement d'images, on cherche souvent à séparer la **chromaticité** (la couleur pure) de la **luminance** (l'intensité lumineuse). Pour s'affranchir de la luminance, on normalise ces valeurs pour obtenir les coordonnées chromatiques $(r, v, b)$ :
 
-Si vous écoutez une personne décrire une couleur, cela donnera quelque chose comme : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair). Le modèle HSL a été classifié par MUNSELL en 1905.
+$$
+r = \frac{R}{R+V+B} \quad ; \quad v = \frac{V}{R+V+B} \quad ; \quad b = \frac{B}{R+V+B}
+$$ {#eq-coefficients-rvb}
 
-Une couleur pure sera saturée à 100 %. Si la saturation atteint 0 % (et non 100 % comme l'erreur de frappe du texte d'origine semble l'indiquer), il n'y a plus de dominante de couleur : la couleur est dite achromatique (absence de couleur). Cela révèle une nuance de gris, allant du blanc au noir selon la luminosité. Le cerveau agit donc comme un intégrateur qui détecte trois grandeurs physiques distinctes :
+Ce qui implique mathématiquement la relation fondamentale suivante (il suffit donc de connaître deux coordonnées pour déduire la troisième) :
 
+$$
+r + v + b = 1
+$$ {#eq-unite-rvb}
+
+Géométriquement, l'ensemble des couleurs réelles forme alors un volume tridimensionnel (un cône) dans l'espace $(R, V, B)$. Les couleurs du spectre visible (l'arc-en-ciel) se situent sur le bord de ce volume, formant une courbe tridimensionnelle.
+
+![Représentation 3D du spectre équi-énergétique avec les couleurs primaires.](images/cie_rgb_3d.png){#fig-cie-rgb-3d}
+
+#### 2. L'espace CIE XYZ et le diagramme de chromaticité
+
+Le modèle CIE RGB d'origine impliquait parfois des valeurs négatives pour certaines couleurs très saturées, ce qui était complexe à traiter informatiquement. La CIE a donc créé un espace mathématique virtuel appelé **CIE XYZ**.
+
+Dans cet espace, les primaires $(X, Y, Z)$ sont virtuelles (elles ne correspondent à aucune lumière physique réelle). Elles ont été choisies pour que :
+1. Toutes les couleurs réelles aient des coordonnées strictement positives.
+2. La coordonnée $Y$ contienne à elle seule toute l'information de **Luminance**.
+
+Comme précédemment, on normalise ces valeurs pour passer dans un espace bidimensionnel en s'affranchissant de la luminosité (projection sur le plan $X+Y+Z=1$) :
+
+$$
+x = \frac{X}{X+Y+Z} \quad ; \quad y = \frac{Y}{X+Y+Z} \quad ; \quad z = \frac{Z}{X+Y+Z}
+$$ {#eq-coefficients-xyz}
+
+$$
+x + y + z = 1
+$$ {#eq-unite-xyz}
+
+En projetant ce plan sur les axes $(x, y)$, on obtient le célèbre **Diagramme de chromaticité de la CIE**.
+
+![Diagramme de chromaticité (x,y) de la CIE (1931). La zone colorée représente toutes les couleurs visibles par l'œil humain.](images/cie_chromaticite.png){#fig-cie-chromaticite}
+
+**Lecture du diagramme :**
+* **Le lieu spectral (Spectrum Locus) :** C'est la courbe en forme de fer à cheval. Elle représente les couleurs pures (monochromatiques) de 400 nm à 700 nm.
+* **La droite des pourpres :** C'est la ligne droite qui relie le rouge extrême et le bleu extrême à la base. Ces couleurs n'existent pas dans le spectre de l'arc-en-ciel, elles sont une invention du cerveau (mélange).
+* **Le point blanc (Blanc de référence) :** Il se situe au centre du diagramme. Plus on s'éloigne du centre vers les bords, plus la couleur est saturée.
+
+::: {.callout-important title="L'importance industrielle : le Gamut"}
+En vision industrielle, ce diagramme est crucial pour évaluer le **Gamut** d'un équipement. Un capteur de caméra ou un écran de contrôle ne peut reproduire qu'un sous-ensemble (généralement un triangle) des couleurs de ce diagramme. Si un défaut de fabrication sur une ligne de production produit une couleur située en dehors du triangle de votre caméra, votre algorithme sera physiquement incapable de détecter l'anomalie !
+:::
+
+#### 3. Évolutions vers l'uniformité (CIE 1960 et 1976)
+
+Le principal défaut du diagramme $(x,y)$ de 1931 est qu'il n'est pas **perceptuellement uniforme** : une même distance mathématique sur le graphique ne correspond pas à la même différence visuelle pour l'œil humain (la zone des verts est disproportionnellement grande).
+
+Pour corriger cela, la CIE a introduit des transformations mathématiques successives (changement de repère) :
+* **CIE 1960 (UCS) :** Passage aux coordonnées $(u, v)$.
+* **CIE 1976 (CIELUV / CIELAB) :** Passage aux coordonnées $(u', v')$.
+
+Ces espaces sont aujourd'hui la norme pour le contrôle de conformité des couleurs dans l'industrie, car ils permettent de calculer des tolérances d'écarts de couleurs ($\Delta E$) fidèles à la vision des contrôleurs humains.
+
+![Diagrammes de chromaticité uniformes de la CIE (1960 et 1976).](images/cie_uniforme.png){#fig-cie-uniforme}
+
+### Le codage RGB (RVB)
+
+Nous avons vu qu'une couleur peut donc être définie par trois valeurs. Le système RVB repose sur une synthèse additive de 3 couleurs de base: le rouge, le vert et le bleu. On les appelle les trois composantes. Généralement, les valeurs de ces composantes sont comprises entre 0 et 255 (un octet). Il est donc possible de coder 16.777.216 couleurs différentes.  Si chacune des composantes est à son maximum, le résultat est blanc ; si chacune est à son minimum, le résultat est noir (absence de lumière). Si nous avons la même proportion de rouge, de bleu et de vert, nous obtenons un niveau de gris. L'augmentation d'une composante accroît la luminosité du résultat.
+
+| Aperçu | Couleur | Rouge (R) | Vert (V) | Bleu (B) | Remarque |
+| :---: | :--- | :---: | :---: | :---: | :--- |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(0,0,0); border:1px solid #777; border-radius:3px;"></span> | **Noir pur** | 0 | 0 | 0 | Absence totale de lumière (minimum) |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(64,64,64); border:1px solid #777; border-radius:3px;"></span> | **Gris foncé** | 64 | 64 | 64 | Les 3 valeurs sont égales et basses |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(128,128,128); border:1px solid #777; border-radius:3px;"></span> | **Gris moyen** | 128 | 128 | 128 | |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(192,192,192); border:1px solid #777; border-radius:3px;"></span> | **Gris clair** | 192 | 192 | 192 | Les 3 valeurs sont égales et élevées |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(255,255,255); border:1px solid #777; border-radius:3px;"></span> | **Blanc pur** | 255 | 255 | 255 | Addition maximale des 3 lumières |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(255,0,0); border:1px solid #777; border-radius:3px;"></span> | **Rouge pur** | 255 | 0 | 0 | |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(100,0,0); border:1px solid #777; border-radius:3px;"></span> | **Rouge foncé**| 100 | 0 | 0 | Baisse de la valeur R = baisse de luminosité |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(255,255,0); border:1px solid #777; border-radius:3px;"></span> | **Jaune pur** | 255 | 255 | 0 | Synthèse de Rouge + Vert |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(0,255,255); border:1px solid #777; border-radius:3px;"></span> | **Cyan pur** | 0 | 255 | 255 | Synthèse de Vert + Bleu |
+| <span style="display:inline-block; width:18px; height:18px; background-color:rgb(255,0,255); border:1px solid #777; border-radius:3px;"></span> | **Magenta pur**| 255 | 0 | 255 | Synthèse de Rouge + Bleu |
+
+: Exemples de couleurs et leurs composantes RVB respectives {#tbl-valeurs-rgb}
+
+Malheureusement, ce système de codage n'est pas très satisfaisant. Dans le domaine informatique, le codage RVB est dépendant du périphérique. Cela entraîne une dérive colorimétrique qui doit être corrigée par calibrage.
+
+Cependant, le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais comme nous allons le voir dans la suite, il n'est pas le seul.
+
+#### Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)
+
+Le modèle HSL a été décrit par MUNSELL en 1905 et est plus proche de la manière dont un humain donne la description d'une couleur. En effet, si vous écoutez une quelqu'un décrire une couleur, on pourrait entendre : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair).
+
+Notre cerveau agit donc comme un intégrateur qui détecte trois grandeurs physiques distinctes :
 * **La teinte (Hue) :** caractérisée par la longueur d'onde dominante du rayonnement (± 250 teintes monochromatiques détectables par l'œil, plus les pourpres).
 * **La luminosité ou clarté (Lightness) :** l'énergie lumineuse reçue (± 1000 niveaux de luminosité différents, selon la teinte).
 * **La saturation (Saturation ou pureté de la couleur) :** contribue à l'intensité de l'ensemble et permet de différencier une couleur vive d'une couleur pastel (atténuée) (± 20 000 différenciations).
 
-#### Le modèle CIE (au lieu de ICL)
+Une couleur pure (un rouge flamboyant) sera donc saturée à 100 % et quand la saturation atteint 0%, il n'y a plus de dominante de couleur. La couleur est dite achromatique (absence de couleur) et révèle une nuance de gris, allant du blanc au noir selon la luminosité.
 
-En 1931, la Commission Internationale de l'Éclairage (CIE) a fixé un modèle universel pour la représentation des couleurs afin de permettre la comparaison entre les indications fournies par différents colorimètres.
+| Aperçu | Couleur | Teinte (H) | Saturation (S) | Luminosité (L) | Remarque |
+| :---: | :--- | :---: | :---: | :---: | :--- |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,0%); border:1px solid #777; border-radius:3px;"></span> | **Noir pur** | 0° | 0% | 0% | Luminosité à 0 = noir total, peu importe H et S |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,50%); border:1px solid #777; border-radius:3px;"></span> | **Gris moyen** | 0° | 0% | 50% | Saturation à 0 = absence de pigment (nuance de gris) |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,100%); border:1px solid #777; border-radius:3px;"></span> | **Blanc pur** | 0° | 0% | 100% | Luminosité à 100 = blanc pur, peu importe H et S |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,50%); border:1px solid #777; border-radius:3px;"></span> | **Rouge pur** | 0° | 100% | 50% | Couleur fondamentale (0° = début du cercle chromatique) |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,25%); border:1px solid #777; border-radius:3px;"></span> | **Rouge foncé**| 0° | 100% | 25% | On baisse L : on assombrit la même couleur |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,75%); border:1px solid #777; border-radius:3px;"></span> | **Rouge clair**| 0° | 100% | 75% | On monte L : on éclaircit la même couleur |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(0,30%,50%); border:1px solid #777; border-radius:3px;"></span> | **Rouge délavé**| 0° | 30% | 50% | On baisse S : la couleur devient fade (tend vers le gris) |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(120,100%,50%); border:1px solid #777; border-radius:3px;"></span> | **Vert pur** | 120° | 100% | 50% | Décalage d'un tiers (120°) sur le cercle chromatique |
+| <span style="display:inline-block; width:18px; height:18px; background-color:hsl(240,100%,50%); border:1px solid #777; border-radius:3px;"></span> | **Bleu pur** | 240° | 100% | 50% | Décalage de deux tiers (240°) sur le cercle chromatique |
 
-Le système choisi comme référence (RGB) est défini par les trois primaires suivantes :
+: Exemples de couleurs et leurs composantes TSL/HSL respectives {#tbl-valeurs-hsl}
 
-* **ROUGE :** 700 nm
-* **VERT :** 546,1 nm
-* **BLEU :** 435,8 nm
+Vous remarquerez la teinte n'est pas donnée par une valeur entre 0 et 255 mais bien entre 0 et 360. H est donné en degré car elle est souvent réprésentée sur un cercle qui se transforme en cylindre avec la saturation et la luminance.
 
-Si l'on calcule les quantités primaires de rouge, de vert et de bleu que l'on doit mélanger pour obtenir l'égalisation d'une lumière blanche E, on obtient les coefficients trichromatiques $(R, V, B)$.
+![Représentation en cylindre de l'espace colorimétrique HSL. La Teinte (Hue) correspond à l'angle, la Saturation correspond au rayon, et la Luminosité (Lightness) correspond à l'axe vertical.](images_dans_le_cours/HSL.png){#fig-cylindre-hsl}
 
-Par définition (pour normaliser l'énergie lumineuse et s'affranchir de la luminance), on calcule les coordonnées chromatiques $r, v, b$ :
+Comme on peut l'observer sur la @fig-cylindre-hsl :
+- **La Teinte (H)** tourne autour de l'axe central (de 0° à 360°).
+- **La Saturation (S)** part de l'axe central gris (0%) vers le bord coloré du cylindre (100%).
+- **La Luminosité (L)** monte de la base noire (0%) vers le sommet blanc (100%).
 
-$$r = \frac{R}{R+V+B} \quad ; \quad v = \frac{V}{R+V+B} \quad ; \quad b = \frac{B}{R+V+B}$$
+### Conversion Mathématique entre RVB et TSL (HSL)
 
+Pour passer d'un espace colorimétrique à l'autre, les algorithmes (comme ceux intégrés dans OpenCV) utilisent une série d'opérations non linéaires. 
 
-{#eq-coefficients-rvb}
+Pour réaliser une conversion de RVB vers TSL (HSL) :
 
-Ce qui implique la relation fondamentale :
+La première étape consiste toujours à **normaliser** les valeurs RVB de l'intervalle $[0, 255]$ vers l'intervalle $[0, 1]$. On note ces valeurs normalisées $R', G', B'$.
 
-$$r + v + b = 1$$
+On cherche ensuite la composante maximale ($C_{max}$), la composante minimale ($C_{min}$) et la différence entre les deux ($\Delta$).
 
+$$
+\begin{aligned}
+C_{max} &= \max(R', G', B') \\
+C_{min} &= \min(R', G', B') \\
+\Delta &= C_{max} - C_{min}
+\end{aligned}
+$$
 
-{#eq-unite-rvb}
+**Calcul de la Luminosité (L) :**
+La luminosité est simplement la moyenne entre la composante la plus forte et la plus faible.
+$$ L = \frac{C_{max} + C_{min}}{2} $$
 
-Ensuite, nous pouvons calculer ces coefficients pour chacun des rayonnements monochromatiques du spectre (avec les mêmes primaires et le même éclairage) et tracer les courbes d'égalisation du spectre équi-énergétique.
+**Calcul de la Saturation (S) :**
+Si $\Delta = 0$ (c'est-à-dire que $R=G=B$), la couleur est une nuance de gris, donc la saturation est nulle.
+$$
+S = \begin{cases} 
+0 & \text{si } \Delta = 0 \\
+\frac{\Delta}{1 - |2L - 1|} & \text{sinon}
+\end{cases}
+$$
 
-Cependant, on préfère une représentation par projection sur un plan donné d'un système à trois axes avec les coordonnées $R$, $V$ et $B$. Si l'on associe à chacune des longueurs d'onde (de 400 nm à 700 nm) un vecteur $OC$ ayant pour composantes les coefficients trichromatiques, on visualise alors une courbe gauche (tridimensionnelle) dans un repère orthonormé standard. Cette courbe est le lieu des extrémités de ces vecteurs. À partir de cette courbe, nous allons délimiter une partie de l'espace colorimétrique.
+**Calcul de la Teinte (H) :**
+La teinte est calculée selon le secteur du cercle chromatique (par tranches de 60°) dominé par la couleur principale.
+$$
+H = \begin{cases} 
+0^\circ & \text{si } \Delta = 0 \\
+60^\circ \times \left( \frac{G' - B'}{\Delta} \bmod 6 \right) & \text{si } C_{max} = R' \\
+60^\circ \times \left( \frac{B' - R'}{\Delta} + 2 \right) & \text{si } C_{max} = G' \\
+60^\circ \times \left( \frac{R' - G'}{\Delta} + 4 \right) & \text{si } C_{max} = B'
+\end{cases}
+$$
+*(Si $H < 0^\circ$, on lui ajoute $360^\circ$ pour obtenir un angle positif).*
 
-Les limites de ce sous-espace sont :
+---
 
-* La surface conique formée par le rayon $OC$ ($C$ appartenant à la courbe gauche).
-* La surface plane $Od$ (où $d$ est la droite des pourpres).
+Pour la conversion inverse de TSL (HSL) vers RVB :
 
-Tous les points de cet espace représentent l'ensemble des couleurs réelles. Les points extérieurs seront associés à des couleurs irréelles (non physiques).
+On utilise la Teinte ($H \in [0, 360[$), la Saturation ($S \in [0, 1]$) et la Luminosité ($L \in [0, 1]$) pour retrouver $R, G, B$.
 
-**Figure X : Courbe du spectre équi-énergétique avec les couleurs primaires**
+On calcule d'abord les paramètres intermédiaires suivants (le Chroma $C$, un paramètre $X$ et un ajustement de luminosité $m$) :
+$$
+\begin{aligned}
+C &= (1 - |2L - 1|) \times S \\
+X &= C \times \left(1 - \left| \left(\frac{H}{60^\circ}\right) \bmod 2 - 1 \right|\right) \\
+m &= L - \frac{C}{2}
+\end{aligned}
+$$
 
-En coupant cet espace par le plan $r + v + b = 1$ et en le projetant sur le plan $rv$, on obtient le diagramme de chromaticité. La trace du cône délimitant les couleurs réelles est une courbe concave, fermée, sur laquelle se situent les couleurs réelles. La partie curviligne de cette courbe représente les couleurs monochromatiques et est graduée en longueurs d'onde. C'est ce qu'on appelle le « lieu spectral » (spectrum locus).
+On détermine ensuite les valeurs RVB temporaires $(R', G', B')$ en fonction de l'angle de la Teinte $H$ :
+$$
+(R', G', B') = \begin{cases} 
+(C, X, 0) & \text{si } 0^\circ \le H < 60^\circ \\
+(X, C, 0) & \text{si } 60^\circ \le H < 120^\circ \\
+(0, C, X) & \text{si } 120^\circ \le H < 180^\circ \\
+(0, X, C) & \text{si } 180^\circ \le H < 240^\circ \\
+(X, 0, C) & \text{si } 240^\circ \le H < 300^\circ \\
+(C, 0, X) & \text{si } 300^\circ \le H < 360^\circ 
+\end{cases}
+$$
 
-Si l'on place cette courbe dans le standard défini par la CIE (le fameux espace XYZ) :
+Enfin, on ajoute l'ajustement de luminosité $m$ et on dé-normalise pour retrouver les valeurs classiques sur un octet (0 à 255) :
+$$
+\begin{aligned}
+R &= (R' + m) \times 255 \\
+G &= (G' + m) \times 255 \\
+B &= (B' + m) \times 255
+\end{aligned}
+$$
 
-* les trois axes primaires $Ox$, $Oy$, $Oz$ sont trirectangles,
-* les plans $Ox$ et $Oz$ sont dans le plan de luminosité nulle (la luminance est entièrement portée par $Y$).
-
-Nous changeons alors de coordonnées (passage aux coordonnées chromatiques $x, y, z$) :
-
-$$x = \frac{X}{X+Y+Z} \quad ; \quad y = \frac{Y}{X+Y+Z} \quad ; \quad z = \frac{Z}{X+Y+Z}$$
-
-
-{#eq-coefficients-xyz}
-
-$$x + y + z = 1$$
-
-
-{#eq-unite-xyz}
-
-Ensuite, on procède comme dans le cas précédent. On coupe l'espace par un plan $(x + y + z) = 1$ et on effectue une projection sur le plan $xOy$.
-
-Ce diagramme est également appelé le triangle des couleurs.
-
-**Figure X : Sous-espace des couleurs réelles**
-
-**Figure X : Diagramme de chromaticité (x,y) de la CIE**
-
-En 1960, la CIE a adopté un diagramme de chromaticité uniforme (UCS - 1960) basé sur une transformation des points de référence (coordonnées $u, v$). En 1976, ce même diagramme a de nouveau été modifié pour améliorer le calcul des écarts chromatiques (coordonnées $u', v'$).
-
-**Figure X : Diagramme de chromaticité de la CIE**
 
 ---
 
@@ -397,6 +515,21 @@ Il ne représente pas une couleur, mais le niveau d'**opacité** (ou de transpar
 * Si Alpha = 0, le pixel est totalement transparent.
 
 Ce quatrième canal est fondamental dans le traitement d'images pour le *compositing* (la superposition d'images), le détourage, ou la création d'interfaces graphiques (comme les icônes sur un fond d'écran ou le rendu d'une page web). Un pixel RGBA nécessite donc 4 octets de mémoire (32 bits) au lieu de 3.
+:::
+
+::: {.callout-note title="Question de réflexion : La non-linéarité du modèle"}
+**Pourquoi la transformation RVB $\rightarrow$ TSL est-elle non linéaire, et quelles en sont les implications concrètes en traitement d'images industriel ?**
+
+**1. Pourquoi est-ce non linéaire ?**
+Contrairement au passage en niveaux de gris qui est une simple combinaison linéaire (une multiplication matricielle), la conversion vers le TSL utilise des opérations conditionnelles (fonctions $\max$ et $\min$), des valeurs absolues et des divisions. Géométriquement, l'algorithme "déforme" un cube (l'espace RVB) pour l'enrouler et le faire rentrer dans un cylindre. Cette torsion mathématique a pour but de s'aligner sur la perception visuelle de l'œil humain, qui est elle-même fortement non linéaire.
+
+**2. Les implications sur le terrain (vision industrielle) :**
+Cette non-linéarité a trois conséquences majeures à prendre en compte lors du développement de vos algorithmes de contrôle qualité :
+
+* **L'instabilité de la Teinte (Singularités) :** Lorsque la saturation est très faible (sur des objets gris/métalliques) ou que l'image est très sombre/très surexposée, la différence $\Delta$ s'approche de $0$. Une infime variation de lumière ou un bruit de capteur (même de 1 bit sur un pixel) va faire bondir l'angle de la Teinte de manière chaotique. 
+*$\rightarrow$ Règle d'or : ne jamais baser une segmentation sur la Teinte si la Saturation ou la Luminosité sont trop faibles.*
+* **Le problème de la circularité (Mathématique modulo) :** La Teinte est un angle. Les valeurs $0^\circ$ (rouge) et $359^\circ$ (rouge) sont visuellement identiques mais numériquement opposées. Vous ne pouvez donc pas utiliser de simples moyennes mathématiques ou de distances euclidiennes sur la Teinte. (Par exemple, dans OpenCV, isoler la couleur rouge requiert souvent de créer deux masques : de 0 à 10 et de 170 à 179, puis de les additionner).
+* **Le coût de calcul (CPU) :** Les divisions, les modulos et les branchements conditionnels (`if`) demandent plus de cycles d'horloge au processeur qu'une simple addition matricielle. Sur des lignes de production à cadence très élevée (milliers de pièces par minute), convertir une image haute résolution de RVB à TSL coûte un temps de traitement précieux qu'il faut budgétiser.
 :::
 
 ## Exercices de programmation : Création d'images matricielles

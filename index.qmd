@@ -9,7 +9,9 @@ L'objectif de ce cours est de faire le pont entre les fondements théoriques de 
 Ce support suit la philosophie du *Docs as Code*. Il ne s'agit pas d'un simple recueil de diapositives, mais d'une documentation technique vivante comprenant :
 
 * **Le cadre théorique :** Les principes mathématiques et algorithmiques.
-* **L'implémentation Python :** Du code basé sur les standards de l'industrie (`OpenCV`, `scikit-image`, `NumPy`).
+* **Des exercices de réflexion :** Pour aller plus loin, avec les solutions commentées.
+* **L'implémentation Python :** Du code basé sur les standards de l'industrie (`OpenCV`, `NumPy`, ...).
+* **Des exercices de base :** Une application modulaire en code Python des principes mathématiques et algorithmiques.
 * **Des Use Cases :** Des cas concrets avec des jeux de données.
 
 ## Environnement de Travail
@@ -22,4 +24,5 @@ Assurez-vous de disposer des éléments suivants sur votre machine :
 1. **Python 3.10+** avec un environnement virtuel configuré (`venv` ou `conda`).
 2. Les bibliothèques listées dans le `requirements.txt` du cours (fourni au premier cours).
 3. **VS Code** avec l'extension Jupyter pour exécuter les notebooks fournis.
+4. Un clone du repo https://github.com/RudiGiot/cours_traitement_images.git pour pouvoir agrémenter mon cours avec vos notes et vos codes.
 :::
