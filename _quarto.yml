@@ -13,7 +13,7 @@ book:
     - index.qmd
     - part: "I. Fondamentaux"
       chapters: 
-        - 01_introduction.qmd
+        - 01_images_numeriques.qmd
         - 02_codage_couleurs.qmd
     - part: "II. Cas pratiques"
       chapters:

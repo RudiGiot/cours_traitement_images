@@ -1,16 +1,16 @@
-# Introduction
+# Images numériques
 
-# Image numérique
+Dans le monde numérique une image est représentée par une grille, un tableau de pixels. 
+![Le pixel dans une image numérique](images_dans_le_cours/pixel.png){#fig-pixel width="100%" fig-align="center"}
+Le pixel est le plus petit élément constitutif d'une image, il est indivisible et est souvent stocké comme élément numérique dans une matrice. Le ou les nombres associés au pixel représente une caractéristique de cette partie de l'image, souvent sa couleur. Pour caractériser ces couleurs, il faut d'abord commencer à étudier les caractéristiques de la lumières et de l’oeil.
 
-Dans le monde numérique une image est représentée par une grille, un tableau de pixels. Le pixel est le plus petit élément constitutif d'une image, il est indivisible et est souvent stocké comme élément numérique dans une matrice. Le ou les nombres associés au pixel représente une caractéristique de cette partie de l'image, souvent sa couleur. Pour caractériser ces couleurs, il faut d'abord commencer à étudier les caractéristiques de la lumières et de l’oeil.
-
-## 1. L'oeil
+## L'oeil
 
 La compréhension des couleurs et de leur système de codage, de classification, requière une étude préalable du fonctionnement de l’oeil. Nous distinguerons deux parties dans cette section, la première traitera du champs de vision et de son importance dans la détermination de la résolution d’une image, la seconde expliquera comment les couleurs sont perçues, captées, interprétées par une oeil humain et codée dans un système numérique.
 
-### Champs de vision
+## Champs de vision
 
-## 2. La lumière
+## La lumière
 
 La lumière est un rayonnement électromagnétique composé de photons, c'est-à-dire de particules élémentaires sans masse. Cette énergie est soumise à toutes les lois physiques correspondantes. 
 La vitesse de la lumière dans le vide est une constante, notée $c$ et approximativement égale à $300~000$ km/s.
@@ -44,7 +44,7 @@ Tableau 1 : Le spectre électromagnétiqueLa lumière peut être représentée p
 
 Figure 2 : Courbe de distribution spectrale de l'énergie lumineuse dans un ciel bleu
 
-## 3. La couleur
+## La couleur
 
 La sensation de couleur d'un objet provient du fait qu'une partie de la lumière incidente est réfléchie. On peut donc dire qu'un objet ne possède pas de couleur propre.
 La couleur perçue dépend effectivement de :
@@ -119,7 +119,7 @@ $$ {#eq-grassmann-add-resultat}
 
 ### Les différents modèles
 
-#### 1. Le modèle RGB (RVB)
+#### Le modèle RGB (RVB)
 
 À ce stade, on pourrait penser qu'une couleur donnée résulte simplement de la superposition de ses composantes verte, rouge et bleue.
 
@@ -127,7 +127,7 @@ Cette conclusion, un peu hâtive, ne serait pas tout à fait complète. D'une pa
 
 Le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais il n'est pas le seul.
 
-#### 2. Le modèle HSL (TSL : Teinte, Saturation, Luminosité)
+#### Le modèle HSL (TSL : Teinte, Saturation, Luminosité)
 
 Si vous écoutez une personne décrire une couleur, cela donnera quelque chose comme : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair). Le modèle HSL a été classifié par MUNSELL en 1905.
 
@@ -137,7 +137,7 @@ Une couleur pure sera saturée à 100 %. Si la saturation atteint 0 % (et non 10
 * **La luminosité ou clarté (Lightness) :** l'énergie lumineuse reçue (± 1000 niveaux de luminosité différents, selon la teinte).
 * **La saturation (Saturation ou pureté de la couleur) :** contribue à l'intensité de l'ensemble et permet de différencier une couleur vive d'une couleur pastel (atténuée) (± 20 000 différenciations).
 
-#### 3. Le modèle CIE (au lieu de ICL)
+#### Le modèle CIE (au lieu de ICL)
 
 En 1931, la Commission Internationale de l'Éclairage (CIE) a fixé un modèle universel pour la représentation des couleurs afin de permettre la comparaison entre les indications fournies par différents colorimètres.
 
@@ -233,7 +233,7 @@ On remarquera également qu'une plage de teintes « chair » (couleur de peau) a
 
 Ces notions sont particulièrement intéressantes pour le choix et la conception de palettes de couleurs en traitement d'images.
 
-## 4. Création et manipulation d'une image en Python
+## Création et manipulation d'une image en Python
 
 Maintenant que nous avons défini les fondements théoriques des modèles colorimétriques (et en particulier le modèle RGB), nous pouvons faire le lien avec l'informatique. 
 En Python, et plus spécifiquement avec la bibliothèque **NumPy**, une image numérique n'est rien d'autre qu'une matrice mathématique multidimensionnelle (un tableau à 3 dimensions ou *tensor*).
@@ -276,7 +276,7 @@ plt.title('Création d\'une image rouge (RGB)')
 plt.show()
 ```
 
-## 5. La bibliothèque OpenCV : le standard industriel
+## La bibliothèque OpenCV : le standard industriel
 
 Jusqu'ici, nous avons conceptualisé une image numérique comme une matrice mathématique pure à l'aide de NumPy. Pour des opérations basiques, cela suffit. Cependant, pour le traitement d'images avancé, la lecture de formats complexes (JPEG, PNG, TIFF) ou l'analyse vidéo, le monde académique et industriel s'appuie sur une bibliothèque incontournable : **OpenCV**.
 
@@ -325,7 +325,7 @@ else:
 
 Vous remarquerez que Matplotlib n'est pas utilisé dans ce code, pour bien montrer que l'environnement matriciel NumPy couplé directement à l'I/O (Input/Output) d'OpenCV suffit parfois. Vous devez bien dissocier "l'outil qui calcule et sauvegarde" (OpenCV) de "l'outil qui dessine des graphiques à l'écran" (Matplotlib).
 
-## 6. Exercices de réflexion
+## Exercices de réflexion
 
 Pour consolider les notions d'espace colorimétrique et de représentation matricielle, répondez aux questions suivantes.
 
@@ -396,19 +396,19 @@ Il ne représente pas une couleur, mais le niveau d'**opacité** (ou de transpar
 Ce quatrième canal est fondamental dans le traitement d'images pour le *compositing* (la superposition d'images), le détourage, ou la création d'interfaces graphiques (comme les icônes sur un fond d'écran ou le rendu d'une page web). Un pixel RGBA nécessite donc 4 octets de mémoire (32 bits) au lieu de 3.
 :::
 
-## 7. Exercices de programmation : Création d'images matricielles
+## Exercices de programmation : Création d'images matricielles
 
 Dans les exercices suivants, utilisez **NumPy** pour initialiser vos matrices et **OpenCV** (`cv2.imwrite`) pour sauvegarder le résultat sur votre disque. 
 
 *Rappel : OpenCV utilise l'espace colorimétrique BGR (Bleu, Vert, Rouge) !*
 
 ::: {.callout-note icon="false"}
-## Exercice 1 : Le drapeau national
+### Exercice 1 : Le drapeau national
 Créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom `drapeau.png`.
 :::
 
 ::: {.callout-note icon="false"}
-## Exercice 2 : Les 4 quadrants
+### Exercice 2 : Les 4 quadrants
 Créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). 
 Attribuez les couleurs suivantes aux quadrants :
 * En haut à gauche : Bleu pur
@@ -418,13 +418,13 @@ Attribuez les couleurs suivantes aux quadrants :
 :::
 
 ::: {.callout-note icon="false"}
-## Exercice 3 : Le cadre coloré
+### Exercice 3 : Le cadre coloré
 Créez une image de 500x500 pixels. Le fond de l'image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. 
 *Astuce d'optimisation : Pensez à la manière dont un peintre peint une toile pour le faire en seulement 2 lignes de code, sans dessiner 4 rectangles distincts !*
 :::
 
 ::: {.callout-note icon="false"}
-## Exercice 4 (Défi) : Le dégradé linéaire
+### Exercice 4 (Défi) : Le dégradé linéaire
 Créez une image de 256 pixels de haut sur 256 pixels de large. 
 Générez un dégradé horizontal allant du Noir pur (à gauche) vers le Rouge pur (à droite). 
 *Indice : Renseignez-vous sur la fonction `np.linspace` ou `np.arange` de NumPy, et profitez du mécanisme de "broadcasting" pour éviter d'utiliser des boucles `for`.*
