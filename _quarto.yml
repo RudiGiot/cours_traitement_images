@@ -23,6 +23,7 @@ book:
 format:
   html:
     theme: cosmo        # Un thème sobre, très lisible et moderne
+    css: style.css     # Ajout des styles perso
     toc: true           # Active la table des matières sur la droite
     toc-depth: 2        # Profondeur de la table des matières
     number-sections: true 

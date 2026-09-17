@@ -1,7 +1,9 @@
 # Images numériques
 
-Dans le monde numérique une image est représentée par une grille, un tableau de pixels. 
-![Le pixel dans une image numérique](images_dans_le_cours/pixel.png){#fig-pixel width="100%" fig-align="center"}
+Dans le monde numérique une image est représentée par une grille, un tableau de pixels.
+
+![Le pixel dans une image numérique](images_dans_le_cours/pixel.png){#fig-pixel width="50%" fig-align="center"}
+
 Le pixel est le plus petit élément constitutif d'une image, il est indivisible et est souvent stocké comme élément numérique dans une matrice. Le ou les nombres associés au pixel représente une caractéristique de cette partie de l'image, souvent sa couleur. Pour caractériser ces couleurs, il faut d'abord commencer à étudier les caractéristiques de la lumières et de l’oeil.
 
 ## L'oeil
@@ -30,7 +32,8 @@ $$ {#eq-longueur-onde}
 
 Il semble donc évident de caractériser une lumière monochromatique par sa fréquence puisqu'il s'agit d'une constante. Néanmoins, c'est généralement la longueur d'onde (supposée dans le vide) qui est choisie pour la définir.
 
-Figure 1 : Dispersion de la lumière dans le prisme de Newton
+![Dispersion de la lumière dans le prisme de Newton](images_dans_le_cours/prisme.png){#fig-pixel width="50%" fig-align="center"}
+
 
 Physiquement, la lumière blanche n'existe pas. Le "blanc" n'est pas une longueur d'onde unique, c'est une perception purement biologique et colorimétrique. Elle est le résultat d'une combinaison d'un ensemble de rayonnements. Le prisme de Newton (Figure 1) facilite l'observation de cette dispersion lumineuse : émise par le soleil ou par une lampe à incandescence, la lumière traverse le prisme avec un angle d'incidence α par rapport à la normale. Lorsque le rayon lumineux passe de l'air au verre, sa vitesse diminue et sa longueur d'onde se comprime, mais sa fréquence (sa "couleur" fondamentale) reste strictement identique car elle ne dépend que de la source d'émission. Le faisceau change alors de direction et se rapproche de la normale au niveau de la surface de séparation, au point d'incidence. C'est le phénomène de réfraction. Le même phénomène s'observe à la sortie du prisme, lors, par exemple, d'une transition verre-air.
 
