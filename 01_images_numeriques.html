@@ -503,7 +503,7 @@ Figure&nbsp;1.10: Diagramme de chromaticité (x,y) de la CIE (1931). La zone col
 <div id="fig-cie-uniforme" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cie-uniforme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images_dans_le_cours/chromacite.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+<img src="images_dans_le_cours/chromacite.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cie-uniforme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976).
@@ -517,13 +517,31 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 <p>Si, dans le diagramme, on trace autour d’une multitude de points <span class="math inline">\(C\)</span> (représentant différentes couleurs) la courbe fermée correspondant au seuil des couleurs tout juste discernables par l’œil humain, on obtient une distribution d’ellipses telle qu’illustrée dans la figure suivante.</p>
 <p>Les études de MacAdam fournissent également les paramètres de ces « cellules de confusion » (dimension des deux axes et orientation du grand axe) pour un très grand nombre de points, couvrant une grande partie du diagramme de chromaticité.</p>
 <p>On observe sur le diagramme que les dimensions des ellipses sont variables (grandes dans les zones vertes, réduites dans les zones bleues), que leur excentricité est forte et que l’orientation de leur grand axe converge globalement vers le blanc E, l’une des directions suivant l’axe jaune-bleu.</p>
-<p><strong>Figure X : Ellipses de MacAdam</strong></p>
+<div id="fig-mcadam" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mcadam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/mcadam.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mcadam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.12: Ellipses de McAdam.
+</figcaption>
+</figure>
+</div>
 <hr>
 </section>
 <section id="couleurs-naturelles" class="level3" data-number="1.2.6">
 <h3 data-number="1.2.6" class="anchored" data-anchor-id="couleurs-naturelles"><span class="header-section-number">1.2.6</span> Couleurs naturelles</h3>
 <p>En pratique, très peu de couleurs naturelles, lorsqu’elles sont éclairées par le soleil, possèdent une forte saturation. Leur pureté d’excitation est généralement inférieure à 0,5. En revanche, les couleurs artificielles peuvent être beaucoup plus saturées (en particulier les teintes orange, jaune et rouge).</p>
-<p><strong>Figure X : Couleurs naturelles dans le diagramme (x,y)</strong></p>
+<div id="fig-naturelles" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-naturelles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/naturelles.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-naturelles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.13: Couleurs naturelles.
+</figcaption>
+</figure>
+</div>
 <p>Dans le diagramme chromatique <span class="math inline">\(x,y\)</span>, la majorité des teintes courantes se situe dans une zone regroupée autour des blancs. Cette zone représente plus ou moins la moitié du diagramme total.</p>
 <p>On remarquera également qu’une plage de teintes « chair » (couleur de peau) a été rigoureusement définie afin d’obtenir un meilleur rendu colorimétrique lors des diffusions. L’Union Européenne de Radio-Télévision (UER) centre cette zone de référence sur les coordonnées <span class="math inline">\(x = 0,38\)</span> ; <span class="math inline">\(y = 0,36\)</span>.</p>
 <p>Ces notions sont particulièrement intéressantes pour le choix et la conception de palettes de couleurs en traitement d’images.</p>
@@ -748,7 +766,7 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom <code>drapeau.png</code>.</p>
+<p>En utilisant uniquement numpy, créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom <code>drapeau.png</code> (vous pouvez utiliser opencv pour la sauvegarde).</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
@@ -761,7 +779,7 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). Attribuez les couleurs suivantes aux quadrants : * En haut à gauche : Bleu pur * En haut à droite : Vert pur * En bas à gauche : Rouge pur * En bas à droite : Blanc pur</p>
+<p>En utilisant uniquement numpy, créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). Attribuez les couleurs suivantes aux quadrants : * En haut à gauche : Bleu pur * En haut à droite : Vert pur * En bas à gauche : Rouge pur * En bas à droite : Blanc pur</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
@@ -774,7 +792,7 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Créez une image de 500x500 pixels. Le fond de l’image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. <em>Astuce d’optimisation : Pensez à la manière dont un peintre peint une toile pour le faire en seulement 2 lignes de code, sans dessiner 4 rectangles distincts !</em></p>
+<p>En utilisant uniquement numpy, créez une image de 500x500 pixels. Le fond de l’image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. <em>Astuce d’optimisation : Pensez à la manière dont un peintre peint une toile pour le faire en seulement 2 lignes de code, sans dessiner 4 rectangles distincts !</em></p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
@@ -787,7 +805,7 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Créez une image de 256 pixels de haut sur 256 pixels de large. Générez un dégradé horizontal allant du Noir pur (à gauche) vers le Rouge pur (à droite). <em>Indice : Renseignez-vous sur la fonction <code>np.linspace</code> ou <code>np.arange</code> de NumPy, et profitez du mécanisme de “broadcasting” pour éviter d’utiliser des boucles <code>for</code>.</em></p>
+<p>En utilisant uniquement numpy, créez une image de 256 pixels de haut sur 256 pixels de large. Générez un dégradé horizontal allant du Noir pur (à gauche) vers le Rouge pur (à droite). <em>Indice : Renseignez-vous sur la fonction <code>np.linspace</code> ou <code>np.arange</code> de NumPy, et profitez du mécanisme de “broadcasting” pour éviter d’utiliser des boucles <code>for</code>.</em></p>
 </div>
 </div>
 <hr>
@@ -1452,7 +1470,7 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 <span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a>Ces espaces sont aujourd'hui la norme pour le contrôle de conformité des couleurs dans l'industrie, car ils permettent de calculer des tolérances d'écarts de couleurs ($\Delta E$) fidèles à la vision des contrôleurs humains.</span>
 <span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a><span class="al">![Diagrammes de chromaticité uniformes de la CIE (1960 et 1976).](images_dans_le_cours/chromacite.png)</span>{#fig-cie-uniforme width="80%" fig-align="center"}</span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a><span class="al">![Diagrammes de chromaticité uniformes de la CIE (1960 et 1976).](images_dans_le_cours/chromacite.jpeg)</span>{#fig-cie-uniforme width="80%" fig-align="center"}</span>
 <span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a></span>
@@ -1464,7 +1482,7 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 <span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a>On observe sur le diagramme que les dimensions des ellipses sont variables (grandes dans les zones vertes, réduites dans les zones bleues), que leur excentricité est forte et que l'orientation de leur grand axe converge globalement vers le blanc E, l'une des directions suivant l'axe jaune-bleu.</span>
 <span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a>**Figure X : Ellipses de MacAdam**</span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a><span class="al">![Ellipses de McAdam.](images_dans_le_cours/mcadam.jpeg)</span>{#fig-mcadam width="80%" fig-align="center"}</span>
 <span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a></span>
@@ -1472,7 +1490,7 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 <span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a>En pratique, très peu de couleurs naturelles, lorsqu'elles sont éclairées par le soleil, possèdent une forte saturation. Leur pureté d'excitation est généralement inférieure à 0,5. En revanche, les couleurs artificielles peuvent être beaucoup plus saturées (en particulier les teintes orange, jaune et rouge).</span>
 <span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>**Figure X : Couleurs naturelles dans le diagramme (x,y)**</span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a><span class="al">![Couleurs naturelles.](images_dans_le_cours/naturelles.jpeg)</span>{#fig-naturelles width="80%" fig-align="center"}</span>
 <span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>Dans le diagramme chromatique $x,y$, la majorité des teintes courantes se situe dans une zone regroupée autour des blancs. Cette zone représente plus ou moins la moitié du diagramme total.</span>
 <span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a></span>
@@ -1651,12 +1669,12 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 <span id="cb3-388"><a href="#cb3-388" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-389"><a href="#cb3-389" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
 <span id="cb3-390"><a href="#cb3-390" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 1 : Le drapeau national</span></span>
-<span id="cb3-391"><a href="#cb3-391" aria-hidden="true" tabindex="-1"></a>Créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom <span class="in">`drapeau.png`</span>.</span>
+<span id="cb3-391"><a href="#cb3-391" aria-hidden="true" tabindex="-1"></a>En utilisant uniquement numpy, créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom <span class="in">`drapeau.png`</span> (vous pouvez utiliser opencv pour la sauvegarde).</span>
 <span id="cb3-392"><a href="#cb3-392" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb3-393"><a href="#cb3-393" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-394"><a href="#cb3-394" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
 <span id="cb3-395"><a href="#cb3-395" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 2 : Les 4 quadrants</span></span>
-<span id="cb3-396"><a href="#cb3-396" aria-hidden="true" tabindex="-1"></a>Créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). </span>
+<span id="cb3-396"><a href="#cb3-396" aria-hidden="true" tabindex="-1"></a>En utilisant uniquement numpy, créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). </span>
 <span id="cb3-397"><a href="#cb3-397" aria-hidden="true" tabindex="-1"></a>Attribuez les couleurs suivantes aux quadrants :</span>
 <span id="cb3-398"><a href="#cb3-398" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>En haut à gauche : Bleu pur</span>
 <span id="cb3-399"><a href="#cb3-399" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>En haut à droite : Vert pur</span>
@@ -1666,13 +1684,13 @@ Figure&nbsp;1.11: Diagrammes de chromaticité uniformes de la CIE (1960 et 1976)
 <span id="cb3-403"><a href="#cb3-403" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-404"><a href="#cb3-404" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
 <span id="cb3-405"><a href="#cb3-405" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 3 : Le cadre coloré</span></span>
-<span id="cb3-406"><a href="#cb3-406" aria-hidden="true" tabindex="-1"></a>Créez une image de 500x500 pixels. Le fond de l'image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. </span>
+<span id="cb3-406"><a href="#cb3-406" aria-hidden="true" tabindex="-1"></a>En utilisant uniquement numpy, créez une image de 500x500 pixels. Le fond de l'image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. </span>
 <span id="cb3-407"><a href="#cb3-407" aria-hidden="true" tabindex="-1"></a>*Astuce d'optimisation : Pensez à la manière dont un peintre peint une toile pour le faire en seulement 2 lignes de code, sans dessiner 4 rectangles distincts !*</span>
 <span id="cb3-408"><a href="#cb3-408" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb3-409"><a href="#cb3-409" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-410"><a href="#cb3-410" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
 <span id="cb3-411"><a href="#cb3-411" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 4 (Défi) : Le dégradé linéaire</span></span>
-<span id="cb3-412"><a href="#cb3-412" aria-hidden="true" tabindex="-1"></a>Créez une image de 256 pixels de haut sur 256 pixels de large. </span>
+<span id="cb3-412"><a href="#cb3-412" aria-hidden="true" tabindex="-1"></a>En utilisant uniquement numpy, créez une image de 256 pixels de haut sur 256 pixels de large. </span>
 <span id="cb3-413"><a href="#cb3-413" aria-hidden="true" tabindex="-1"></a>Générez un dégradé horizontal allant du Noir pur (à gauche) vers le Rouge pur (à droite). </span>
 <span id="cb3-414"><a href="#cb3-414" aria-hidden="true" tabindex="-1"></a>*Indice : Renseignez-vous sur la fonction `np.linspace` ou `np.arange` de NumPy, et profitez du mécanisme de "broadcasting" pour éviter d'utiliser des boucles `for`.*</span>
 <span id="cb3-415"><a href="#cb3-415" aria-hidden="true" tabindex="-1"></a>:::</span>
