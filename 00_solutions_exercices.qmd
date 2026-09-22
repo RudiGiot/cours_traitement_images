@@ -1,4 +1,3 @@
-
 ### Solutions des exercices de programmation
 
 ::: {.callout-tip icon="false"}
