@@ -189,7 +189,7 @@ Pour corriger cela, la CIE a introduit des transformations mathématiques succes
 
 Ces espaces sont aujourd'hui la norme pour le contrôle de conformité des couleurs dans l'industrie, car ils permettent de calculer des tolérances d'écarts de couleurs ($\Delta E$) fidèles à la vision des contrôleurs humains.
 
-![Diagrammes de chromaticité uniformes de la CIE (1960 et 1976).](images_dans_le_cours/chromacite.png){#fig-cie-uniforme width="80%" fig-align="center"}
+![Diagrammes de chromaticité uniformes de la CIE (1960 et 1976).](images_dans_le_cours/chromacite.jpeg){#fig-cie-uniforme width="80%" fig-align="center"}
 
 
 
@@ -201,7 +201,7 @@ Les études de MacAdam fournissent également les paramètres de ces « cellules
 
 On observe sur le diagramme que les dimensions des ellipses sont variables (grandes dans les zones vertes, réduites dans les zones bleues), que leur excentricité est forte et que l'orientation de leur grand axe converge globalement vers le blanc E, l'une des directions suivant l'axe jaune-bleu.
 
-**Figure X : Ellipses de MacAdam**
+![Ellipses de McAdam.](images_dans_le_cours/mcadam.jpeg){#fig-mcadam width="80%" fig-align="center"}
 
 ---
 
@@ -209,7 +209,7 @@ On observe sur le diagramme que les dimensions des ellipses sont variables (gran
 
 En pratique, très peu de couleurs naturelles, lorsqu'elles sont éclairées par le soleil, possèdent une forte saturation. Leur pureté d'excitation est généralement inférieure à 0,5. En revanche, les couleurs artificielles peuvent être beaucoup plus saturées (en particulier les teintes orange, jaune et rouge).
 
-**Figure X : Couleurs naturelles dans le diagramme (x,y)**
+![Couleurs naturelles.](images_dans_le_cours/naturelles.jpeg){#fig-naturelles width="80%" fig-align="center"}
 
 Dans le diagramme chromatique $x,y$, la majorité des teintes courantes se situe dans une zone regroupée autour des blancs. Cette zone représente plus ou moins la moitié du diagramme total.
 
@@ -388,12 +388,12 @@ Dans les exercices suivants, utilisez **NumPy** pour initialiser vos matrices et
 
 ::: {.callout-note icon="false"}
 ### Exercice 1 : Le drapeau national
-Créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom `drapeau.png`.
+En utilisant uniquement numpy, créez une image de 300 pixels de haut sur 300 pixels de large représentant le drapeau de la Belgique (trois bandes verticales de largeur égale : Noir, Jaune, Rouge). Sauvegardez-la sous le nom `drapeau.png` (vous pouvez utiliser opencv pour la sauvegarde).
 :::
 
 ::: {.callout-note icon="false"}
 ### Exercice 2 : Les 4 quadrants
-Créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). 
+En utilisant uniquement numpy, créez une image carrée de 400x400 pixels, divisée en 4 carrés égaux (200x200). 
 Attribuez les couleurs suivantes aux quadrants :
 * En haut à gauche : Bleu pur
 * En haut à droite : Vert pur
@@ -403,13 +403,13 @@ Attribuez les couleurs suivantes aux quadrants :
 
 ::: {.callout-note icon="false"}
 ### Exercice 3 : Le cadre coloré
-Créez une image de 500x500 pixels. Le fond de l'image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. 
+En utilisant uniquement numpy, créez une image de 500x500 pixels. Le fond de l'image doit être jaune pur, mais elle doit posséder une bordure bleue épaisse de 20 pixels sur tout son périmètre. 
 *Astuce d'optimisation : Pensez à la manière dont un peintre peint une toile pour le faire en seulement 2 lignes de code, sans dessiner 4 rectangles distincts !*
 :::
 
 ::: {.callout-note icon="false"}
 ### Exercice 4 (Défi) : Le dégradé linéaire
-Créez une image de 256 pixels de haut sur 256 pixels de large. 
+En utilisant uniquement numpy, créez une image de 256 pixels de haut sur 256 pixels de large. 
 Générez un dégradé horizontal allant du Noir pur (à gauche) vers le Rouge pur (à droite). 
 *Indice : Renseignez-vous sur la fonction `np.linspace` ou `np.arange` de NumPy, et profitez du mécanisme de "broadcasting" pour éviter d'utiliser des boucles `for`.*
 :::

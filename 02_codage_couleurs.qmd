@@ -23,6 +23,48 @@ Malheureusement, ce système de codage n'est pas très satisfaisant. Dans le dom
 
 Cependant, le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais comme nous allons le voir dans la suite, il n'est pas le seul.
 
+Comment lire une image avec Python ?
+
+```python
+import cv2
+import sys
+
+# 1. Chargement de l'image
+chemin_image = "images/mon_image.jpg" # À adapter avec une image de votre dossier
+image = cv2.imread(chemin_image)
+
+# Sécurité : vérifier que l'image a bien été trouvée et chargée
+if image is None:
+    print(f"Erreur : Impossible de lire le fichier '{chemin_image}'")
+    sys.exit()
+
+# 2. Choix des coordonnées du pixel à analyser
+x = 120  # Colonne (axe horizontal)
+y = 50   # Ligne (axe vertical)
+
+# 3. Lecture des composantes du pixel
+# ATTENTION : En numpy/matriciel, on lit d'abord la ligne, puis la colonne, donc [y, x]
+pixel = image[y, x]
+
+# 4. Extraction des couleurs
+# PIÈGE CLASSIQUE : OpenCV utilise nativement le format BGR, et non RGB !
+b = pixel[0] # Bleu (Blue)
+g = pixel[1] # Vert (Green)
+r = pixel[2] # Rouge (Red)
+
+# 5. Affichage des résultats
+print(f"Analyse du pixel aux coordonnées matricielles (Y={y}, X={x}) :")
+print(f"-> Tableau brut retourné par OpenCV (BGR) : {pixel}")
+print(f"-> Composante Rouge (R) : {r}")
+print(f"-> Composante Verte (V) : {g}")
+print(f"-> Composante Bleue (B) : {b}")
+```
+
+::: {.callout-note icon="false"}
+### Exercice : Décomposition des canaux RGB
+Chargez d'abord une image en couleur (par exemple, le `clown.png`), décomposez-le en ses trois composantes R, G et B que vous affichez dans trois fenêtres différentes.
+:::
+
 ## Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)
 
 Le modèle HSL a été décrit par MUNSELL en 1905 et est plus proche de la manière dont un humain donne la description d'une couleur. En effet, si vous écoutez une quelqu'un décrire une couleur, on pourrait entendre : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair).
@@ -150,5 +192,20 @@ Cette non-linéarité a trois conséquences majeures à prendre en compte lors d
 * **L'instabilité de la Teinte (Singularités) :** Lorsque la saturation est très faible (sur des objets gris/métalliques) ou que l'image est très sombre/très surexposée, la différence $\Delta$ s'approche de $0$. Une infime variation de lumière ou un bruit de capteur (même de 1 bit sur un pixel) va faire bondir l'angle de la Teinte de manière chaotique. 
 *$\rightarrow$ Règle d'or : ne jamais baser une segmentation sur la Teinte si la Saturation ou la Luminosité sont trop faibles.*
 * **Le problème de la circularité (Mathématique modulo) :** La Teinte est un angle. Les valeurs $0^\circ$ (rouge) et $359^\circ$ (rouge) sont visuellement identiques mais numériquement opposées. Vous ne pouvez donc pas utiliser de simples moyennes mathématiques ou de distances euclidiennes sur la Teinte. (Par exemple, dans OpenCV, isoler la couleur rouge requiert souvent de créer deux masques : de 0 à 10 et de 170 à 179, puis de les additionner).
-* **Le coût de calcul (CPU) :** Les divisions, les modulos et les branchements conditionnels (`if`) demandent plus de cycles d'horloge au processeur qu'une simple addition matricielle. Sur des lignes de production à cadence très élevée (milliers de pièces par minute), convertir une image haute résolution de RVB à TSL coûte un temps de traitement précieux qu'il faut budgétiser.
+* **Le coût de calcul (CPU) :** Les divisions, les modulos et les branchements conditionnels (`if`) demandent plus de cycles d'horloge au processeur qu'une simple addition matricielle. Sur des lignes de production à cadence très élevée (milliers de pièces par minute), convertir une image haute résolution de RVB à TSL coûte un temps de traitement précieux qu'il faut estimer.
+:::
+
+::: {.callout-note icon="false"}
+### Exercice : Décomposition des canaux HSL avec les formules
+Chargez d'abord une image en couleur (par exemple, le `clown.png`), EN UTILISANT les formules ci-dessus, décomposez l'image en ses trois composantes H, S et L que vous affichez dans trois fenêtres différentes. Posez-vous d'abord la question de savoir comment afficher une composante dont l'unité est en degré et comment afficher une saturation.
+:::
+
+::: {.callout-note icon="false"}
+### Exercice : Décomposition des canaux HSL en utilisant opencv
+Refaites l'exercice précédent en utilisant la librairie opencv. Comparez et commentez les résultats.
+:::
+
+::: {.callout-note icon="false"}
+### Exercice : Décomposition des canaux HSL en utilisant opencv
+Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge (H=0, S=1, L=1). Comparez avec l'image rouge générée plus haut.
 :::
