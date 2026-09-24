@@ -4,6 +4,19 @@
 
 Nous avons vu qu'une couleur peut donc être définie par trois valeurs. Le système RVB repose sur une synthèse additive de 3 couleurs de base: le rouge, le vert et le bleu. On les appelle les trois composantes. Généralement, les valeurs de ces composantes sont comprises entre 0 et 255 (un octet). Il est donc possible de coder 16.777.216 couleurs différentes.  Si chacune des composantes est à son maximum, le résultat est blanc ; si chacune est à son minimum, le résultat est noir (absence de lumière). Si nous avons la même proportion de rouge, de bleu et de vert, nous obtenons un niveau de gris. L'augmentation d'une composante accroît la luminosité du résultat.
 
+**Question d'architecture :** Sachant que chaque composante colorimétrique (R, V et B) est codée en mémoire sur un octet, combien de niveaux de gris différents peut-on théoriquement générer au sein de cet espace RVB ?
+
+::: {.callout-tip collapse="true" title="Afficher la réponse détaillée"}
+**La réponse est 256 niveaux de gris.**
+
+**L'explication technique :**
+1. Un octet (8 bits) permet de stocker $2^8 = 256$ valeurs entières, allant de $0$ à $255$.
+2. Par définition, un pixel est gris si, et seulement si, l'intensité de ses trois primaires est parfaitement équilibrée ($R = V = B$).
+3. Les seules combinaisons grises possibles sont donc $(0,0,0)$, $(1,1,1)$, $(2,2,2)$ ... jusqu'à $(255,255,255)$. 
+
+Même si l'espace RVB total permet d'afficher plus de 16,7 millions de couleurs ($256 \times 256 \times 256$), il ne contient que 256 nuances de gris parfaites. C'est d'ailleurs pour cela qu'une image convertie en niveaux de gris n'a plus besoin de trois canaux : un seul canal (un octet par pixel) suffit pour stocker toute l'information de luminance !
+:::
+
 | Aperçu | Couleur | Rouge (R) | Vert (V) | Bleu (B) | Remarque |
 | :---: | :--- | :---: | :---: | :---: | :--- |
 | <span style="display:inline-block; width:18px; height:18px; background-color:rgb(0,0,0); border:1px solid #777; border-radius:3px;"></span> | **Noir pur** | 0 | 0 | 0 | Absence totale de lumière (minimum) |
@@ -63,6 +76,28 @@ print(f"-> Composante Bleue (B) : {b}")
 ::: {.callout-note icon="false"}
 ### Exercice : Décomposition des canaux RGB
 Chargez d'abord une image en couleur (par exemple, le `clown.png`), décomposez-le en ses trois composantes R, G et B que vous affichez dans trois fenêtres différentes.
+:::
+
+## Les modèles CMJ (CMY) et CMJN (CMYK)
+Ces modèles représentent l'espace colorimétrique construit par synthèse soustractive des trois composantes primaires : le Cyan (bleu pâle), le Magenta (proche du rouge) et le Jaune.La couleur est formée par la soustraction des composantes primaires à partir d'une lumière blanche (l'impression en couleur reposant sur la réflexion d'une lumière incidente sur une encre colorée). En théorie, la superposition maximale des trois composantes absorbe totalement la lumière et produit la couleur noire. Le processus d'impression sur papier utilise naturellement cette synthèse soustractive ; il est la norme en imprimerie (pour le mélange des encres) mais reste rarement utilisé dans le monde informatique, malgré son intérêt fondamental pour comprendre les mécanismes d'impression.Le cube des couleurs primaires RVB et CMJ
+
+Chaque composante C, M et J est la complémentaire des composantes R, V et B. Ainsi, nous pouvons écrire (R étant la complémentaire de C, V de M, et B de J) les équations suivantes, en supposant des valeurs normalisées entre $0$ et $1$ :$$C = 1 - R \quad ; \quad M = 1 - V \quad ; \quad J = 1 - B$$
+
+Ou dans le sens inverse :$$R = 1 - C \quad ; \quad V = 1 - M \quad ; \quad B = 1 - J$$
+
+Tout comme le RVB, nous représentons le modèle CMJ dans l'espace colorimétrique sous la forme d'un cube. Les composantes primaires se situent aux sommets de ce cube. Le blanc et le noir occupent les deux derniers sommets opposés. À noter que la diagonale reliant le blanc au noir représente l'axe des niveaux de gris.Le passage à la quadrichromie (CMJN)
+
+L'extension classique de ce système est le modèle CMJN (N pour Noir, ou K pour Key en anglais). 
+Cette synthèse en « quadrichromie » est devenue nécessaire en raison de contraintes techniques (les impuretés des encres réelles produisant un brun boueux plutôt qu'un noir pur).
+Puisque le noir (ou les niveaux de gris) est obtenu par la superposition d'une quantité égale de chaque composante, nous pouvons extraire cette base noire ($N$) :$$N = \min(C, M, J)$$
+
+Et ensuite recalculer les quantités d'encre couleur strictement nécessaires :$$C' = C - N$$$$M' = M - N$$$$J' = J - N$$
+
+Exemple : La couleur définie par $(C, M, J) = (0.6, 0.2, 0.9)$ dans le modèle CMJ devient $(C', M', J', N) = (0.4, 0.0, 0.7, 0.2)$ dans le modèle CMJN, car la valeur minimale de la couleur d'origine est $\min(0.6, 0.2, 0.9) = 0.2$.
+
+::: {.callout-note icon="false"}
+### Exercice : Décomposition des canaux CMJ et CMJN
+Chargez l'image précédente (par exemple, le `clown.png`), décomposez-le en ses trois composantes Cyan, Magenta et Jaune que vous affichez dans trois fenêtres différentes.
 :::
 
 ## Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)
