@@ -73,9 +73,18 @@ print(f"-> Composante Verte (V) : {g}")
 print(f"-> Composante Bleue (B) : {b}")
 ```
 
+Pour les exercices qui vont suivre il serait utile d'avoir une image de référence qui sert pour faire des tests.
+
+::: {.callout-note icon="false"}
+### Exercice : Créer une mire de test
+Créez une image de neuf cases avec les couleurs : Rouge, Verte, Bleue, Cyan, Magenta, Jaune, Noire, Blanche, Grise.
+:::
+
+![Mire de test 3x3. Ligne 1 : Couleurs primaires additives (RVB). Ligne 2 : Couleurs primaires soustractives (CMJ). Ligne 3 : Niveaux de gris.](images_dans_le_cours/test9cases.png){#fig-mire}
+
 ::: {.callout-note icon="false"}
 ### Exercice : Décomposition des canaux RGB
-Chargez d'abord une image en couleur (par exemple, le `clown.png`), décomposez-le en ses trois composantes R, G et B que vous affichez dans trois fenêtres différentes.
+Chargez d'abord une image en couleur (par exemple, la mire céée précédement et ensuite le `clown.png`), décomposez-les en trois composantes R, G et B que vous affichez dans trois fenêtres différentes.
 :::
 
 ## Les modèles CMJ (CMY) et CMJN (CMYK)
@@ -97,7 +106,7 @@ Exemple : La couleur définie par $(C, M, J) = (0.6, 0.2, 0.9)$ dans le modèle 
 
 ::: {.callout-note icon="false"}
 ### Exercice : Décomposition des canaux CMJ et CMJN
-Chargez l'image précédente (par exemple, le `clown.png`), décomposez-le en ses trois composantes Cyan, Magenta et Jaune que vous affichez dans trois fenêtres différentes.
+Chargez les images précédentes, décomposez-les en trois composantes Cyan, Magenta et Jaune que vous affichez dans trois fenêtres différentes.
 :::
 
 ## Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)
@@ -232,7 +241,7 @@ Cette non-linéarité a trois conséquences majeures à prendre en compte lors d
 
 ::: {.callout-note icon="false"}
 ### Exercice : Décomposition des canaux HSL avec les formules
-Chargez d'abord une image en couleur (par exemple, le `clown.png`), EN UTILISANT les formules ci-dessus, décomposez l'image en ses trois composantes H, S et L que vous affichez dans trois fenêtres différentes. Posez-vous d'abord la question de savoir comment afficher une composante dont l'unité est en degré et comment afficher une saturation.
+Chargez d'abord une image en couleur (la mire de test, par exemple), EN UTILISANT les formules ci-dessus, décomposez l'image en ses trois composantes H, S et L que vous affichez dans trois fenêtres différentes. Posez-vous d'abord la question de savoir comment afficher une composante dont l'unité est en degré et comment afficher une saturation.
 :::
 
 ::: {.callout-note icon="false"}

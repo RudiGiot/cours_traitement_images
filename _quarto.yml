@@ -17,7 +17,8 @@ book:
         - 02_codage_couleurs.qmd
     - part: "II. Traitements de Base"
       chapters:
-        - 03_segmentation.qmd
+        - 03_operations_statistiques.qmd
+        - 04_operations_pixel_vers_pixel.qmd
     - part: "III. Cas d'Utilisation"
       chapters:
         - 04_use_cases_industrie.qmd
