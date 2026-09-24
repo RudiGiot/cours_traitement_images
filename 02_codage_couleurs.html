@@ -252,7 +252,8 @@ window.Quarto = {
    
   <ul class="collapse">
   <li><a href="#le-codage-rgb-rvb" id="toc-le-codage-rgb-rvb" class="nav-link active" data-scroll-target="#le-codage-rgb-rvb"><span class="header-section-number">2.1</span> Le codage RGB (RVB)</a></li>
-  <li><a href="#le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité" id="toc-le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité" class="nav-link" data-scroll-target="#le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité"><span class="header-section-number">2.2</span> Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)</a></li>
+  <li><a href="#les-modèles-cmj-cmy-et-cmjn-cmyk" id="toc-les-modèles-cmj-cmy-et-cmjn-cmyk" class="nav-link" data-scroll-target="#les-modèles-cmj-cmy-et-cmjn-cmyk"><span class="header-section-number">2.2</span> Les modèles CMJ (CMY) et CMJN (CMYK)</a></li>
+  <li><a href="#le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité" id="toc-le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité" class="nav-link" data-scroll-target="#le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité"><span class="header-section-number">2.3</span> Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)</a></li>
   </ul>
 </nav>
     </div>
@@ -281,6 +282,25 @@ window.Quarto = {
 <section id="le-codage-rgb-rvb" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="le-codage-rgb-rvb"><span class="header-section-number">2.1</span> Le codage RGB (RVB)</h2>
 <p>Nous avons vu qu’une couleur peut donc être définie par trois valeurs. Le système RVB repose sur une synthèse additive de 3 couleurs de base: le rouge, le vert et le bleu. On les appelle les trois composantes. Généralement, les valeurs de ces composantes sont comprises entre 0 et 255 (un octet). Il est donc possible de coder 16.777.216 couleurs différentes. Si chacune des composantes est à son maximum, le résultat est blanc ; si chacune est à son minimum, le résultat est noir (absence de lumière). Si nous avons la même proportion de rouge, de bleu et de vert, nous obtenons un niveau de gris. L’augmentation d’une composante accroît la luminosité du résultat.</p>
+<p><strong>Question d’architecture :</strong> Sachant que chaque composante colorimétrique (R, V et B) est codée en mémoire sur un octet, combien de niveaux de gris différents peut-on théoriquement générer au sein de cet espace RVB ?</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Afficher la réponse détaillée">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Afficher la réponse détaillée
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>La réponse est 256 niveaux de gris.</strong></p>
+<p><strong>L’explication technique :</strong> 1. Un octet (8 bits) permet de stocker <span class="math inline">\(2^8 = 256\)</span> valeurs entières, allant de <span class="math inline">\(0\)</span> à <span class="math inline">\(255\)</span>. 2. Par définition, un pixel est gris si, et seulement si, l’intensité de ses trois primaires est parfaitement équilibrée (<span class="math inline">\(R = V = B\)</span>). 3. Les seules combinaisons grises possibles sont donc <span class="math inline">\((0,0,0)\)</span>, <span class="math inline">\((1,1,1)\)</span>, <span class="math inline">\((2,2,2)\)</span> … jusqu’à <span class="math inline">\((255,255,255)\)</span>.</p>
+<p>Même si l’espace RVB total permet d’afficher plus de 16,7 millions de couleurs (<span class="math inline">\(256 \times 256 \times 256\)</span>), il ne contient que 256 nuances de gris parfaites. C’est d’ailleurs pour cela qu’une image convertie en niveaux de gris n’a plus besoin de trois canaux : un seul canal (un octet par pixel) suffit pour stocker toute l’information de luminance !</p>
+</div>
+</div>
+</div>
 <div id="tbl-valeurs-rgb" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-valeurs-rgb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -441,8 +461,31 @@ Table&nbsp;2.1: Exemples de couleurs et leurs composantes RVB respectives
 </div>
 </div>
 </section>
-<section id="le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité"><span class="header-section-number">2.2</span> Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)</h2>
+<section id="les-modèles-cmj-cmy-et-cmjn-cmyk" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="les-modèles-cmj-cmy-et-cmjn-cmyk"><span class="header-section-number">2.2</span> Les modèles CMJ (CMY) et CMJN (CMYK)</h2>
+<p>Ces modèles représentent l’espace colorimétrique construit par synthèse soustractive des trois composantes primaires : le Cyan (bleu pâle), le Magenta (proche du rouge) et le Jaune.La couleur est formée par la soustraction des composantes primaires à partir d’une lumière blanche (l’impression en couleur reposant sur la réflexion d’une lumière incidente sur une encre colorée). En théorie, la superposition maximale des trois composantes absorbe totalement la lumière et produit la couleur noire. Le processus d’impression sur papier utilise naturellement cette synthèse soustractive ; il est la norme en imprimerie (pour le mélange des encres) mais reste rarement utilisé dans le monde informatique, malgré son intérêt fondamental pour comprendre les mécanismes d’impression.Le cube des couleurs primaires RVB et CMJ</p>
+<p>Chaque composante C, M et J est la complémentaire des composantes R, V et B. Ainsi, nous pouvons écrire (R étant la complémentaire de C, V de M, et B de J) les équations suivantes, en supposant des valeurs normalisées entre <span class="math inline">\(0\)</span> et <span class="math inline">\(1\)</span> :<span class="math display">\[C = 1 - R \quad ; \quad M = 1 - V \quad ; \quad J = 1 - B\]</span></p>
+<p>Ou dans le sens inverse :<span class="math display">\[R = 1 - C \quad ; \quad V = 1 - M \quad ; \quad B = 1 - J\]</span></p>
+<p>Tout comme le RVB, nous représentons le modèle CMJ dans l’espace colorimétrique sous la forme d’un cube. Les composantes primaires se situent aux sommets de ce cube. Le blanc et le noir occupent les deux derniers sommets opposés. À noter que la diagonale reliant le blanc au noir représente l’axe des niveaux de gris.Le passage à la quadrichromie (CMJN)</p>
+<p>L’extension classique de ce système est le modèle CMJN (N pour Noir, ou K pour Key en anglais). Cette synthèse en « quadrichromie » est devenue nécessaire en raison de contraintes techniques (les impuretés des encres réelles produisant un brun boueux plutôt qu’un noir pur). Puisque le noir (ou les niveaux de gris) est obtenu par la superposition d’une quantité égale de chaque composante, nous pouvons extraire cette base noire (<span class="math inline">\(N\)</span>) :<span class="math display">\[N = \min(C, M, J)\]</span></p>
+<p>Et ensuite recalculer les quantités d’encre couleur strictement nécessaires :<span class="math display">\[C' = C - N\]</span><span class="math display">\[M' = M - N\]</span><span class="math display">\[J' = J - N\]</span></p>
+<p>Exemple : La couleur définie par <span class="math inline">\((C, M, J) = (0.6, 0.2, 0.9)\)</span> dans le modèle CMJ devient <span class="math inline">\((C', M', J', N) = (0.4, 0.0, 0.7, 0.2)\)</span> dans le modèle CMJN, car la valeur minimale de la couleur d’origine est <span class="math inline">\(\min(0.6, 0.2, 0.9) = 0.2\)</span>.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice : Décomposition des canaux CMJ et CMJN
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Chargez l’image précédente (par exemple, le <code>clown.png</code>), décomposez-le en ses trois composantes Cyan, Magenta et Jaune que vous affichez dans trois fenêtres différentes.</p>
+</div>
+</div>
+</section>
+<section id="le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="le-modèle-hsl-hue-saturation-luminance-ou-en-français-tsl-teinte-saturation-luminosité"><span class="header-section-number">2.3</span> Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)</h2>
 <p>Le modèle HSL a été décrit par MUNSELL en 1905 et est plus proche de la manière dont un humain donne la description d’une couleur. En effet, si vous écoutez une quelqu’un décrire une couleur, on pourrait entendre : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair).</p>
 <p>Notre cerveau agit donc comme un intégrateur qui détecte trois grandeurs physiques distinctes : * <strong>La teinte (Hue) :</strong> caractérisée par la longueur d’onde dominante du rayonnement (± 250 teintes monochromatiques détectables par l’œil, plus les pourpres). * <strong>La luminosité ou clarté (Lightness) :</strong> l’énergie lumineuse reçue (± 1000 niveaux de luminosité différents, selon la teinte). * <strong>La saturation (Saturation ou pureté de la couleur) :</strong> contribue à l’intensité de l’ensemble et permet de différencier une couleur vive d’une couleur pastel (atténuée) (± 20 000 différenciations).</p>
 <p>Une couleur pure (un rouge flamboyant) sera donc saturée à 100 % et quand la saturation atteint 0%, il n’y a plus de dominante de couleur. La couleur est dite achromatique (absence de couleur) et révèle une nuance de gris, allant du blanc au noir selon la luminosité.</p>
@@ -561,8 +604,8 @@ Figure&nbsp;2.1: Représentation en cylindre de l’espace colorimétrique HSL. 
 </figure>
 </div>
 <p>Comme on peut l’observer sur la <a href="#fig-cylindre-hsl" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> : - <strong>La Teinte (H)</strong> tourne autour de l’axe central (de 0° à 360°). - <strong>La Saturation (S)</strong> part de l’axe central gris (0%) vers le bord coloré du cylindre (100%). - <strong>La Luminosité (L)</strong> monte de la base noire (0%) vers le sommet blanc (100%).</p>
-<section id="conversion-mathématique-entre-rvb-et-tsl-hsl" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="conversion-mathématique-entre-rvb-et-tsl-hsl"><span class="header-section-number">2.2.1</span> Conversion Mathématique entre RVB et TSL (HSL)</h3>
+<section id="conversion-mathématique-entre-rvb-et-tsl-hsl" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="conversion-mathématique-entre-rvb-et-tsl-hsl"><span class="header-section-number">2.3.1</span> Conversion Mathématique entre RVB et TSL (HSL)</h3>
 <p>Pour passer d’un espace colorimétrique à l’autre, les algorithmes (comme ceux intégrés dans OpenCV) utilisent une série d’opérations non linéaires.</p>
 <p>Pour réaliser une conversion de RVB vers TSL (HSL) :</p>
 <p>La première étape consiste toujours à <strong>normaliser</strong> les valeurs RVB de l’intervalle <span class="math inline">\([0, 255]\)</span> vers l’intervalle <span class="math inline">\([0, 1]\)</span>. On note ces valeurs normalisées <span class="math inline">\(R', G', B'\)</span>.</p>
@@ -630,7 +673,7 @@ B &amp;= (B' + m) \times 255
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -639,7 +682,7 @@ B &amp;= (B' + m) \times 255
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1. Pourquoi est-ce non linéaire ?</strong> Contrairement au passage en niveaux de gris qui est une simple combinaison linéaire (une multiplication matricielle), la conversion vers le TSL utilise des opérations conditionnelles (fonctions <span class="math inline">\(\max\)</span> et <span class="math inline">\(\min\)</span>), des valeurs absolues et des divisions. Géométriquement, l’algorithme “déforme” un cube (l’espace RVB) pour l’enrouler et le faire rentrer dans un cylindre. Cette torsion mathématique a pour but de s’aligner sur la perception visuelle de l’œil humain, qui est elle-même fortement non linéaire.</p>
 <p><strong>2. Les implications sur le terrain (vision industrielle) :</strong> Cette non-linéarité a trois conséquences majeures à prendre en compte lors du développement de vos algorithmes de contrôle qualité :</p>
@@ -1167,211 +1210,246 @@ B &amp;= (B' + m) \times 255
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>Nous avons vu qu'une couleur peut donc être définie par trois valeurs. Le système RVB repose sur une synthèse additive de 3 couleurs de base: le rouge, le vert et le bleu. On les appelle les trois composantes. Généralement, les valeurs de ces composantes sont comprises entre 0 et 255 (un octet). Il est donc possible de coder 16.777.216 couleurs différentes.  Si chacune des composantes est à son maximum, le résultat est blanc ; si chacune est à son minimum, le résultat est noir (absence de lumière). Si nous avons la même proportion de rouge, de bleu et de vert, nous obtenons un niveau de gris. L'augmentation d'une composante accroît la luminosité du résultat.</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Aperçu <span class="pp">|</span> Couleur <span class="pp">|</span> Rouge (R) <span class="pp">|</span> Vert (V) <span class="pp">|</span> Bleu (B) <span class="pp">|</span> Remarque <span class="pp">|</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">|</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(0,0,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Noir pur** <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> Absence totale de lumière (minimum) <span class="pp">|</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(64,64,64); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris foncé** <span class="pp">|</span> 64 <span class="pp">|</span> 64 <span class="pp">|</span> 64 <span class="pp">|</span> Les 3 valeurs sont égales et basses <span class="pp">|</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(128,128,128); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris moyen** <span class="pp">|</span> 128 <span class="pp">|</span> 128 <span class="pp">|</span> 128 <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(192,192,192); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris clair** <span class="pp">|</span> 192 <span class="pp">|</span> 192 <span class="pp">|</span> 192 <span class="pp">|</span> Les 3 valeurs sont égales et élevées <span class="pp">|</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,255,255); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Blanc pur** <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> Addition maximale des 3 lumières <span class="pp">|</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,0,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge pur** <span class="pp">|</span> 255 <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(100,0,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge foncé**<span class="pp">|</span> 100 <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> Baisse de la valeur R = baisse de luminosité <span class="pp">|</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,255,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Jaune pur** <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> 0 <span class="pp">|</span> Synthèse de Rouge + Vert <span class="pp">|</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(0,255,255); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Cyan pur** <span class="pp">|</span> 0 <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> Synthèse de Vert + Bleu <span class="pp">|</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,0,255); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Magenta pur**<span class="pp">|</span> 255 <span class="pp">|</span> 0 <span class="pp">|</span> 255 <span class="pp">|</span> Synthèse de Rouge + Bleu <span class="pp">|</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>**Question d'architecture :** Sachant que chaque composante colorimétrique (R, V et B) est codée en mémoire sur un octet, combien de niveaux de gris différents peut-on théoriquement générer au sein de cet espace RVB ?</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true" title="Afficher la réponse détaillée"}</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>**La réponse est 256 niveaux de gris.**</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>**L'explication technique :**</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Un octet (8 bits) permet de stocker $2^8 = 256$ valeurs entières, allant de $0$ à $255$.</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Par définition, un pixel est gris si, et seulement si, l'intensité de ses trois primaires est parfaitement équilibrée ($R = V = B$).</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Les seules combinaisons grises possibles sont donc $(0,0,0)$, $(1,1,1)$, $(2,2,2)$ ... jusqu'à $(255,255,255)$. </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>Même si l'espace RVB total permet d'afficher plus de 16,7 millions de couleurs ($256 \times 256 \times 256$), il ne contient que 256 nuances de gris parfaites. C'est d'ailleurs pour cela qu'une image convertie en niveaux de gris n'a plus besoin de trois canaux : un seul canal (un octet par pixel) suffit pour stocker toute l'information de luminance !</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>: Exemples de couleurs et leurs composantes RVB respectives {#tbl-valeurs-rgb}</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>Malheureusement, ce système de codage n'est pas très satisfaisant. Dans le domaine informatique, le codage RVB est dépendant du périphérique. Cela entraîne une dérive colorimétrique qui doit être corrigée par calibrage.</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>Cependant, le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais comme nous allons le voir dans la suite, il n'est pas le seul.</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>Comment lire une image avec Python ?</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Chargement de l'image</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>chemin_image <span class="op">=</span> <span class="st">"images/mon_image.jpg"</span> <span class="co"># À adapter avec une image de votre dossier</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> cv2.imread(chemin_image)</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Sécurité : vérifier que l'image a bien été trouvée et chargée</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> image <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Erreur : Impossible de lire le fichier '</span><span class="sc">{</span>chemin_image<span class="sc">}</span><span class="ss">'"</span>)</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    sys.exit()</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Aperçu <span class="pp">|</span> Couleur <span class="pp">|</span> Rouge (R) <span class="pp">|</span> Vert (V) <span class="pp">|</span> Bleu (B) <span class="pp">|</span> Remarque <span class="pp">|</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">|</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(0,0,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Noir pur** <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> Absence totale de lumière (minimum) <span class="pp">|</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(64,64,64); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris foncé** <span class="pp">|</span> 64 <span class="pp">|</span> 64 <span class="pp">|</span> 64 <span class="pp">|</span> Les 3 valeurs sont égales et basses <span class="pp">|</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(128,128,128); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris moyen** <span class="pp">|</span> 128 <span class="pp">|</span> 128 <span class="pp">|</span> 128 <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(192,192,192); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris clair** <span class="pp">|</span> 192 <span class="pp">|</span> 192 <span class="pp">|</span> 192 <span class="pp">|</span> Les 3 valeurs sont égales et élevées <span class="pp">|</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,255,255); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Blanc pur** <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> Addition maximale des 3 lumières <span class="pp">|</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,0,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge pur** <span class="pp">|</span> 255 <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(100,0,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge foncé**<span class="pp">|</span> 100 <span class="pp">|</span> 0 <span class="pp">|</span> 0 <span class="pp">|</span> Baisse de la valeur R = baisse de luminosité <span class="pp">|</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,255,0); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Jaune pur** <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> 0 <span class="pp">|</span> Synthèse de Rouge + Vert <span class="pp">|</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(0,255,255); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Cyan pur** <span class="pp">|</span> 0 <span class="pp">|</span> 255 <span class="pp">|</span> 255 <span class="pp">|</span> Synthèse de Vert + Bleu <span class="pp">|</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:rgb(255,0,255); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Magenta pur**<span class="pp">|</span> 255 <span class="pp">|</span> 0 <span class="pp">|</span> 255 <span class="pp">|</span> Synthèse de Rouge + Bleu <span class="pp">|</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>: Exemples de couleurs et leurs composantes RVB respectives {#tbl-valeurs-rgb}</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>Malheureusement, ce système de codage n'est pas très satisfaisant. Dans le domaine informatique, le codage RVB est dépendant du périphérique. Cela entraîne une dérive colorimétrique qui doit être corrigée par calibrage.</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>Cependant, le modèle RGB (Rouge, Vert, Bleu) est probablement le plus utilisé, mais comme nous allons le voir dans la suite, il n'est pas le seul.</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>Comment lire une image avec Python ?</span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Choix des coordonnées du pixel à analyser</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">120</span>  <span class="co"># Colonne (axe horizontal)</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">50</span>   <span class="co"># Ligne (axe vertical)</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Lecture des composantes du pixel</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">ATTENTION</span><span class="co"> : En numpy/matriciel, on lit d'abord la ligne, puis la colonne, donc [y, x]</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>pixel <span class="op">=</span> image[y, x]</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Chargement de l'image</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>chemin_image <span class="op">=</span> <span class="st">"images/mon_image.jpg"</span> <span class="co"># À adapter avec une image de votre dossier</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> cv2.imread(chemin_image)</span>
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Extraction des couleurs</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co"># PIÈGE CLASSIQUE : OpenCV utilise nativement le format BGR, et non RGB !</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> pixel[<span class="dv">0</span>] <span class="co"># Bleu (Blue)</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> pixel[<span class="dv">1</span>] <span class="co"># Vert (Green)</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> pixel[<span class="dv">2</span>] <span class="co"># Rouge (Red)</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Affichage des résultats</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Analyse du pixel aux coordonnées matricielles (Y=</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">, X=</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">) :"</span>)</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Tableau brut retourné par OpenCV (BGR) : </span><span class="sc">{</span>pixel<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Composante Rouge (R) : </span><span class="sc">{</span>r<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Composante Verte (V) : </span><span class="sc">{</span>g<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Composante Bleue (B) : </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux RGB</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>Chargez d'abord une image en couleur (par exemple, le <span class="in">`clown.png`</span>), décomposez-le en ses trois composantes R, G et B que vous affichez dans trois fenêtres différentes.</span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Sécurité : vérifier que l'image a bien été trouvée et chargée</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> image <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Erreur : Impossible de lire le fichier '</span><span class="sc">{</span>chemin_image<span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    sys.exit()</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Choix des coordonnées du pixel à analyser</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">120</span>  <span class="co"># Colonne (axe horizontal)</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">50</span>   <span class="co"># Ligne (axe vertical)</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Lecture des composantes du pixel</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">ATTENTION</span><span class="co"> : En numpy/matriciel, on lit d'abord la ligne, puis la colonne, donc [y, x]</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>pixel <span class="op">=</span> image[y, x]</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Extraction des couleurs</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="co"># PIÈGE CLASSIQUE : OpenCV utilise nativement le format BGR, et non RGB !</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> pixel[<span class="dv">0</span>] <span class="co"># Bleu (Blue)</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> pixel[<span class="dv">1</span>] <span class="co"># Vert (Green)</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> pixel[<span class="dv">2</span>] <span class="co"># Rouge (Red)</span></span>
 <span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>Le modèle HSL a été décrit par MUNSELL en 1905 et est plus proche de la manière dont un humain donne la description d'une couleur. En effet, si vous écoutez une quelqu'un décrire une couleur, on pourrait entendre : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair).</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>Notre cerveau agit donc comme un intégrateur qui détecte trois grandeurs physiques distinctes :</span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La teinte (Hue) :** caractérisée par la longueur d'onde dominante du rayonnement (± 250 teintes monochromatiques détectables par l'œil, plus les pourpres).</span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La luminosité ou clarté (Lightness) :** l'énergie lumineuse reçue (± 1000 niveaux de luminosité différents, selon la teinte).</span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La saturation (Saturation ou pureté de la couleur) :** contribue à l'intensité de l'ensemble et permet de différencier une couleur vive d'une couleur pastel (atténuée) (± 20 000 différenciations).</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>Une couleur pure (un rouge flamboyant) sera donc saturée à 100 % et quand la saturation atteint 0%, il n'y a plus de dominante de couleur. La couleur est dite achromatique (absence de couleur) et révèle une nuance de gris, allant du blanc au noir selon la luminosité.</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Aperçu <span class="pp">|</span> Couleur <span class="pp">|</span> Teinte (H) <span class="pp">|</span> Saturation (S) <span class="pp">|</span> Luminosité (L) <span class="pp">|</span> Remarque <span class="pp">|</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">|</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,0%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Noir pur** <span class="pp">|</span> 0° <span class="pp">|</span> 0% <span class="pp">|</span> 0% <span class="pp">|</span> Luminosité à 0 = noir total, peu importe H et S <span class="pp">|</span></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris moyen** <span class="pp">|</span> 0° <span class="pp">|</span> 0% <span class="pp">|</span> 50% <span class="pp">|</span> Saturation à 0 = absence de pigment (nuance de gris) <span class="pp">|</span></span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,100%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Blanc pur** <span class="pp">|</span> 0° <span class="pp">|</span> 0% <span class="pp">|</span> 100% <span class="pp">|</span> Luminosité à 100 = blanc pur, peu importe H et S <span class="pp">|</span></span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge pur** <span class="pp">|</span> 0° <span class="pp">|</span> 100% <span class="pp">|</span> 50% <span class="pp">|</span> Couleur fondamentale (0° = début du cercle chromatique) <span class="pp">|</span></span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,25%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge foncé**<span class="pp">|</span> 0° <span class="pp">|</span> 100% <span class="pp">|</span> 25% <span class="pp">|</span> On baisse L : on assombrit la même couleur <span class="pp">|</span></span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,75%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge clair**<span class="pp">|</span> 0° <span class="pp">|</span> 100% <span class="pp">|</span> 75% <span class="pp">|</span> On monte L : on éclaircit la même couleur <span class="pp">|</span></span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,30%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge délavé**<span class="pp">|</span> 0° <span class="pp">|</span> 30% <span class="pp">|</span> 50% <span class="pp">|</span> On baisse S : la couleur devient fade (tend vers le gris) <span class="pp">|</span></span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(120,100%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Vert pur** <span class="pp">|</span> 120° <span class="pp">|</span> 100% <span class="pp">|</span> 50% <span class="pp">|</span> Décalage d'un tiers (120°) sur le cercle chromatique <span class="pp">|</span></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(240,100%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Bleu pur** <span class="pp">|</span> 240° <span class="pp">|</span> 100% <span class="pp">|</span> 50% <span class="pp">|</span> Décalage de deux tiers (240°) sur le cercle chromatique <span class="pp">|</span></span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>: Exemples de couleurs et leurs composantes TSL/HSL respectives {#tbl-valeurs-hsl}</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>Vous remarquerez la teinte n'est pas donnée par une valeur entre 0 et 255 mais bien entre 0 et 360. H est donné en degré car elle est souvent réprésentée sur un cercle qui se transforme en cylindre avec la saturation et la luminance.</span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="al">![Représentation en cylindre de l'espace colorimétrique HSL. La Teinte (Hue) correspond à l'angle, la Saturation correspond au rayon, et la Luminosité (Lightness) correspond à l'axe vertical.](images_dans_le_cours/HSL.png)</span>{#fig-cylindre-hsl}</span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>Comme on peut l'observer sur la @fig-cylindre-hsl :</span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**La Teinte (H)** tourne autour de l'axe central (de 0° à 360°).</span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**La Saturation (S)** part de l'axe central gris (0%) vers le bord coloré du cylindre (100%).</span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**La Luminosité (L)** monte de la base noire (0%) vers le sommet blanc (100%).</span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="fu">### Conversion Mathématique entre RVB et TSL (HSL)</span></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>Pour passer d'un espace colorimétrique à l'autre, les algorithmes (comme ceux intégrés dans OpenCV) utilisent une série d'opérations non linéaires. </span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>Pour réaliser une conversion de RVB vers TSL (HSL) :</span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>La première étape consiste toujours à **normaliser** les valeurs RVB de l'intervalle $<span class="co">[</span><span class="ot">0, 255</span><span class="co">]</span>$ vers l'intervalle $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. On note ces valeurs normalisées $R', G', B'$.</span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>On cherche ensuite la composante maximale ($C_{max}$), la composante minimale ($C_{min}$) et la différence entre les deux ($\Delta$).</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Affichage des résultats</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Analyse du pixel aux coordonnées matricielles (Y=</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">, X=</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">) :"</span>)</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Tableau brut retourné par OpenCV (BGR) : </span><span class="sc">{</span>pixel<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Composante Rouge (R) : </span><span class="sc">{</span>r<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Composante Verte (V) : </span><span class="sc">{</span>g<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"-&gt; Composante Bleue (B) : </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux RGB</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>Chargez d'abord une image en couleur (par exemple, le <span class="in">`clown.png`</span>), décomposez-le en ses trois composantes R, G et B que vous affichez dans trois fenêtres différentes.</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## Les modèles CMJ (CMY) et CMJN (CMYK)</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>Ces modèles représentent l'espace colorimétrique construit par synthèse soustractive des trois composantes primaires : le Cyan (bleu pâle), le Magenta (proche du rouge) et le Jaune.La couleur est formée par la soustraction des composantes primaires à partir d'une lumière blanche (l'impression en couleur reposant sur la réflexion d'une lumière incidente sur une encre colorée). En théorie, la superposition maximale des trois composantes absorbe totalement la lumière et produit la couleur noire. Le processus d'impression sur papier utilise naturellement cette synthèse soustractive ; il est la norme en imprimerie (pour le mélange des encres) mais reste rarement utilisé dans le monde informatique, malgré son intérêt fondamental pour comprendre les mécanismes d'impression.Le cube des couleurs primaires RVB et CMJ</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>Chaque composante C, M et J est la complémentaire des composantes R, V et B. Ainsi, nous pouvons écrire (R étant la complémentaire de C, V de M, et B de J) les équations suivantes, en supposant des valeurs normalisées entre $0$ et $1$ :$$C = 1 - R \quad ; \quad M = 1 - V \quad ; \quad J = 1 - B$$</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>Ou dans le sens inverse :$$R = 1 - C \quad ; \quad V = 1 - M \quad ; \quad B = 1 - J$$</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>Tout comme le RVB, nous représentons le modèle CMJ dans l'espace colorimétrique sous la forme d'un cube. Les composantes primaires se situent aux sommets de ce cube. Le blanc et le noir occupent les deux derniers sommets opposés. À noter que la diagonale reliant le blanc au noir représente l'axe des niveaux de gris.Le passage à la quadrichromie (CMJN)</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>L'extension classique de ce système est le modèle CMJN (N pour Noir, ou K pour Key en anglais). </span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>Cette synthèse en « quadrichromie » est devenue nécessaire en raison de contraintes techniques (les impuretés des encres réelles produisant un brun boueux plutôt qu'un noir pur).</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>Puisque le noir (ou les niveaux de gris) est obtenu par la superposition d'une quantité égale de chaque composante, nous pouvons extraire cette base noire ($N$) :$$N = \min(C, M, J)$$</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>Et ensuite recalculer les quantités d'encre couleur strictement nécessaires :$$C' = C - N$$$$M' = M - N$$$$J' = J - N$$</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>Exemple : La couleur définie par $(C, M, J) = (0.6, 0.2, 0.9)$ dans le modèle CMJ devient $(C', M', J', N) = (0.4, 0.0, 0.7, 0.2)$ dans le modèle CMJN, car la valeur minimale de la couleur d'origine est $\min(0.6, 0.2, 0.9) = 0.2$.</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux CMJ et CMJN</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>Chargez l'image précédente (par exemple, le <span class="in">`clown.png`</span>), décomposez-le en ses trois composantes Cyan, Magenta et Jaune que vous affichez dans trois fenêtres différentes.</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="fu">## Le modèle HSL (Hue, Saturation, Luminance ou en français TSL : Teinte, Saturation, Luminosité)</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>Le modèle HSL a été décrit par MUNSELL en 1905 et est plus proche de la manière dont un humain donne la description d'une couleur. En effet, si vous écoutez une quelqu'un décrire une couleur, on pourrait entendre : « Je cherche un bleu pastel très clair ». On retrouve dans cette phrase les notions fondamentales de teinte (bleu), de saturation (pastel) et de luminosité (très clair).</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>Notre cerveau agit donc comme un intégrateur qui détecte trois grandeurs physiques distinctes :</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La teinte (Hue) :** caractérisée par la longueur d'onde dominante du rayonnement (± 250 teintes monochromatiques détectables par l'œil, plus les pourpres).</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La luminosité ou clarté (Lightness) :** l'énergie lumineuse reçue (± 1000 niveaux de luminosité différents, selon la teinte).</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La saturation (Saturation ou pureté de la couleur) :** contribue à l'intensité de l'ensemble et permet de différencier une couleur vive d'une couleur pastel (atténuée) (± 20 000 différenciations).</span>
 <span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>C_{max} &amp;= \max(R', G', B') <span class="sc">\\</span></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>C_{min} &amp;= \min(R', G', B') <span class="sc">\\</span></span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>\Delta &amp;= C_{max} - C_{min}</span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>**Calcul de la Luminosité (L) :**</span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>La luminosité est simplement la moyenne entre la composante la plus forte et la plus faible.</span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>$$ L = \frac{C_{max} + C_{min}}{2} $$</span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>**Calcul de la Saturation (S) :**</span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>Si $\Delta = 0$ (c'est-à-dire que $R=G=B$), la couleur est une nuance de gris, donc la saturation est nulle.</span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>S = \begin{cases} </span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>0 &amp; \text{si } \Delta = 0 <span class="sc">\\</span></span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>\frac{\Delta}{1 - |2L - 1|} &amp; \text{sinon}</span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>\end{cases}</span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>**Calcul de la Teinte (H) :**</span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>La teinte est calculée selon le secteur du cercle chromatique (par tranches de 60°) dominé par la couleur principale.</span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>H = \begin{cases} </span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>0^\circ &amp; \text{si } \Delta = 0 <span class="sc">\\</span></span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>60^\circ \times \left( \frac{G' - B'}{\Delta} \bmod 6 \right) &amp; \text{si } C_{max} = R' <span class="sc">\\</span></span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>60^\circ \times \left( \frac{B' - R'}{\Delta} + 2 \right) &amp; \text{si } C_{max} = G' <span class="sc">\\</span></span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>60^\circ \times \left( \frac{R' - G'}{\Delta} + 4 \right) &amp; \text{si } C_{max} = B'</span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>\end{cases}</span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>*(Si $H &lt; 0^\circ$, on lui ajoute $360^\circ$ pour obtenir un angle positif).*</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>Une couleur pure (un rouge flamboyant) sera donc saturée à 100 % et quand la saturation atteint 0%, il n'y a plus de dominante de couleur. La couleur est dite achromatique (absence de couleur) et révèle une nuance de gris, allant du blanc au noir selon la luminosité.</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Aperçu <span class="pp">|</span> Couleur <span class="pp">|</span> Teinte (H) <span class="pp">|</span> Saturation (S) <span class="pp">|</span> Luminosité (L) <span class="pp">|</span> Remarque <span class="pp">|</span></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---</span> <span class="pp">|</span></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,0%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Noir pur** <span class="pp">|</span> 0° <span class="pp">|</span> 0% <span class="pp">|</span> 0% <span class="pp">|</span> Luminosité à 0 = noir total, peu importe H et S <span class="pp">|</span></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Gris moyen** <span class="pp">|</span> 0° <span class="pp">|</span> 0% <span class="pp">|</span> 50% <span class="pp">|</span> Saturation à 0 = absence de pigment (nuance de gris) <span class="pp">|</span></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,0%,100%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Blanc pur** <span class="pp">|</span> 0° <span class="pp">|</span> 0% <span class="pp">|</span> 100% <span class="pp">|</span> Luminosité à 100 = blanc pur, peu importe H et S <span class="pp">|</span></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge pur** <span class="pp">|</span> 0° <span class="pp">|</span> 100% <span class="pp">|</span> 50% <span class="pp">|</span> Couleur fondamentale (0° = début du cercle chromatique) <span class="pp">|</span></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,25%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge foncé**<span class="pp">|</span> 0° <span class="pp">|</span> 100% <span class="pp">|</span> 25% <span class="pp">|</span> On baisse L : on assombrit la même couleur <span class="pp">|</span></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,100%,75%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge clair**<span class="pp">|</span> 0° <span class="pp">|</span> 100% <span class="pp">|</span> 75% <span class="pp">|</span> On monte L : on éclaircit la même couleur <span class="pp">|</span></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(0,30%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Rouge délavé**<span class="pp">|</span> 0° <span class="pp">|</span> 30% <span class="pp">|</span> 50% <span class="pp">|</span> On baisse S : la couleur devient fade (tend vers le gris) <span class="pp">|</span></span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(120,100%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Vert pur** <span class="pp">|</span> 120° <span class="pp">|</span> 100% <span class="pp">|</span> 50% <span class="pp">|</span> Décalage d'un tiers (120°) sur le cercle chromatique <span class="pp">|</span></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> style</span><span class="op">=</span><span class="st">"display:inline-block; width:18px; height:18px; background-color:hsl(240,100%,50%); border:1px solid #777; border-radius:3px;"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span> <span class="pp">|</span> **Bleu pur** <span class="pp">|</span> 240° <span class="pp">|</span> 100% <span class="pp">|</span> 50% <span class="pp">|</span> Décalage de deux tiers (240°) sur le cercle chromatique <span class="pp">|</span></span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>: Exemples de couleurs et leurs composantes TSL/HSL respectives {#tbl-valeurs-hsl}</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>Vous remarquerez la teinte n'est pas donnée par une valeur entre 0 et 255 mais bien entre 0 et 360. H est donné en degré car elle est souvent réprésentée sur un cercle qui se transforme en cylindre avec la saturation et la luminance.</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="al">![Représentation en cylindre de l'espace colorimétrique HSL. La Teinte (Hue) correspond à l'angle, la Saturation correspond au rayon, et la Luminosité (Lightness) correspond à l'axe vertical.](images_dans_le_cours/HSL.png)</span>{#fig-cylindre-hsl}</span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>Comme on peut l'observer sur la @fig-cylindre-hsl :</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**La Teinte (H)** tourne autour de l'axe central (de 0° à 360°).</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**La Saturation (S)** part de l'axe central gris (0%) vers le bord coloré du cylindre (100%).</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**La Luminosité (L)** monte de la base noire (0%) vers le sommet blanc (100%).</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Conversion Mathématique entre RVB et TSL (HSL)</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>Pour passer d'un espace colorimétrique à l'autre, les algorithmes (comme ceux intégrés dans OpenCV) utilisent une série d'opérations non linéaires. </span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>Pour réaliser une conversion de RVB vers TSL (HSL) :</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>La première étape consiste toujours à **normaliser** les valeurs RVB de l'intervalle $<span class="co">[</span><span class="ot">0, 255</span><span class="co">]</span>$ vers l'intervalle $<span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. On note ces valeurs normalisées $R', G', B'$.</span>
 <span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>On cherche ensuite la composante maximale ($C_{max}$), la composante minimale ($C_{min}$) et la différence entre les deux ($\Delta$).</span>
 <span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>Pour la conversion inverse de TSL (HSL) vers RVB :</span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>On utilise la Teinte ($H \in <span class="co">[</span><span class="ot">0, 360[$), la Saturation ($S \in [0, 1</span><span class="co">]</span>$) et la Luminosité ($L \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$) pour retrouver $R, G, B$.</span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>On calcule d'abord les paramètres intermédiaires suivants (le Chroma $C$, un paramètre $X$ et un ajustement de luminosité $m$) :</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>C &amp;= (1 - |2L - 1|) \times S <span class="sc">\\</span></span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>X &amp;= C \times \left(1 - \left| \left(\frac{H}{60^\circ}\right) \bmod 2 - 1 \right|\right) <span class="sc">\\</span></span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>m &amp;= L - \frac{C}{2}</span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>On détermine ensuite les valeurs RVB temporaires $(R', G', B')$ en fonction de l'angle de la Teinte $H$ :</span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>C_{max} &amp;= \max(R', G', B') <span class="sc">\\</span></span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>C_{min} &amp;= \min(R', G', B') <span class="sc">\\</span></span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>\Delta &amp;= C_{max} - C_{min}</span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>**Calcul de la Luminosité (L) :**</span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>La luminosité est simplement la moyenne entre la composante la plus forte et la plus faible.</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>$$ L = \frac{C_{max} + C_{min}}{2} $$</span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>**Calcul de la Saturation (S) :**</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>Si $\Delta = 0$ (c'est-à-dire que $R=G=B$), la couleur est une nuance de gris, donc la saturation est nulle.</span>
 <span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>(R', G', B') = \begin{cases} </span>
-<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>(C, X, 0) &amp; \text{si } 0^\circ \le H &lt; 60^\circ <span class="sc">\\</span></span>
-<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>(X, C, 0) &amp; \text{si } 60^\circ \le H &lt; 120^\circ <span class="sc">\\</span></span>
-<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>(0, C, X) &amp; \text{si } 120^\circ \le H &lt; 180^\circ <span class="sc">\\</span></span>
-<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>(0, X, C) &amp; \text{si } 180^\circ \le H &lt; 240^\circ <span class="sc">\\</span></span>
-<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>(X, 0, C) &amp; \text{si } 240^\circ \le H &lt; 300^\circ <span class="sc">\\</span></span>
-<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>(C, 0, X) &amp; \text{si } 300^\circ \le H &lt; 360^\circ </span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>\end{cases}</span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>S = \begin{cases} </span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>0 &amp; \text{si } \Delta = 0 <span class="sc">\\</span></span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>\frac{\Delta}{1 - |2L - 1|} &amp; \text{sinon}</span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>\end{cases}</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>**Calcul de la Teinte (H) :**</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>La teinte est calculée selon le secteur du cercle chromatique (par tranches de 60°) dominé par la couleur principale.</span>
 <span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>Enfin, on ajoute l'ajustement de luminosité $m$ et on dé-normalise pour retrouver les valeurs classiques sur un octet (0 à 255) :</span>
-<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>R &amp;= (R' + m) \times 255 <span class="sc">\\</span></span>
-<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>G &amp;= (G' + m) \times 255 <span class="sc">\\</span></span>
-<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>B &amp;= (B' + m) \times 255</span>
-<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question de réflexion : La non-linéarité du modèle"}</span>
-<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>**Pourquoi la transformation RVB $\rightarrow$ TSL est-elle non linéaire, et quelles en sont les implications concrètes en traitement d'images industriel ?**</span>
-<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
-<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a><span class="fu">### Voir la réponse et l'explication</span></span>
-<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>**1. Pourquoi est-ce non linéaire ?**</span>
-<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>Contrairement au passage en niveaux de gris qui est une simple combinaison linéaire (une multiplication matricielle), la conversion vers le TSL utilise des opérations conditionnelles (fonctions $\max$ et $\min$), des valeurs absolues et des divisions. Géométriquement, l'algorithme "déforme" un cube (l'espace RVB) pour l'enrouler et le faire rentrer dans un cylindre. Cette torsion mathématique a pour but de s'aligner sur la perception visuelle de l'œil humain, qui est elle-même fortement non linéaire.</span>
-<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a>**2. Les implications sur le terrain (vision industrielle) :**</span>
-<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a>Cette non-linéarité a trois conséquences majeures à prendre en compte lors du développement de vos algorithmes de contrôle qualité :</span>
-<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**L'instabilité de la Teinte (Singularités) :** Lorsque la saturation est très faible (sur des objets gris/métalliques) ou que l'image est très sombre/très surexposée, la différence $\Delta$ s'approche de $0$. Une infime variation de lumière ou un bruit de capteur (même de 1 bit sur un pixel) va faire bondir l'angle de la Teinte de manière chaotique. </span>
-<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>*$\rightarrow$ Règle d'or : ne jamais baser une segmentation sur la Teinte si la Saturation ou la Luminosité sont trop faibles.*</span>
-<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Le problème de la circularité (Mathématique modulo) :** La Teinte est un angle. Les valeurs $0^\circ$ (rouge) et $359^\circ$ (rouge) sont visuellement identiques mais numériquement opposées. Vous ne pouvez donc pas utiliser de simples moyennes mathématiques ou de distances euclidiennes sur la Teinte. (Par exemple, dans OpenCV, isoler la couleur rouge requiert souvent de créer deux masques : de 0 à 10 et de 170 à 179, puis de les additionner).</span>
-<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Le coût de calcul (CPU) :** Les divisions, les modulos et les branchements conditionnels (<span class="in">`if`</span>) demandent plus de cycles d'horloge au processeur qu'une simple addition matricielle. Sur des lignes de production à cadence très élevée (milliers de pièces par minute), convertir une image haute résolution de RVB à TSL coûte un temps de traitement précieux qu'il faut estimer.</span>
-<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
-<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux HSL avec les formules</span></span>
-<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>Chargez d'abord une image en couleur (par exemple, le <span class="in">`clown.png`</span>), EN UTILISANT les formules ci-dessus, décomposez l'image en ses trois composantes H, S et L que vous affichez dans trois fenêtres différentes. Posez-vous d'abord la question de savoir comment afficher une composante dont l'unité est en degré et comment afficher une saturation.</span>
-<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
-<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux HSL en utilisant opencv</span></span>
-<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>Refaites l'exercice précédent en utilisant la librairie opencv. Comparez et commentez les résultats.</span>
-<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
-<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux HSL en utilisant opencv</span></span>
-<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a>Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge (H=0, S=1, L=1). Comparez avec l'image rouge générée plus haut.</span>
-<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>H = \begin{cases} </span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>0^\circ &amp; \text{si } \Delta = 0 <span class="sc">\\</span></span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>60^\circ \times \left( \frac{G' - B'}{\Delta} \bmod 6 \right) &amp; \text{si } C_{max} = R' <span class="sc">\\</span></span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>60^\circ \times \left( \frac{B' - R'}{\Delta} + 2 \right) &amp; \text{si } C_{max} = G' <span class="sc">\\</span></span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>60^\circ \times \left( \frac{R' - G'}{\Delta} + 4 \right) &amp; \text{si } C_{max} = B'</span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>\end{cases}</span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>*(Si $H &lt; 0^\circ$, on lui ajoute $360^\circ$ pour obtenir un angle positif).*</span>
+<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>Pour la conversion inverse de TSL (HSL) vers RVB :</span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>On utilise la Teinte ($H \in <span class="co">[</span><span class="ot">0, 360[$), la Saturation ($S \in [0, 1</span><span class="co">]</span>$) et la Luminosité ($L \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$) pour retrouver $R, G, B$.</span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>On calcule d'abord les paramètres intermédiaires suivants (le Chroma $C$, un paramètre $X$ et un ajustement de luminosité $m$) :</span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a>C &amp;= (1 - |2L - 1|) \times S <span class="sc">\\</span></span>
+<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a>X &amp;= C \times \left(1 - \left| \left(\frac{H}{60^\circ}\right) \bmod 2 - 1 \right|\right) <span class="sc">\\</span></span>
+<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a>m &amp;= L - \frac{C}{2}</span>
+<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>On détermine ensuite les valeurs RVB temporaires $(R', G', B')$ en fonction de l'angle de la Teinte $H$ :</span>
+<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a>(R', G', B') = \begin{cases} </span>
+<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a>(C, X, 0) &amp; \text{si } 0^\circ \le H &lt; 60^\circ <span class="sc">\\</span></span>
+<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a>(X, C, 0) &amp; \text{si } 60^\circ \le H &lt; 120^\circ <span class="sc">\\</span></span>
+<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>(0, C, X) &amp; \text{si } 120^\circ \le H &lt; 180^\circ <span class="sc">\\</span></span>
+<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a>(0, X, C) &amp; \text{si } 180^\circ \le H &lt; 240^\circ <span class="sc">\\</span></span>
+<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>(X, 0, C) &amp; \text{si } 240^\circ \le H &lt; 300^\circ <span class="sc">\\</span></span>
+<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>(C, 0, X) &amp; \text{si } 300^\circ \le H &lt; 360^\circ </span>
+<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>\end{cases}</span>
+<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a>Enfin, on ajoute l'ajustement de luminosité $m$ et on dé-normalise pour retrouver les valeurs classiques sur un octet (0 à 255) :</span>
+<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a>R &amp;= (R' + m) \times 255 <span class="sc">\\</span></span>
+<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a>G &amp;= (G' + m) \times 255 <span class="sc">\\</span></span>
+<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a>B &amp;= (B' + m) \times 255</span>
+<span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question de réflexion : La non-linéarité du modèle"}</span>
+<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a>**Pourquoi la transformation RVB $\rightarrow$ TSL est-elle non linéaire, et quelles en sont les implications concrètes en traitement d'images industriel ?**</span>
+<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true"}</span>
+<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### Voir la réponse et l'explication</span></span>
+<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a>**1. Pourquoi est-ce non linéaire ?**</span>
+<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a>Contrairement au passage en niveaux de gris qui est une simple combinaison linéaire (une multiplication matricielle), la conversion vers le TSL utilise des opérations conditionnelles (fonctions $\max$ et $\min$), des valeurs absolues et des divisions. Géométriquement, l'algorithme "déforme" un cube (l'espace RVB) pour l'enrouler et le faire rentrer dans un cylindre. Cette torsion mathématique a pour but de s'aligner sur la perception visuelle de l'œil humain, qui est elle-même fortement non linéaire.</span>
+<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a>**2. Les implications sur le terrain (vision industrielle) :**</span>
+<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a>Cette non-linéarité a trois conséquences majeures à prendre en compte lors du développement de vos algorithmes de contrôle qualité :</span>
+<span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**L'instabilité de la Teinte (Singularités) :** Lorsque la saturation est très faible (sur des objets gris/métalliques) ou que l'image est très sombre/très surexposée, la différence $\Delta$ s'approche de $0$. Une infime variation de lumière ou un bruit de capteur (même de 1 bit sur un pixel) va faire bondir l'angle de la Teinte de manière chaotique. </span>
+<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a>*$\rightarrow$ Règle d'or : ne jamais baser une segmentation sur la Teinte si la Saturation ou la Luminosité sont trop faibles.*</span>
+<span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Le problème de la circularité (Mathématique modulo) :** La Teinte est un angle. Les valeurs $0^\circ$ (rouge) et $359^\circ$ (rouge) sont visuellement identiques mais numériquement opposées. Vous ne pouvez donc pas utiliser de simples moyennes mathématiques ou de distances euclidiennes sur la Teinte. (Par exemple, dans OpenCV, isoler la couleur rouge requiert souvent de créer deux masques : de 0 à 10 et de 170 à 179, puis de les additionner).</span>
+<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Le coût de calcul (CPU) :** Les divisions, les modulos et les branchements conditionnels (<span class="in">`if`</span>) demandent plus de cycles d'horloge au processeur qu'une simple addition matricielle. Sur des lignes de production à cadence très élevée (milliers de pièces par minute), convertir une image haute résolution de RVB à TSL coûte un temps de traitement précieux qu'il faut estimer.</span>
+<span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux HSL avec les formules</span></span>
+<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a>Chargez d'abord une image en couleur (par exemple, le <span class="in">`clown.png`</span>), EN UTILISANT les formules ci-dessus, décomposez l'image en ses trois composantes H, S et L que vous affichez dans trois fenêtres différentes. Posez-vous d'abord la question de savoir comment afficher une composante dont l'unité est en degré et comment afficher une saturation.</span>
+<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux HSL en utilisant opencv</span></span>
+<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>Refaites l'exercice précédent en utilisant la librairie opencv. Comparez et commentez les résultats.</span>
+<span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux HSL en utilisant opencv</span></span>
+<span id="cb2-245"><a href="#cb2-245" aria-hidden="true" tabindex="-1"></a>Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge (H=0, S=1, L=1). Comparez avec l'image rouge générée plus haut.</span>
+<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
