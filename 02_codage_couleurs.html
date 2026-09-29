@@ -228,6 +228,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Opérations ponctuelles</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_operations_voisinage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -241,8 +247,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
+  <a href="./10_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
   </div>
 </li>
       </ul>
@@ -487,7 +493,7 @@ Figure&nbsp;2.1: Mire de test 3x3. Ligne 1 : Couleurs primaires additives (RVB).
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Chargez d’abord une image en couleur (par exemple, la mire céée précédement et ensuite le <code>clown.png</code>), décomposez-les en trois composantes R, G et B que vous affichez dans trois fenêtres différentes.</p>
+<p>Chargez d’abord une image en couleur (par exemple, la mire céée précédement et ensuite <a href="images_pour_les_exercices/clown.png">l’image du clown</a>), décomposez-les en trois composantes R, G et B que vous affichez dans trois fenêtres différentes.</p>
 </div>
 </div>
 </section>
@@ -760,7 +766,20 @@ B &amp;= (B' + m) \times 255
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge (H=0, S=1, L=1). Comparez avec l’image rouge générée plus haut.</p>
+<p>Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge avec le H à zéro degré, la saturation au maximum et la luminance à 50%. Comparez avec l’image rouge générée plus haut.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice : “Effet Sin City”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A partir de l’image issue de <a href="images_pour_les_exercices/SinCity.jpg">l’affiche du film Sin City</a> créer un effet qui transforme toutes les couleurs de l’image en niveaux de gris, sauf les couleurs de pixels rouges qui doit rester rouges et qui doivent en plus être saturées.</p>
 </div>
 </div>
 
@@ -1320,7 +1339,7 @@ B &amp;= (B' + m) \times 255
 <span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
 <span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux RGB</span></span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>Chargez d'abord une image en couleur (par exemple, la mire céée précédement et ensuite le <span class="in">`clown.png`</span>), décomposez-les en trois composantes R, G et B que vous affichez dans trois fenêtres différentes.</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>Chargez d'abord une image en couleur (par exemple, la mire céée précédement et ensuite <span class="co">[</span><span class="ot">l'image du clown</span><span class="co">](images_pour_les_exercices/clown.png)</span>), décomposez-les en trois composantes R, G et B que vous affichez dans trois fenêtres différentes.</span>
 <span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## Les modèles CMJ (CMY) et CMJN (CMYK)</span></span>
@@ -1487,8 +1506,13 @@ B &amp;= (B' + m) \times 255
 <span id="cb2-251"><a href="#cb2-251" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
 <span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Décomposition des canaux HSL en utilisant opencv</span></span>
-<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a>Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge (H=0, S=1, L=1). Comparez avec l'image rouge générée plus haut.</span>
-<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a>Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge avec le H à zéro degré, la saturation au maximum et la luminance à 50%. Comparez avec l'image rouge générée plus haut.</span>
+<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-257"><a href="#cb2-257" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
+<span id="cb2-258"><a href="#cb2-258" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : "Effet Sin City"</span></span>
+<span id="cb2-259"><a href="#cb2-259" aria-hidden="true" tabindex="-1"></a>A partir de l'image issue de <span class="co">[</span><span class="ot">l'affiche du film Sin City</span><span class="co">](images_pour_les_exercices/SinCity.jpg)</span> créer un effet qui transforme toutes les couleurs de l'image en niveaux de gris, sauf les couleurs de pixels rouges qui doit rester rouges et qui doivent en plus être saturées.</span>
+<span id="cb2-260"><a href="#cb2-260" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

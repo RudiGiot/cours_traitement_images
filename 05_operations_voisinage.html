@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Opérations de voisinage – Traitement d'Images</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./10_use_cases_industrie.html" rel="next">
+<link href="./04_operations_pixel_vers_pixel.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-fd0503e23dce65854c81c5baaade3bdf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_operations_statistiques.html">II. Traitements de Base</a></li><li class="breadcrumb-item"><a href="./05_operations_voisinage.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Traitement d’Images</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Une introduction au traitement d’images</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">I. Fondamentaux</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_images_numeriques.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Images numériques</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_codage_couleurs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Le codage des couleurs</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">II. Traitements de Base</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_operations_statistiques.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Opérations statistiques</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_operations_pixel_vers_pixel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Opérations ponctuelles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_operations_voisinage.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">III. Cas d’Utilisation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#masques" id="toc-masques" class="nav-link active" data-scroll-target="#masques"><span class="header-section-number">5.1</span> Masques</a></li>
+  <li><a href="#convolution" id="toc-convolution" class="nav-link" data-scroll-target="#convolution"><span class="header-section-number">5.2</span> Convolution</a></li>
+  <li><a href="#filtres-non-linéaires" id="toc-filtres-non-linéaires" class="nav-link" data-scroll-target="#filtres-non-linéaires"><span class="header-section-number">5.3</span> Filtres non-linéaires</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_operations_statistiques.html">II. Traitements de Base</a></li><li class="breadcrumb-item"><a href="./05_operations_voisinage.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Contrairement aux opérations ponctuelles (pixel à pixel), la valeur d’un pixel de sortie lors d’une opération de voisinage dépend d’un sous-ensemble de pixels d’entrée.</p>
+<div id="fig-voisinage" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-voisinage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/voisinage.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-voisinage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Principe d’une opération de voisinage. L’opérateur <span class="math inline">\(O\)</span> calcule la valeur du pixel de sortie <span class="math inline">\(g_{n,m}\)</span> à partir du sous-ensemble de pixels inclus dans le voisinage local <span class="math inline">\(\varphi_{n,m}\)</span> de l’image d’entrée <span class="math inline">\(f\)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Le <strong>voisinage local</strong> d’un pixel <span class="math inline">\((n,m)\)</span> est l’ensemble des pixels situés dans une sous-région de l’image entourant le pixel <span class="math inline">\((n,m)\)</span>. Généralement, cette sous-région est rectangulaire, avec <span class="math inline">\((n,m)\)</span> en son centre. Si l’on suppose que la taille du voisinage est <span class="math inline">\((2K+1) \times (2L+1)\)</span>, alors le voisinage local <span class="math inline">\(\phi_{n,m}\)</span> du pixel <span class="math inline">\((n,m)\)</span> dans l’image d’entrée <span class="math inline">\(f\)</span> est défini par :</p>
+<p><span class="math display">\[ \phi_{n,m} = \{ f_{i,j} \mid n-K \le i \le n+K, \quad m-L \le j \le m+L \} \]</span></p>
+<p>Nous pouvons modéliser mathématiquement ces opérations par :</p>
+<p><span class="math display">\[ g_{n,m} = O(\phi_{n,m}) \]</span></p>
+<p>Cette opération est qualifiée de <strong>linéaire</strong> si elle respecte le principe de superposition :</p>
+<p><span class="math display">\[ O(a \cdot \phi_1 + b \cdot \phi_2) = a \cdot O(\phi_1) + b \cdot O(\phi_2) \]</span></p>
+<section id="masques" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="masques"><span class="header-section-number">5.1</span> Masques</h2>
+<p>Un masque (ou noyau) est défini par une matrice de pondération <span class="math inline">\(h_{k,l}\)</span>, une norme de normalisation <span class="math inline">\(N\)</span> et éventuellement un seuil <span class="math inline">\(\sigma\)</span>.</p>
+<p><span class="math display">\[
+h = \begin{bmatrix}
+h_{-K,-L} &amp; h_{-K,-L+1} &amp; \dots &amp; h_{-K,L} \\
+h_{-K+1,-L} &amp; &amp; &amp; \dots \\
+\dots &amp; &amp; &amp; \\
+h_{K,-L} &amp; \dots &amp; \dots &amp; h_{K,L}
+\end{bmatrix}
+\]</span></p>
+<p>Le masque <span class="math inline">\(h\)</span> est utilisé pour calculer la nouvelle valeur des pixels <span class="math inline">\(g_{n,m}\)</span> selon l’équation suivante :</p>
+<p><span class="math display">\[ g_{n,m} = \frac{1}{N} \sum_{k=-K}^{K} \sum_{l=-L}^{L} h_{k,l} f_{n-k, m-l} \]</span></p>
+<p>De manière générale, <span class="math inline">\(N\)</span> est égal à la somme des coefficients du masque pour conserver la luminance globale de l’image :</p>
+<p><span class="math display">\[ N = \sum_{k=-K}^{K} \sum_{l=-L}^{L} h_{k,l} \]</span></p>
+<p>Si un seuil <span class="math inline">\(\sigma\)</span> est défini (pour ne modifier le pixel que si le changement est significatif), la nouvelle valeur devient :</p>
+<p><span class="math display">\[ g_{n,m} = \begin{cases} \text{Nouvelle valeur calculée} &amp; \text{si la différence } &gt; \sigma \\ f_{n,m} &amp; \text{sinon} \end{cases} \]</span></p>
+<p>Pour traiter l’image, on “glisse” ce masque pixel par pixel, de gauche à droite et de haut en bas. Ces équations sont valides pour <span class="math inline">\(n \ge K\)</span>, <span class="math inline">\(n &lt; N-K\)</span>, <span class="math inline">\(m \ge L\)</span> et <span class="math inline">\(m &lt; M-L\)</span>.</p>
+<p><strong>Gestion des effets de bord :</strong> Une ambiguïté survient près des bords de l’image car le voisinage local “déborde” de l’image. Trois méthodes classiques permettent de résoudre ce problème :</p>
+<ol type="1">
+<li><strong>Ignorer les bords :</strong> L’image de sortie n’est pas calculée sur une épaisseur correspondant au rayon du masque.</li>
+<li><strong>Zero-padding :</strong> L’image d’entrée est virtuellement entourée de zéros au-delà de ses limites.</li>
+<li><strong>Répétition périodique :</strong> L’image est répétée comme un motif continu (le bord droit “touche” le bord gauche).</li>
+</ol>
+</section>
+<section id="convolution" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="convolution"><span class="header-section-number">5.2</span> Convolution</h2>
+<p>Dans l’équation de l’opération de voisinage, si l’opérateur <span class="math inline">\(O(\cdot)\)</span> ne dépend pas de la position spatiale du pixel <span class="math inline">\((n,m)\)</span>, l’opération est dite <strong>invariante dans l’espace</strong>. Si, en plus, l’opération est linéaire, on parle alors de <strong>convolution discrète</strong>. Les masques vus précédemment sont utilisés pour calculer cette convolution.</p>
+<section id="filtrage-passe-bas-low-pass" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="filtrage-passe-bas-low-pass"><span class="header-section-number">5.2.1</span> Filtrage Passe-bas (Low-pass)</h3>
+<p>Les filtres passe-bas laissent passer les basses fréquences (les aplats de couleurs) sans modification, mais atténuent les hautes fréquences (les détails fins et le bruit). On les appelle souvent <strong>filtres de lissage</strong> (smoothing filters).</p>
+</section>
+<section id="moyenne-locale" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="moyenne-locale"><span class="header-section-number">5.2.2</span> Moyenne locale</h3>
+<p>La moyenne locale (ou opérateur de lissage) remplace la valeur d’un pixel par la moyenne de son voisinage. Mathématiquement, pour un masque <span class="math inline">\(3 \times 3\)</span>, tous les coefficients <span class="math inline">\(h_{k,l}\)</span> valent <span class="math inline">\(1\)</span> et la norme est <span class="math inline">\(N=9\)</span> :</p>
+<p><span class="math display">\[ H_{\text{moyenne}} = \frac{1}{9} \begin{bmatrix} 1 &amp; 1 &amp; 1 \\ 1 &amp; 1 &amp; 1 \\ 1 &amp; 1 &amp; 1 \end{bmatrix} \]</span></p>
+<p><em>Exemple de calcul :</em> Si le pixel central vaut 12 et ses 8 voisins valent 59, 72, 67, 76, 54, 73, 69 et 71. La moyenne est <span class="math inline">\(\frac{12 + 59 + 72 + 67 + 76 + 54 + 73 + 69 + 71}{9} = \frac{553}{9} \approx 61\)</span>.</p>
+</section>
+<section id="filtre-gaussien" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="filtre-gaussien"><span class="header-section-number">5.2.3</span> Filtre Gaussien</h3>
+<p>Le filtrage gaussien utilise une distribution normale. La fonction gaussienne 2D étant séparable, le filtre peut être implémenté comme une cascade d’opérations (lignes puis colonnes). Voici l’approximation classique d’un masque gaussien <span class="math inline">\(3 \times 3\)</span> (avec <span class="math inline">\(N=16\)</span>) :</p>
+<p><span class="math display">\[ H_{\text{gaussien}} = \frac{1}{16} \begin{bmatrix} 1 &amp; 2 &amp; 1 \\ 2 &amp; 4 &amp; 2 \\ 1 &amp; 2 &amp; 1 \end{bmatrix} \]</span></p>
+<hr>
+</section>
+<section id="filtrage-passe-haut-high-pass" class="level3" data-number="5.2.4">
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="filtrage-passe-haut-high-pass"><span class="header-section-number">5.2.4</span> Filtrage Passe-haut (High-pass)</h3>
+<p>Les filtres passe-haut atténuent les basses fréquences pour ne conserver (ou amplifier) que les hautes fréquences, c’est-à-dire les variations brusques d’intensité (les contours). Puisque le passe-bas et le passe-haut sont complémentaires, un filtrage passe-haut peut être obtenu en soustrayant l’image lissée (passe-bas) de l’image originale :</p>
+<p><span class="math display">\[ \text{Passe-haut} = \text{Image Originale} - \text{Passe-bas} \]</span></p>
+<p>Par exemple, la contrepartie passe-haut du filtre gaussien s’écrit (sans normalisation <span class="math inline">\(N\)</span>) : <span class="math display">\[ H_{\text{passe-haut\_gaussien}} = \begin{bmatrix} -1 &amp; -2 &amp; -1 \\ -2 &amp; 12 &amp; -2 \\ -1 &amp; -2 &amp; -1 \end{bmatrix} \]</span></p>
+<p>Voici deux autres masques passe-haut classiques : <span class="math display">\[ H_{1} = \begin{bmatrix} -1 &amp; -1 &amp; -1 \\ -1 &amp; 9 &amp; -1 \\ -1 &amp; -1 &amp; -1 \end{bmatrix} \quad \text{et} \quad H_{2} = \begin{bmatrix} -1 &amp; -2 &amp; -1 \\ -2 &amp; 13 &amp; -2 \\ -1 &amp; -2 &amp; -1 \end{bmatrix} \]</span></p>
+<hr>
+</section>
+<section id="détection-de-contours-autres-filtres-linéaires" class="level3" data-number="5.2.5">
+<h3 data-number="5.2.5" class="anchored" data-anchor-id="détection-de-contours-autres-filtres-linéaires"><span class="header-section-number">5.2.5</span> Détection de contours : Autres filtres linéaires</h3>
+<p>Différents masques permettent de détecter des caractéristiques géométriques spécifiques. Voici les principaux filtres de détection de gradients matriciels :</p>
+<p><strong>Filtres de Sobel (Détection directionnelle) :</strong> <span class="math display">\[ H_{\text{vertical}} = \begin{bmatrix} -1 &amp; 0 &amp; 1 \\ -2 &amp; 0 &amp; 2 \\ -1 &amp; 0 &amp; 1 \end{bmatrix} \quad H_{\text{horizontal}} = \begin{bmatrix} -1 &amp; -2 &amp; -1 \\ 0 &amp; 0 &amp; 0 \\ 1 &amp; 2 &amp; 1 \end{bmatrix} \]</span></p>
+<p><strong>Filtres de Prewitt :</strong> <span class="math display">\[ H_{\text{vertical}} = \begin{bmatrix} -1 &amp; 0 &amp; 1 \\ -1 &amp; 0 &amp; 1 \\ -1 &amp; 0 &amp; 1 \end{bmatrix} \quad H_{\text{horizontal}} = \begin{bmatrix} -1 &amp; -1 &amp; -1 \\ 0 &amp; 0 &amp; 0 \\ 1 &amp; 1 &amp; 1 \end{bmatrix} \]</span></p>
+<p><strong>Filtres Isotropes :</strong> <span class="math display">\[ H_{\text{vertical}} = \begin{bmatrix} -1 &amp; 0 &amp; 1 \\ -\sqrt{2} &amp; 0 &amp; \sqrt{2} \\ -1 &amp; 0 &amp; 1 \end{bmatrix} \quad H_{\text{horizontal}} = \begin{bmatrix} -1 &amp; -\sqrt{2} &amp; -1 \\ 0 &amp; 0 &amp; 0 \\ 1 &amp; \sqrt{2} &amp; 1 \end{bmatrix} \]</span></p>
+<p><strong>Filtres Laplaciens (Détection omnidirectionnelle) :</strong> <span class="math display">\[ H_{\text{Laplace 1}} = \begin{bmatrix} 0 &amp; -1 &amp; 0 \\ -1 &amp; 4 &amp; -1 \\ 0 &amp; -1 &amp; 0 \end{bmatrix} \quad H_{\text{Laplace 2}} = \begin{bmatrix} -1 &amp; -1 &amp; -1 \\ -1 &amp; 8 &amp; -1 \\ -1 &amp; -1 &amp; -1 \end{bmatrix} \]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Filtre de Canny">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Filtre de Canny
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>L’algorithme de Canny est une méthode multi-étapes sophistiquée pour la détection de contours (incluant un lissage gaussien, le calcul du gradient, la suppression des non-maxima et un seuillage par hystérésis). Pour plus de détails mathématiques : <a href="https://en.wikipedia.org/wiki/Canny_edge_detector">Canny edge detector (Wikipedia)</a>.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="filtres-non-linéaires" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="filtres-non-linéaires"><span class="header-section-number">5.3</span> Filtres non-linéaires</h2>
+<section id="filtre-médian" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="filtre-médian"><span class="header-section-number">5.3.1</span> Filtre Médian</h3>
+<p>Le filtre non-linéaire le plus courant est le filtre médian, particulièrement efficace pour éliminer le bruit impulsionnel (“poivre et sel”) tout en préservant la netteté des contours.</p>
+<p>Il ne s’agit pas d’un masque multiplicatif. L’algorithme trie toutes les valeurs des pixels présents dans la fenêtre locale et remplace le pixel central par la valeur située au milieu de cette liste triée.</p>
+<p><em>Exemple :</em> Soit les valeurs dans une fenêtre <span class="math inline">\(3 \times 3\)</span> : 59, 72, 67, 76, 76, 12, 54, 73, 69, 71. 1. Tri croissant : 12, 54, 59, 67, <strong>69</strong>, 71, 72, 73, 76. 2. La valeur médiane est <strong>69</strong>.</p>
+<p>L’avantage majeur de ce filtre est de conserver les arêtes franches de l’image. Son inconvénient apparaît lorsque le rapport signal-sur-bruit est très faible, car il peut alors générer des cassures artificielles et de faux contours.</p>
+<p><strong>Amélioration (MTM - Modified Trimmed Mean) :</strong> Pour affiner ce filtre, on peut fixer un seuil (ne remplacer le pixel que si l’écart est significatif) ou utiliser un filtre MTM. Dans ce cas, on calcule la médiane, mais on ne garde pour la moyenne que les valeurs voisines proches de cette médiane, éliminant ainsi les valeurs aberrantes (outliers) avant de lisser.</p>
+</section>
+<section id="local-binary-pattern-lbp" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="local-binary-pattern-lbp"><span class="header-section-number">5.3.2</span> Local Binary Pattern (LBP)</h3>
+<p>Les motifs binaires locaux (LBP) sont conçus pour repérer des structures répétitives dans une image. Principalement utilisés pour la classification et la reconnaissance de textures, ils peuvent également caractériser localement des contours ou des coins.</p>
+<p>L’algorithme LBP de base se calcule ainsi :</p>
+<ol type="1">
+<li>Pour chaque pixel <span class="math inline">\(p\)</span> disposant de 8 voisins immédiats.</li>
+<li>Initialiser un octet (8 bits numérotés de <span class="math inline">\(b_0\)</span> à <span class="math inline">\(b_7\)</span>) à zéro.</li>
+<li>Pour chacun des 8 voisins <span class="math inline">\(v\)</span> (parcourus dans le sens horaire) :
+<ul>
+<li>Calculer la différence d’intensité entre ce voisin <span class="math inline">\(v\)</span> et le pixel central <span class="math inline">\(p\)</span>.</li>
+<li>Si l’intensité de <span class="math inline">\(v \ge p\)</span> (différence positive ou nulle), le bit correspondant prend la valeur <span class="math inline">\(1\)</span>.</li>
+<li>Sinon, il reste à <span class="math inline">\(0\)</span>.</li>
+</ul></li>
+<li>L’octet binaire final est converti en valeur décimale (de 0 à 255), qui devient la nouvelle valeur du pixel <span class="math inline">\(p\)</span>.</li>
+</ol>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./04_operations_pixel_vers_pixel.html" class="pagination-link" aria-label="Opérations ponctuelles">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Opérations ponctuelles</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./10_use_cases_industrie.html" class="pagination-link" aria-label="Use cases">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Use cases</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Opérations de voisinage</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Contrairement aux opérations ponctuelles (pixel à pixel), la valeur d'un pixel de sortie lors d'une opération de voisinage dépend d'un sous-ensemble de pixels d'entrée.</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="al">![Principe d'une opération de voisinage. L'opérateur $O$ calcule la valeur du pixel de sortie $g_{n,m}$ à partir du sous-ensemble de pixels inclus dans le voisinage local $\varphi_{n,m}$ de l'image d'entrée $f$.](images_dans_le_cours/voisinage.png)</span>{#fig-voisinage}</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Le **voisinage local** d'un pixel $(n,m)$ est l'ensemble des pixels situés dans une sous-région de l'image entourant le pixel $(n,m)$. Généralement, cette sous-région est rectangulaire, avec $(n,m)$ en son centre. Si l'on suppose que la taille du voisinage est $(2K+1) \times (2L+1)$, alors le voisinage local $\phi_{n,m}$ du pixel $(n,m)$ dans l'image d'entrée $f$ est défini par :</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>$$ \phi_{n,m} = <span class="sc">\{</span> f_{i,j} \mid n-K \le i \le n+K, \quad m-L \le j \le m+L <span class="sc">\}</span> $$</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Nous pouvons modéliser mathématiquement ces opérations par :</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>$$ g_{n,m} = O(\phi_{n,m}) $$</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>Cette opération est qualifiée de **linéaire** si elle respecte le principe de superposition :</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>$$ O(a \cdot \phi_1 + b \cdot \phi_2) = a \cdot O(\phi_1) + b \cdot O(\phi_2) $$</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Masques</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>Un masque (ou noyau) est défini par une matrice de pondération $h_{k,l}$, une norme de normalisation $N$ et éventuellement un seuil $\sigma$.</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>h = \begin{bmatrix}</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>h_{-K,-L} &amp; h_{-K,-L+1} &amp; \dots &amp; h_{-K,L} <span class="sc">\\</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>h_{-K+1,-L} &amp; &amp; &amp; \dots <span class="sc">\\</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>\dots &amp; &amp; &amp; <span class="sc">\\</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>h_{K,-L} &amp; \dots &amp; \dots &amp; h_{K,L}</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>\end{bmatrix}</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>Le masque $h$ est utilisé pour calculer la nouvelle valeur des pixels $g_{n,m}$ selon l'équation suivante :</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>$$ g_{n,m} = \frac{1}{N} \sum_{k=-K}^{K} \sum_{l=-L}^{L} h_{k,l} f_{n-k, m-l} $$</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>De manière générale, $N$ est égal à la somme des coefficients du masque pour conserver la luminance globale de l'image :</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>$$ N = \sum_{k=-K}^{K} \sum_{l=-L}^{L} h_{k,l} $$</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>Si un seuil $\sigma$ est défini (pour ne modifier le pixel que si le changement est significatif), la nouvelle valeur devient :</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>$$ g_{n,m} = \begin{cases} \text{Nouvelle valeur calculée} &amp; \text{si la différence } &gt; \sigma <span class="sc">\\</span> f_{n,m} &amp; \text{sinon} \end{cases} $$</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>Pour traiter l'image, on "glisse" ce masque pixel par pixel, de gauche à droite et de haut en bas. Ces équations sont valides pour $n \ge K$, $n &lt; N-K$, $m \ge L$ et $m &lt; M-L$. </span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>**Gestion des effets de bord :**</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>Une ambiguïté survient près des bords de l'image car le voisinage local "déborde" de l'image. Trois méthodes classiques permettent de résoudre ce problème :</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Ignorer les bords :** L'image de sortie n'est pas calculée sur une épaisseur correspondant au rayon du masque.</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Zero-padding :** L'image d'entrée est virtuellement entourée de zéros au-delà de ses limites.</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Répétition périodique :** L'image est répétée comme un motif continu (le bord droit "touche" le bord gauche).</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Convolution</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>Dans l'équation de l'opération de voisinage, si l'opérateur $O(\cdot)$ ne dépend pas de la position spatiale du pixel $(n,m)$, l'opération est dite **invariante dans l'espace**. Si, en plus, l'opération est linéaire, on parle alors de **convolution discrète**. Les masques vus précédemment sont utilisés pour calculer cette convolution.</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### Filtrage Passe-bas (Low-pass)</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>Les filtres passe-bas laissent passer les basses fréquences (les aplats de couleurs) sans modification, mais atténuent les hautes fréquences (les détails fins et le bruit). On les appelle souvent **filtres de lissage** (smoothing filters).</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="fu">### Moyenne locale</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>La moyenne locale (ou opérateur de lissage) remplace la valeur d'un pixel par la moyenne de son voisinage. Mathématiquement, pour un masque $3 \times 3$, tous les coefficients $h_{k,l}$ valent $1$ et la norme est $N=9$ :</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>$$ H_{\text{moyenne}} = \frac{1}{9} \begin{bmatrix} 1 &amp; 1 &amp; 1 <span class="sc">\\</span> 1 &amp; 1 &amp; 1 <span class="sc">\\</span> 1 &amp; 1 &amp; 1 \end{bmatrix} $$</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>*Exemple de calcul :* Si le pixel central vaut 12 et ses 8 voisins valent 59, 72, 67, 76, 54, 73, 69 et 71.</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>La moyenne est $\frac{12 + 59 + 72 + 67 + 76 + 54 + 73 + 69 + 71}{9} = \frac{553}{9} \approx 61$.</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="fu">### Filtre Gaussien</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>Le filtrage gaussien utilise une distribution normale. La fonction gaussienne 2D étant séparable, le filtre peut être implémenté comme une cascade d'opérations (lignes puis colonnes). Voici l'approximation classique d'un masque gaussien $3 \times 3$ (avec $N=16$) :</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>$$ H_{\text{gaussien}} = \frac{1}{16} \begin{bmatrix} 1 &amp; 2 &amp; 1 <span class="sc">\\</span> 2 &amp; 4 &amp; 2 <span class="sc">\\</span> 1 &amp; 2 &amp; 1 \end{bmatrix} $$</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="fu">### Filtrage Passe-haut (High-pass)</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>Les filtres passe-haut atténuent les basses fréquences pour ne conserver (ou amplifier) que les hautes fréquences, c'est-à-dire les variations brusques d'intensité (les contours). </span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>Puisque le passe-bas et le passe-haut sont complémentaires, un filtrage passe-haut peut être obtenu en soustrayant l'image lissée (passe-bas) de l'image originale :</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>$$ \text{Passe-haut} = \text{Image Originale} - \text{Passe-bas} $$</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>Par exemple, la contrepartie passe-haut du filtre gaussien s'écrit (sans normalisation $N$) :</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>$$ H_{\text{passe-haut<span class="sc">\_</span>gaussien}} = \begin{bmatrix} -1 &amp; -2 &amp; -1 <span class="sc">\\</span> -2 &amp; 12 &amp; -2 <span class="sc">\\</span> -1 &amp; -2 &amp; -1 \end{bmatrix} $$</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>Voici deux autres masques passe-haut classiques :</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>$$ H_{1} = \begin{bmatrix} -1 &amp; -1 &amp; -1 <span class="sc">\\</span> -1 &amp; 9 &amp; -1 <span class="sc">\\</span> -1 &amp; -1 &amp; -1 \end{bmatrix} \quad \text{et} \quad H_{2} = \begin{bmatrix} -1 &amp; -2 &amp; -1 <span class="sc">\\</span> -2 &amp; 13 &amp; -2 <span class="sc">\\</span> -1 &amp; -2 &amp; -1 \end{bmatrix} $$</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="fu">### Détection de contours : Autres filtres linéaires</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>Différents masques permettent de détecter des caractéristiques géométriques spécifiques. Voici les principaux filtres de détection de gradients matriciels :</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>**Filtres de Sobel (Détection directionnelle) :**</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>$$ H_{\text{vertical}} = \begin{bmatrix} -1 &amp; 0 &amp; 1 <span class="sc">\\</span> -2 &amp; 0 &amp; 2 <span class="sc">\\</span> -1 &amp; 0 &amp; 1 \end{bmatrix} \quad H_{\text{horizontal}} = \begin{bmatrix} -1 &amp; -2 &amp; -1 <span class="sc">\\</span> 0 &amp; 0 &amp; 0 <span class="sc">\\</span> 1 &amp; 2 &amp; 1 \end{bmatrix} $$</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>**Filtres de Prewitt :**</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>$$ H_{\text{vertical}} = \begin{bmatrix} -1 &amp; 0 &amp; 1 <span class="sc">\\</span> -1 &amp; 0 &amp; 1 <span class="sc">\\</span> -1 &amp; 0 &amp; 1 \end{bmatrix} \quad H_{\text{horizontal}} = \begin{bmatrix} -1 &amp; -1 &amp; -1 <span class="sc">\\</span> 0 &amp; 0 &amp; 0 <span class="sc">\\</span> 1 &amp; 1 &amp; 1 \end{bmatrix} $$</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>**Filtres Isotropes :**</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>$$ H_{\text{vertical}} = \begin{bmatrix} -1 &amp; 0 &amp; 1 <span class="sc">\\</span> -\sqrt{2} &amp; 0 &amp; \sqrt{2} <span class="sc">\\</span> -1 &amp; 0 &amp; 1 \end{bmatrix} \quad H_{\text{horizontal}} = \begin{bmatrix} -1 &amp; -\sqrt{2} &amp; -1 <span class="sc">\\</span> 0 &amp; 0 &amp; 0 <span class="sc">\\</span> 1 &amp; \sqrt{2} &amp; 1 \end{bmatrix} $$</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>**Filtres Laplaciens (Détection omnidirectionnelle) :**</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>$$ H_{\text{Laplace 1}} = \begin{bmatrix} 0 &amp; -1 &amp; 0 <span class="sc">\\</span> -1 &amp; 4 &amp; -1 <span class="sc">\\</span> 0 &amp; -1 &amp; 0 \end{bmatrix} \quad H_{\text{Laplace 2}} = \begin{bmatrix} -1 &amp; -1 &amp; -1 <span class="sc">\\</span> -1 &amp; 8 &amp; -1 <span class="sc">\\</span> -1 &amp; -1 &amp; -1 \end{bmatrix} $$</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Filtre de Canny"}</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>L'algorithme de Canny est une méthode multi-étapes sophistiquée pour la détection de contours (incluant un lissage gaussien, le calcul du gradient, la suppression des non-maxima et un seuillage par hystérésis). Pour plus de détails mathématiques : <span class="co">[</span><span class="ot">Canny edge detector (Wikipedia)</span><span class="co">](https://en.wikipedia.org/wiki/Canny_edge_detector)</span>.</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="fu">## Filtres non-linéaires</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="fu">### Filtre Médian</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>Le filtre non-linéaire le plus courant est le filtre médian, particulièrement efficace pour éliminer le bruit impulsionnel ("poivre et sel") tout en préservant la netteté des contours.</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>Il ne s'agit pas d'un masque multiplicatif. L'algorithme trie toutes les valeurs des pixels présents dans la fenêtre locale et remplace le pixel central par la valeur située au milieu de cette liste triée.</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>*Exemple :* Soit les valeurs dans une fenêtre $3 \times 3$ : 59, 72, 67, 76, 76, 12, 54, 73, 69, 71.</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Tri croissant : 12, 54, 59, 67, **69**, 71, 72, 73, 76.</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>La valeur médiane est **69**.</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>L'avantage majeur de ce filtre est de conserver les arêtes franches de l'image. Son inconvénient apparaît lorsque le rapport signal-sur-bruit est très faible, car il peut alors générer des cassures artificielles et de faux contours.</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>**Amélioration (MTM - Modified Trimmed Mean) :** </span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>Pour affiner ce filtre, on peut fixer un seuil (ne remplacer le pixel que si l'écart est significatif) ou utiliser un filtre MTM. Dans ce cas, on calcule la médiane, mais on ne garde pour la moyenne que les valeurs voisines proches de cette médiane, éliminant ainsi les valeurs aberrantes (outliers) avant de lisser.</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="fu">### Local Binary Pattern (LBP)</span></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>Les motifs binaires locaux (LBP) sont conçus pour repérer des structures répétitives dans une image. Principalement utilisés pour la classification et la reconnaissance de textures, ils peuvent également caractériser localement des contours ou des coins.</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>L'algorithme LBP de base se calcule ainsi :</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Pour chaque pixel $p$ disposant de 8 voisins immédiats.</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Initialiser un octet (8 bits numérotés de $b_0$ à $b_7$) à zéro.</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Pour chacun des 8 voisins $v$ (parcourus dans le sens horaire) :</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Calculer la différence d'intensité entre ce voisin $v$ et le pixel central $p$.</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Si l'intensité de $v \ge p$ (différence positive ou nulle), le bit correspondant prend la valeur $1$.</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="ss">    *   </span>Sinon, il reste à $0$.</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>L'octet binaire final est converti en valeur décimale (de 0 à 255), qui devient la nouvelle valeur du pixel $p$.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

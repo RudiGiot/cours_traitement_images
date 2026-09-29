@@ -168,7 +168,9 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Traitement d’Images</a> 
+      <a href="./">
+      Traitement d'Images
+      </a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -181,7 +183,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Une introduction au traitement d’images</span></a>
+ <span class="menu-text">Une introduction au traitement d'images</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -228,12 +230,18 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Opérations ponctuelles</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_operations_voisinage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">III. Cas d’Utilisation</span></a>
+ <span class="menu-text">III. Cas d'Utilisation</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -241,8 +249,8 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
+  <a href="./10_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
   </div>
 </li>
       </ul>
@@ -260,8 +268,7 @@ window.Quarto = {
   <li><a href="#lhistogramme" id="toc-lhistogramme" class="nav-link active" data-scroll-target="#lhistogramme"><span class="header-section-number">3.1</span> L’histogramme</a></li>
   <li><a href="#projection" id="toc-projection" class="nav-link" data-scroll-target="#projection"><span class="header-section-number">3.2</span> Projection</a></li>
   <li><a href="#les-moments-statistiques-globaux-analyse-de-la-luminance" id="toc-les-moments-statistiques-globaux-analyse-de-la-luminance" class="nav-link" data-scroll-target="#les-moments-statistiques-globaux-analyse-de-la-luminance"><span class="header-section-number">3.3</span> Les moments statistiques globaux (Analyse de la luminance)</a></li>
-  <li><a href="#les-moments-spatiaux-analyse-de-blobs" id="toc-les-moments-spatiaux-analyse-de-blobs" class="nav-link" data-scroll-target="#les-moments-spatiaux-analyse-de-blobs"><span class="header-section-number">3.4</span> Les moments spatiaux (Analyse de “Blobs”)</a></li>
-  <li><a href="#lentropie-mesure-de-linformation-et-de-la-texture" id="toc-lentropie-mesure-de-linformation-et-de-la-texture" class="nav-link" data-scroll-target="#lentropie-mesure-de-linformation-et-de-la-texture"><span class="header-section-number">3.5</span> L’Entropie (Mesure de l’information et de la texture)</a></li>
+  <li><a href="#lentropie-mesure-de-linformation-et-de-la-texture" id="toc-lentropie-mesure-de-linformation-et-de-la-texture" class="nav-link" data-scroll-target="#lentropie-mesure-de-linformation-et-de-la-texture"><span class="header-section-number">3.4</span> L’Entropie (Mesure de l’information et de la texture)</a></li>
   </ul>
 </nav>
     </div>
@@ -509,45 +516,635 @@ Figure&nbsp;3.9: Profils de projection verticale de la matrice.
 <li><strong>L’Écart-type (Moment d’ordre 2 centré) :</strong> Il quantifie la dispersion des niveaux de gris autour de la moyenne, c’est-à-dire le <strong>contraste macroscopique</strong> de l’image. Une image “délavée” aura un écart-type très faible.</li>
 </ul>
 <p><span class="math display">\[\sigma = \sqrt{\frac{1}{N \cdot M} \sum_{n=0}^{N-1} \sum_{m=0}^{M-1} (u_{n,m} - \mu)^2}\]</span></p>
+<section id="attention-au-dépassement-de-capacité-overflow" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="attention-au-dépassement-de-capacité-overflow"><span class="header-section-number">3.3.1</span> Attention au dépassement de capacité (Overflow)</h3>
+<p>Lorsqu’on applique la formule naïve de la moyenne (<span class="math inline">\(\sum u_{n,m}\)</span>) sur une image de grande dimension, on accumule des millions de valeurs.</p>
+<p>Prenons une image moderne en résolution 4K (<span class="math inline">\(3840 \times 2160\)</span> pixels), soit environ 8,3 millions de pixels. Si l’image est très claire (pixels proches de 255), la somme totale atteindra environ <span class="math inline">\(2,1 \times 10^9\)</span>. Cette valeur frôle la limite absolue d’un entier signé sur 32 bits (<span class="math inline">\(2^{31}-1 \approx 2,14 \times 10^9\)</span>). Sur une image de taille supérieure, la variable d’accumulation va déborder (overflow), repasser en négatif, et fausser totalement le calcul de la moyenne et de l’écart-type.</p>
+<p>En vision par ordinateur, il existe trois méthodes pour contourner ce problème matériel :</p>
+<section id="lapproche-data-science-lélévation-de-type-casting" class="level4" data-number="3.3.1.1">
+<h4 data-number="3.3.1.1" class="anchored" data-anchor-id="lapproche-data-science-lélévation-de-type-casting"><span class="header-section-number">3.3.1.1</span> L’approche “Data Science” : L’élévation de type (Casting)</h4>
+<p>C’est la solution de force brute utilisée par défaut dans les langages de haut niveau. Avant de commencer l’addition, on convertit la matrice d’entiers 8 bits (<code>uint8</code>) vers un type flottant 64 bits (<code>float64</code>). C’est exactement ce que fait la fonction <code>np.mean()</code> de NumPy sous le capot. L’inconvénient est que l’on multiplie par 8 la consommation de mémoire vive lors du calcul.</p>
 </section>
-<section id="les-moments-spatiaux-analyse-de-blobs" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="les-moments-spatiaux-analyse-de-blobs"><span class="header-section-number">3.4</span> Les moments spatiaux (Analyse de “Blobs”)</h2>
-<p>C’est l’outil roi en vision industrielle. Une fois l’image binarisée (les objets d’intérêt sont à 1, le fond est à 0), on calcule les statistiques spatiales de ces taches blanches (appelées <em>Blobs</em> pour <em>Binary Large Objects</em>).</p>
-<p>Pour une image binaire <span class="math inline">\(B(x,y)\)</span>, le moment spatial d’ordre <span class="math inline">\((p,q)\)</span> est défini par :</p>
-<p><span class="math display">\[M_{pq} = \sum_{x} \sum_{y} x^p y^q B(x,y)\]</span></p>
-<p>À partir de cette formule unique, l’industrie extrait les caractéristiques géométriques :</p>
+<section id="lapproche-traitement-dimages-lutilisation-de-lhistogramme" class="level4" data-number="3.3.1.2">
+<h4 data-number="3.3.1.2" class="anchored" data-anchor-id="lapproche-traitement-dimages-lutilisation-de-lhistogramme"><span class="header-section-number">3.3.1.2</span> L’approche “Traitement d’images” : L’utilisation de l’histogramme</h4>
+<p>C’est la méthode la plus élégante et la plus optimisée. Puisque nous manipulons des images quantifiées sur 8 bits, il n’y a que 256 valeurs d’intensité possibles. Plutôt que d’additionner 8 millions de pixels un par un, il est mathématiquement équivalent, et beaucoup plus sûr, de se servir de l’histogramme <span class="math inline">\(h(i)\)</span> (qui contient le nombre de pixels pour chaque niveau de gris <span class="math inline">\(i\)</span>).</p>
+<p>La moyenne devient la somme de 256 termes seulement : <span class="math display">\[\mu = \frac{1}{N \cdot M} \sum_{i=0}^{255} i \cdot h(i)\]</span></p>
+<p>L’écart-type se déduit de la même manière à partir de l’histogramme : <span class="math display">\[\sigma = \sqrt{\frac{1}{N \cdot M} \sum_{i=0}^{255} (i - \mu)^2 \cdot h(i)}\]</span> Cette méthode garantit qu’aucun débordement arithmétique ne se produira, tout en étant des milliers de fois plus rapide sur un processeur bas niveau.</p>
+</section>
+<section id="lapproche-streaming-lalgorithme-de-welford" class="level4" data-number="3.3.1.3">
+<h4 data-number="3.3.1.3" class="anchored" data-anchor-id="lapproche-streaming-lalgorithme-de-welford"><span class="header-section-number">3.3.1.3</span> L’approche “Streaming” : L’algorithme de Welford</h4>
+<p>Pour les flux vidéo en temps réel ou les systèmes très contraints en mémoire (où l’on ne peut stocker ni l’image complète ni l’histogramme), on calcule la moyenne et la variance itérativement. À chaque nouveau pixel <span class="math inline">\(x_k\)</span> reçu, la moyenne <span class="math inline">\(\mu_k\)</span> est mise à jour selon la différence avec la moyenne précédente : <span class="math display">\[\mu_k = \mu_{k-1} + \frac{x_k - \mu_{k-1}}{k}\]</span> Ici, la variable d’accumulation ne dépasse jamais la valeur 255.</p>
+</section>
+</section>
+<section id="exercices" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="exercices"><span class="header-section-number">3.3.2</span> Exercices</h3>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Calcul de la moyenne et de l’écart type
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nous avons vu que la moyenne et l’écart-type mesurent deux caractéristiques distinctes d’une image (respectivement la luminosité globale et le contraste macroscopique/dispersion).</p>
+<p>Imaginez et décrivez la structure de deux images en niveaux de gris différentes qui possèdent <em>exactement</em> la même valeur moyenne, mais dont les écarts-types sont aux antipodes l’un de l’autre. Proposez deux approches différentes pour justifier votre réponse.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 1 : L'approche théorique (Cas d'école)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 1 : L’approche théorique (Cas d’école)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Image A (Écart-type nul) :</strong> Il suffit de concevoir une image parfaitement uniforme où tous les pixels possèdent exactement la même valeur (par exemple, la valeur 127 pour un gris parfait). La moyenne est de 127, et puisqu’il n’y a aucune dispersion autour de cette moyenne, l’écart-type est strictement égal à 0.</p>
+<p><strong>Image B (Écart-type maximal) :</strong> Il suffit de concevoir une image composée de 50 % de pixels noirs purs (0) et de 50 % de pixels blancs purs (254 ou 255). Peu importe leur disposition (damier géométrique ou bruit binaire aléatoire), la moyenne globale restera de 127. En revanche, tous les pixels étant situés aux extrêmes absolus de l’histogramme, la variance explose et l’écart-type atteint sa valeur maximale possible.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 2 : L'approche par dégradation (Bruit centré)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 2 : L’approche par dégradation (Bruit centré)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Image A (Image d’origine) :</strong> On choisit n’importe quelle photographie classique en niveaux de gris, qui possède donc une certaine moyenne et un certain écart-type de base.</p>
+<p><strong>Image B (Image bruitée) :</strong> On prend cette même photographie et on lui additionne un bruit artificiel (comme un bruit gaussien) très puissant, mais <strong>strictement centré sur zéro</strong> (<span class="math inline">\(\mu_{bruit} = 0\)</span>). L’astuce mathématique est ici : l’ajout d’une matrice de bruit dont la moyenne est nulle ne modifie absolument pas la luminosité globale de l’image (la moyenne globale reste identique). Par contre, ce bruit disperse aléatoirement l’intensité de chaque pixel par rapport à sa valeur d’origine, ce qui fait inévitablement croître la variance et donc l’écart-type.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lentropie-mesure-de-linformation-et-de-la-texture" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="lentropie-mesure-de-linformation-et-de-la-texture"><span class="header-section-number">3.4</span> L’Entropie (Mesure de l’information et de la texture)</h2>
+<p>Issue de la théorie de l’information de Shannon, l’entropie mesure le degré de désordre ou d’imprévisibilité des pixels dans l’image.</p>
+<p>Si <span class="math inline">\(p_i\)</span> est la probabilité d’apparition du niveau de gris <span class="math inline">\(i\)</span> (valeur issue de l’histogramme normalisé), l’entropie <span class="math inline">\(H\)</span> est :</p>
+<p><span class="math display">\[H = - \sum_{i=0}^{255} p_i \log_2(p_i)\]</span></p>
+<p><em>Convention mathématique : si <span class="math inline">\(p_i = 0\)</span>, on considère que <span class="math inline">\(p_i \log_2(p_i) = 0\)</span>.</em></p>
+<p><strong>Usage industriel :</strong> L’entropie est très utilisée pour la <strong>détection de flou</strong> ou l’inspection de surfaces texturées (bois, textile, métal brossé). Une image parfaitement nette d’un circuit imprimé aura une forte entropie (beaucoup de variations nettes, d’arêtes et de détails), tandis que si la caméra est floue, l’image devient lisse, les niveaux de gris se moyennent, et l’entropie chute drastiquement. L’automate peut alors déclencher une alarme de perte de focus.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice : Calcul de l’entropie de Shannon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Sans utiliser de code informatique, déduisez l’entropie théorique exacte des deux images de test que nous avons générées précédemment :</p>
+<ol type="1">
+<li>La <code>mire_damier.png</code> (50% de pixels noirs à 0, 50% de pixels blancs à 255).</li>
+<li>La <code>mire_degrade.png</code> (Dégradé linéaire parfait où chaque niveau de gris de 0 à 255 est présent en quantité strictement égale).</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 1 : Entropie du Damier (Bimodal)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 1 : Entropie du Damier (Bimodal)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Calcul pour le Damier :</strong> L’image ne contient que deux valeurs. La probabilité de tirer un pixel noir est <span class="math inline">\(p_0 = 0,5\)</span> et celle de tirer un pixel blanc est <span class="math inline">\(p_{255} = 0,5\)</span>. Toutes les autres probabilités sont nulles.</p>
+<p>En appliquant la formule : <span class="math display">\[H = - (p_0 \log_2(p_0) + p_{255} \log_2(p_{255}))\]</span> <span class="math display">\[H = - (0,5 \cdot \log_2(0,5) + 0,5 \cdot \log_2(0,5))\]</span></p>
+<p>Puisque <span class="math inline">\(\log_2(0,5) = -1\)</span> : <span class="math display">\[H = - (0,5 \cdot (-1) + 0,5 \cdot (-1)) = - (-0,5 - 0,5) = 1 \text{ bit}\]</span></p>
+<p><strong>Conclusion :</strong> Il suffit d’exactement <span class="math inline">\(1\)</span> bit d’information pour coder chaque pixel de cette image (noir ou blanc).</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 2 : Entropie du Dégradé (Équiprobable)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 2 : Entropie du Dégradé (Équiprobable)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Calcul pour le Dégradé Linéaire :</strong> Ici, les 256 niveaux de gris sont présents en quantité égale. La probabilité d’apparition de chaque niveau de gris est donc constante : <span class="math inline">\(p_i = \frac{1}{256}\)</span>.</p>
+<p>En appliquant la formule sur les 256 termes : <span class="math display">\[H = - \sum_{i=0}^{255} \frac{1}{256} \log_2\left(\frac{1}{256}\right)\]</span></p>
+<p>Puisque <span class="math inline">\(\log_2\left(\frac{1}{256}\right) = -8\)</span> : <span class="math display">\[H = - \sum_{i=0}^{255} \frac{1}{256} \cdot (-8)\]</span> <span class="math display">\[H = - 256 \cdot \left( \frac{-8}{256} \right) = 8 \text{ bits}\]</span></p>
+<p><strong>Conclusion :</strong> L’entropie est maximale. Le désordre (la variété des niveaux de gris) est total. L’image contient 8 bits d’information par pixel, ce qui signifie qu’elle ne peut pas être compressée sans perte d’information.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Implémentation Python (Vérification algorithmique)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Implémentation Python (Vérification algorithmique)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>En TP, le calcul de l’entropie nécessite une petite précaution technique : il faut retirer les probabilités nulles de l’histogramme avant de calculer le logarithme, pour éviter l’erreur mathématique <code>math domain error</code> (log de 0 n’existe pas).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculer_entropie(chemin_image):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> cv2.imread(chemin_image, cv2.IMREAD_GRAYSCALE)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Calcul de l'histogramme normalisé (Probabilités)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    valeurs, occurrences <span class="op">=</span> np.unique(img, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    probabilites <span class="op">=</span> occurrences <span class="op">/</span> img.size</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. On filtre les probabilités strictement supérieures à 0</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> probabilites[probabilites <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Formule de Shannon</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    entropie <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(p <span class="op">*</span> np.log2(p))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> entropie</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Entropie du Damier : </span><span class="sc">{</span>calculer_entropie(<span class="st">'mire_damier.png'</span>)<span class="sc">:.2f}</span><span class="ss"> bits"</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Entropie du Dégradé : </span><span class="sc">{</span>calculer_entropie(<span class="st">'mire_degrade.png'</span>)<span class="sc">:.2f}</span><span class="ss"> bits"</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>:::{<span class="co">#quarto-navigation-envelope .hidden}</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>[Traitement d<span class="st">'Images]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl"}</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="er">[Traitement d'Images]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uYXZiYXItdGl0bGU="}</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;4&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Opérations ponctuelles&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1uZXh0"}</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;2&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Le codage des couleurs&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1wcmV2"}</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="er">[Une introduction au traitement d'images]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pbmRleC5odG1sVW5lLWludHJvZHVjdGlvbi1hdS10cmFpdGVtZW50LWQnaW1hZ2Vz"}</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="er">[I. Fondamentaux]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tMQ=="}</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;1&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Images numériques&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi8wMV9pbWFnZXNfbnVtZXJpcXVlcy5odG1sPHNwYW4tY2xhc3M9J2NoYXB0ZXItbnVtYmVyJz4xPC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPkltYWdlcy1udW3DqXJpcXVlczwvc3Bhbj4="}</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;2&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Le codage des couleurs&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi8wMl9jb2RhZ2VfY291bGV1cnMuaHRtbDxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+Mjwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5MZS1jb2RhZ2UtZGVzLWNvdWxldXJzPC9zcGFuPg=="}</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="er">[II. Traitements de Base]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tMg=="}</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;3&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Opérations statistiques&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi8wM19vcGVyYXRpb25zX3N0YXRpc3RpcXVlcy5odG1sPHNwYW4tY2xhc3M9J2NoYXB0ZXItbnVtYmVyJz4zPC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPk9ww6lyYXRpb25zLXN0YXRpc3RpcXVlczwvc3Bhbj4="}</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;4&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Opérations ponctuelles&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi8wNF9vcGVyYXRpb25zX3BpeGVsX3ZlcnNfcGl4ZWwuaHRtbDxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+NDwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5PcMOpcmF0aW9ucy1wb25jdHVlbGxlczwvc3Bhbj4="}</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;5&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Opérations de voisinage&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi8wNV9vcGVyYXRpb25zX3ZvaXNpbmFnZS5odG1sPHNwYW4tY2xhc3M9J2NoYXB0ZXItbnVtYmVyJz41PC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPk9ww6lyYXRpb25zLWRlLXZvaXNpbmFnZTwvc3Bhbj4="}</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="er">[III. Cas d'Utilisation]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tMw=="}</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;6&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Use cases&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWludC1zaWRlYmFyOi8xMF91c2VfY2FzZXNfaW5kdXN0cmllLmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjY8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+VXNlLWNhc2VzPC9zcGFuPg=="}</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="er">[II. Traitements de Base]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWJyZWFkY3J1bWJzLUlJLi1UcmFpdGVtZW50cy1kZS1CYXNl"}</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="er">[&lt;span class='chapter-number'&gt;3&lt;/span&gt;&nbsp; &lt;span class='chapter-title'&gt;Opérations statistiques&lt;/span&gt;]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLWJyZWFkY3J1bWJzLTxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+Mzwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5PcMOpcmF0aW9ucy1zdGF0aXN0aXF1ZXM8L3NwYW4+"}</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="er">:::</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="er">:::{#quarto-meta-markdown .hidden}</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">3</span>]{.chapter<span class="op">-</span>number}&nbsp; [Opérations statistiques]{.chapter<span class="op">-</span>title} – Traitement d<span class="st">'Images]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW1ldGF0aXRsZQ=="}</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="er">[[3]{.chapter-number}&nbsp; [Opérations statistiques]{.chapter-title} – Traitement d'Images]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU="}</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="er">[[3]{.chapter-number}&nbsp; [Opérations statistiques]{.chapter-title} – Traitement d'Images]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW9nY2FyZHRpdGxl"}</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="er">[Traitement d'Images]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW1ldGFzaXRlbmFtZQ=="}</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="er">[]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw=="}</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="er">[]{.hidden .quarto-markdown-envelope-contents render-id="cXVhcnRvLW9nY2FyZGRkZXNj"}</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="er">:::</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;!-- --&gt;</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>::: {.quarto<span class="op">-</span>embedded<span class="op">-</span>source<span class="op">-</span>code}</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>```````````````````{.markdown shortcodes<span class="op">=</span><span class="st">"false"</span>}</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Opérations statistiques</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="co">### Opérations statistiques</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>Les <span class="op">**</span>opérations statistiques<span class="op">**</span> (comme le calcul de l<span class="st">'histogramme ou des projections) n'</span>altèrent pas directement l<span class="st">'image, mais en extraient des informations mathématiques globales sur la distribution et la géométrie des images. Elles constituent une étape d'</span>analyse primordiale en vision industrielle pour automatiser la prise de décision, qu<span class="st">'il s'</span>agisse de déterminer le seuil optimal d<span class="st">'une binarisation ou de localiser rapidement des anomalies de surface.</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="er">Considèrons une image comme étant définie par une matrice $N \times M$ de coordonnées $</span>(n,m)$ avec $n<span class="op">=</span><span class="dv">0</span>,<span class="dv">1</span>,\dots,N<span class="op">-</span><span class="dv">1</span>$ et $m<span class="op">=</span><span class="dv">0</span>,<span class="dv">1</span>,\dots,M<span class="op">-</span><span class="dv">1</span>$ et que la valeur des pixels est établie par une échelle de gris notée $$g(n,m)$. </span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="co">## L'histogramme</span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>Un graphique illustrant la probabilité d<span class="st">'apparition de chaque valeur de pixel dans une image est appelé un histogramme. Pour construire un histogramme, il faut d'</span>abord compter le nombre total de pixels pour chaque valeur possible présente dans l<span class="st">'image (noté $n_f$). Ensuite, on divise chacun de ces décomptes par le nombre total de pixels de l'</span>image ($N \times M$) pour obtenir la valeur de probabilité. Toutes ces valeurs sont représentées dans un graphique $\text{probabilité} <span class="op">=</span> h_f(f)$, où $f$ représente le niveau de gris :</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>$$h_f(f) <span class="op">=</span> \frac{n_f}{N \times M} \quad (<span class="fl">6.1</span>)$$</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>Cette méthode est généralement appliquée à une échelle de gris mais peut également être appliquée à une seule composante d<span class="st">'une couleur. Nous verrons plus tard que l'</span>histogramme permet, par exemple, de choisir une table de correspondance (LookUpTable) ou une palette de couleurs.</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>Nous pouvons également définir l<span class="st">'histogramme cumulé $H_f(f)$ qui représente le pourcentage de pixels ayant un niveau de gris inférieur ou égal à $f$ :</span></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="er">$$H_f</span>(f) <span class="op">=</span> \sum_{j<span class="op">=</span><span class="dv">0</span>}<span class="op">^</span>{f} h_f(j) \quad (<span class="fl">6.2</span>)$$</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="op">**</span>Exemple :<span class="op">**</span> À partir de maintenant, les exemples utiliseront cette matrice de nombres (qui peut représenter les niveaux de gris d<span class="st">'une image) :</span></span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="er">```text</span></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span> <span class="dv">100</span></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span>   <span class="dv">0</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span>   <span class="dv">0</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a> <span class="dv">10</span>  <span class="dv">25</span>  <span class="dv">30</span>  <span class="dv">45</span>  <span class="dv">50</span>  <span class="dv">69</span>  <span class="dv">70</span>  <span class="dv">71</span>  <span class="dv">90</span>  <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span> <span class="dv">250</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fig-histogramme-exemple" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-histogramme-exemple-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/histogram.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogramme-exemple-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.10: Histogramme de la matrice d’exemple. On observe clairement un pic à 250 (le fond quasi blanc) et un groupe de pixels sombres formant le dégradé de gauche.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice : Créer des images de test en niveaux de gris
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pour faire des exercices, nous allons créer trois images de test :</p>
+</div>
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-mire-degrade" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mire-degrade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/mire_degrade.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mire-degrade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.11: Mire de dégradé linéaire
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-mire-paliers" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mire-paliers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/mire_paliers.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mire-paliers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.12: Mire à 8 paliers de gris
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-mire-damier" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mire-damier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/mire_damier.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mire-damier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.13: Mire en damier binaire
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice : Dessiner la LUT pour ces trois images
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A partir des trois images précédemment créées, calculer et dessiner leur LUT respective.</p>
+</div>
+</div>
+<div id="fig-hist-degrade" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hist-degrade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/hist_degrade.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hist-degrade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.14: Histogramme plat (équiprobabilité)
+</figcaption>
+</figure>
+</div>
+<p><em>Le dégradé linéaire parfait distribue les pixels uniformément sur les 256 niveaux.</em></p>
+<div id="fig-hist-paliers" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hist-paliers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/hist_paliers.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hist-paliers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.15: Histogramme quantifié (8 impulsions)
+</figcaption>
+</figure>
+</div>
+<p><em>L’échelle à paliers illustre le phénomène de quantification spatiale.</em></p>
+<div id="fig-hist-damier" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hist-damier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/hist_damier.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hist-damier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.16: Histogramme bimodal (noir et blanc pur)
+</figcaption>
+</figure>
+</div>
+<p><em>Le damier représente une distribution bimodale absolue, idéale pour démontrer le principe du seuillage.</em></p>
+<section id="projection-1" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="projection-1"><span class="header-section-number">3.5</span> Projection</h2>
+<p>La projection d’une image consiste à accumuler (sommer) ou moyenner les valeurs des amplitudes de pixels le long d’un axe spécifique (lignes ou colonnes). Cette opération permet de réduire une image bidimensionnelle en un profil unidimensionnel (une dimension). En vision industrielle, les projections sont extrêmement utiles pour détecter des décalages, segmenter des lignes de texte (OCR), redresser des grilles, ou identifier rapidement des anomalies de surface avec un coût de calcul très faible.</p>
+<p>Mathématiquement, pour une image <span class="math inline">\(u_{n,m}\)</span> définie sur une grille <span class="math inline">\(N \times M\)</span> :</p>
+<p>La <strong>projection verticale</strong> (somme le long de chaque ligne <span class="math inline">\(n\)</span>) est définie par :</p>
+<p><span class="math display">\[P_v(n) = \sum_{m=0}^{M-1} u_{n,m}\]</span></p>
+<p>La <strong>projection horizontale</strong> (somme le long de chaque colonne <span class="math inline">\(m\)</span>) est définie par :</p>
+<p><span class="math display">\[P_h(m) = \sum_{n=0}^{N-1} u_{n,m}\]</span></p>
+<p><strong>Exemple d’application sur notre matrice :</strong> Reprenons notre matrice de 13 lignes (<span class="math inline">\(N=13\)</span>) et 18 colonnes (<span class="math inline">\(M=18\)</span>). Calculons la projection verticale <span class="math inline">\(P_v(n)\)</span>, c’est-à-dire la somme de l’intensité des pixels pour chaque ligne :</p>
 <ul>
-<li><strong>L’Aire (Surface du défaut ou de la pièce) :</strong> C’est simplement le moment d’ordre zéro. Si <span class="math inline">\(M_{00}\)</span> est inférieur à un seuil <span class="math inline">\(S\)</span>, on considère qu’il s’agit d’une poussière (bruit) et non d’une pièce.</li>
+<li><strong>Lignes 1 à 4 :</strong> <span class="math inline">\(10 + 25 + ... + 90 + (9 \times 100) = 1360\)</span></li>
+<li><strong>Lignes 5 à 8, 10, 12 et 13 :</strong> <span class="math inline">\(10 + 25 + ... + 90 + (9 \times 250) = 2710\)</span></li>
+<li><strong>Ligne 9 :</strong> Contient un 0 à la place d’un 250. Sa somme est donc <span class="math inline">\(2710 - 250 = 2460\)</span></li>
+<li><strong>Ligne 11 :</strong> Contient également un 0. Sa somme est de <span class="math inline">\(2460\)</span></li>
 </ul>
-<p><span class="math display">\[Aire = M_{00}\]</span></p>
-<ul>
-<li><strong>Le Centre de Gravité (Centroid) :</strong> Fondamental pour transmettre les coordonnées <span class="math inline">\((X_c, Y_c)\)</span> à un bras robotique (Pick &amp; Place) afin qu’il vienne saisir la pièce au bon endroit.</li>
-</ul>
-<p><span class="math display">\[X_c = \frac{M_{10}}{M_{00}} \quad \text{et} \quad Y_c = \frac{M_{01}}{M_{00}}\]</span></p>
-<div class="callout callout-style-default callout-note callout-titled" title="Implémentation logicielle">
+<div id="fig-projections-horiz" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-projections-horiz-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/projection_horizontale.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-projections-horiz-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.17: Profils de projection horizontale de la matrice.
+</figcaption>
+</figure>
+</div>
+<div id="fig-projections-vertic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-projections-vertic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images_dans_le_cours/projection_verticale.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-projections-vertic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.18: Profils de projection verticale de la matrice.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="L'intérêt des projections pour l'inspection industrielle">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Implémentation logicielle
+<span class="screen-reader-only">Tip</span>L’intérêt des projections pour l’inspection industrielle
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Dans l’industrie, le calcul de ces moments spatiaux est tellement critique qu’il est optimisé au niveau matériel. Sous Python, la fonction <code>cv2.moments(contour)</code> d’OpenCV calcule instantanément tous les moments spatiaux (jusqu’à l’ordre 3) d’une forme binaire.</p>
+<p>Dans cet exemple, sans avoir à analyser mathématiquement chaque pixel individuellement, la simple lecture du profil de projection verticale <span class="math inline">\(P_v(n)\)</span> montre une chute brutale de l’intensité aux lignes 9 et 11.</p>
+<p>Si nous calculons la projection horizontale <span class="math inline">\(P_h(m)\)</span>, nous observerons la même chute d’intensité (passant de 2650 à 2400) sur les colonnes 12 et 15. L’intersection de ces “creux” dans les profils 1D nous donne instantanément les coordonnées exactes des défauts (les pixels à 0) dans l’image 2D, ce qui est une méthode classique et ultra-rapide pour le contrôle qualité !</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice : Réaliser des projections
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Calculer et dessiner les projections horizontales et verticales des trois images de test créées précedement</p>
+</div>
+</div>
+<p>Outre l’histogramme et les projections, la vision industrielle (contrôle qualité, tri automatisé, guidage de robots) s’appuie massivement sur trois autres catégories de descripteurs statistiques. Dans un contexte industriel, l’objectif est toujours le même : réduire une matrice de plusieurs millions de pixels à quelques valeurs numériques scalaires pour qu’un automate puisse prendre une décision binaire (Accepter/Rejeter) en quelques millisecondes.</p>
+<p>Voici les concepts incontournables que vous pouvez ajouter à votre cours <code>.qmd</code> :</p>
+</section>
+<section id="les-moments-statistiques-globaux-analyse-de-la-luminance-1" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="les-moments-statistiques-globaux-analyse-de-la-luminance-1"><span class="header-section-number">3.6</span> Les moments statistiques globaux (Analyse de la luminance)</h2>
+<p>Plutôt que d’analyser tout l’histogramme, on se contente souvent d’en extraire les moments statistiques fondamentaux. Ils permettent de vérifier instantanément si l’éclairage de l’usine a varié (dérive machine) ou si la caméra s’est déréglée.</p>
+<p>Pour une image <span class="math inline">\(u_{n,m}\)</span> de taille <span class="math inline">\(N \times M\)</span> :</p>
+<ul>
+<li><strong>La Moyenne (Moment d’ordre 1) :</strong> Elle représente la luminosité globale de l’image (la composante continue).</li>
+</ul>
+<p><span class="math display">\[\mu = \frac{1}{N \cdot M} \sum_{n=0}^{N-1} \sum_{m=0}^{M-1} u_{n,m}\]</span></p>
+<ul>
+<li><strong>L’Écart-type (Moment d’ordre 2 centré) :</strong> Il quantifie la dispersion des niveaux de gris autour de la moyenne, c’est-à-dire le <strong>contraste macroscopique</strong> de l’image. Une image “délavée” aura un écart-type très faible.</li>
+</ul>
+<p><span class="math display">\[\sigma = \sqrt{\frac{1}{N \cdot M} \sum_{n=0}^{N-1} \sum_{m=0}^{M-1} (u_{n,m} - \mu)^2}\]</span></p>
+<section id="attention-au-dépassement-de-capacité-overflow-1" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="attention-au-dépassement-de-capacité-overflow-1"><span class="header-section-number">3.6.1</span> Attention au dépassement de capacité (Overflow)</h3>
+<p>Lorsqu’on applique la formule naïve de la moyenne (<span class="math inline">\(\sum u_{n,m}\)</span>) sur une image de grande dimension, on accumule des millions de valeurs.</p>
+<p>Prenons une image moderne en résolution 4K (<span class="math inline">\(3840 \times 2160\)</span> pixels), soit environ 8,3 millions de pixels. Si l’image est très claire (pixels proches de 255), la somme totale atteindra environ <span class="math inline">\(2,1 \times 10^9\)</span>. Cette valeur frôle la limite absolue d’un entier signé sur 32 bits (<span class="math inline">\(2^{31}-1 \approx 2,14 \times 10^9\)</span>). Sur une image de taille supérieure, la variable d’accumulation va déborder (overflow), repasser en négatif, et fausser totalement le calcul de la moyenne et de l’écart-type.</p>
+<p>En vision par ordinateur, il existe trois méthodes pour contourner ce problème matériel :</p>
+<section id="lapproche-data-science-lélévation-de-type-casting-1" class="level4" data-number="3.6.1.1">
+<h4 data-number="3.6.1.1" class="anchored" data-anchor-id="lapproche-data-science-lélévation-de-type-casting-1"><span class="header-section-number">3.6.1.1</span> L’approche “Data Science” : L’élévation de type (Casting)</h4>
+<p>C’est la solution de force brute utilisée par défaut dans les langages de haut niveau. Avant de commencer l’addition, on convertit la matrice d’entiers 8 bits (<code>uint8</code>) vers un type flottant 64 bits (<code>float64</code>). C’est exactement ce que fait la fonction <code>np.mean()</code> de NumPy sous le capot. L’inconvénient est que l’on multiplie par 8 la consommation de mémoire vive lors du calcul.</p>
+</section>
+<section id="lapproche-traitement-dimages-lutilisation-de-lhistogramme-1" class="level4" data-number="3.6.1.2">
+<h4 data-number="3.6.1.2" class="anchored" data-anchor-id="lapproche-traitement-dimages-lutilisation-de-lhistogramme-1"><span class="header-section-number">3.6.1.2</span> L’approche “Traitement d’images” : L’utilisation de l’histogramme</h4>
+<p>C’est la méthode la plus élégante et la plus optimisée. Puisque nous manipulons des images quantifiées sur 8 bits, il n’y a que 256 valeurs d’intensité possibles. Plutôt que d’additionner 8 millions de pixels un par un, il est mathématiquement équivalent, et beaucoup plus sûr, de se servir de l’histogramme <span class="math inline">\(h(i)\)</span> (qui contient le nombre de pixels pour chaque niveau de gris <span class="math inline">\(i\)</span>).</p>
+<p>La moyenne devient la somme de 256 termes seulement : <span class="math display">\[\mu = \frac{1}{N \cdot M} \sum_{i=0}^{255} i \cdot h(i)\]</span></p>
+<p>L’écart-type se déduit de la même manière à partir de l’histogramme : <span class="math display">\[\sigma = \sqrt{\frac{1}{N \cdot M} \sum_{i=0}^{255} (i - \mu)^2 \cdot h(i)}\]</span> Cette méthode garantit qu’aucun débordement arithmétique ne se produira, tout en étant des milliers de fois plus rapide sur un processeur bas niveau.</p>
+</section>
+<section id="lapproche-streaming-lalgorithme-de-welford-1" class="level4" data-number="3.6.1.3">
+<h4 data-number="3.6.1.3" class="anchored" data-anchor-id="lapproche-streaming-lalgorithme-de-welford-1"><span class="header-section-number">3.6.1.3</span> L’approche “Streaming” : L’algorithme de Welford</h4>
+<p>Pour les flux vidéo en temps réel ou les systèmes très contraints en mémoire (où l’on ne peut stocker ni l’image complète ni l’histogramme), on calcule la moyenne et la variance itérativement. À chaque nouveau pixel <span class="math inline">\(x_k\)</span> reçu, la moyenne <span class="math inline">\(\mu_k\)</span> est mise à jour selon la différence avec la moyenne précédente : <span class="math display">\[\mu_k = \mu_{k-1} + \frac{x_k - \mu_{k-1}}{k}\]</span> Ici, la variable d’accumulation ne dépasse jamais la valeur 255.</p>
+</section>
+</section>
+<section id="exercices-1" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="exercices-1"><span class="header-section-number">3.6.2</span> Exercices</h3>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Calcul de la moyenne et de l’écart type
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nous avons vu que la moyenne et l’écart-type mesurent deux caractéristiques distinctes d’une image (respectivement la luminosité globale et le contraste macroscopique/dispersion).</p>
+<p>Imaginez et décrivez la structure de deux images en niveaux de gris différentes qui possèdent <em>exactement</em> la même valeur moyenne, mais dont les écarts-types sont aux antipodes l’un de l’autre. Proposez deux approches différentes pour justifier votre réponse.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 1 : L'approche théorique (Cas d'école)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 1 : L’approche théorique (Cas d’école)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Image A (Écart-type nul) :</strong> Il suffit de concevoir une image parfaitement uniforme où tous les pixels possèdent exactement la même valeur (par exemple, la valeur 127 pour un gris parfait). La moyenne est de 127, et puisqu’il n’y a aucune dispersion autour de cette moyenne, l’écart-type est strictement égal à 0.</p>
+<p><strong>Image B (Écart-type maximal) :</strong> Il suffit de concevoir une image composée de 50 % de pixels noirs purs (0) et de 50 % de pixels blancs purs (254 ou 255). Peu importe leur disposition (damier géométrique ou bruit binaire aléatoire), la moyenne globale restera de 127. En revanche, tous les pixels étant situés aux extrêmes absolus de l’histogramme, la variance explose et l’écart-type atteint sa valeur maximale possible.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 2 : L'approche par dégradation (Bruit centré)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 2 : L’approche par dégradation (Bruit centré)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Image A (Image d’origine) :</strong> On choisit n’importe quelle photographie classique en niveaux de gris, qui possède donc une certaine moyenne et un certain écart-type de base.</p>
+<p><strong>Image B (Image bruitée) :</strong> On prend cette même photographie et on lui additionne un bruit artificiel (comme un bruit gaussien) très puissant, mais <strong>strictement centré sur zéro</strong> (<span class="math inline">\(\mu_{bruit} = 0\)</span>). L’astuce mathématique est ici : l’ajout d’une matrice de bruit dont la moyenne est nulle ne modifie absolument pas la luminosité globale de l’image (la moyenne globale reste identique). Par contre, ce bruit disperse aléatoirement l’intensité de chaque pixel par rapport à sa valeur d’origine, ce qui fait inévitablement croître la variance et donc l’écart-type.</p>
+</div>
 </div>
 </div>
 </section>
-<section id="lentropie-mesure-de-linformation-et-de-la-texture" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="lentropie-mesure-de-linformation-et-de-la-texture"><span class="header-section-number">3.5</span> L’Entropie (Mesure de l’information et de la texture)</h2>
+</section>
+<section id="lentropie-mesure-de-linformation-et-de-la-texture-1" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="lentropie-mesure-de-linformation-et-de-la-texture-1"><span class="header-section-number">3.7</span> L’Entropie (Mesure de l’information et de la texture)</h2>
 <p>Issue de la théorie de l’information de Shannon, l’entropie mesure le degré de désordre ou d’imprévisibilité des pixels dans l’image.</p>
 <p>Si <span class="math inline">\(p_i\)</span> est la probabilité d’apparition du niveau de gris <span class="math inline">\(i\)</span> (valeur issue de l’histogramme normalisé), l’entropie <span class="math inline">\(H\)</span> est :</p>
 <p><span class="math display">\[H = - \sum_{i=0}^{255} p_i \log_2(p_i)\]</span></p>
+<p><em>Convention mathématique : si <span class="math inline">\(p_i = 0\)</span>, on considère que <span class="math inline">\(p_i \log_2(p_i) = 0\)</span>.</em></p>
 <p><strong>Usage industriel :</strong> L’entropie est très utilisée pour la <strong>détection de flou</strong> ou l’inspection de surfaces texturées (bois, textile, métal brossé). Une image parfaitement nette d’un circuit imprimé aura une forte entropie (beaucoup de variations nettes, d’arêtes et de détails), tandis que si la caméra est floue, l’image devient lisse, les niveaux de gris se moyennent, et l’entropie chute drastiquement. L’automate peut alors déclencher une alarme de perte de focus.</p>
-
-
-<!-- -->
-
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercice : Calcul de l’entropie de Shannon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Sans utiliser de code informatique, déduisez l’entropie théorique exacte des deux images de test que nous avons générées précédemment :</p>
+<ol type="1">
+<li>La <code>mire_damier.png</code> (50% de pixels noirs à 0, 50% de pixels blancs à 255).</li>
+<li>La <code>mire_degrade.png</code> (Dégradé linéaire parfait où chaque niveau de gris de 0 à 255 est présent en quantité strictement égale).</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 1 : Entropie du Damier (Bimodal)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 1 : Entropie du Damier (Bimodal)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Calcul pour le Damier :</strong> L’image ne contient que deux valeurs. La probabilité de tirer un pixel noir est <span class="math inline">\(p_0 = 0,5\)</span> et celle de tirer un pixel blanc est <span class="math inline">\(p_{255} = 0,5\)</span>. Toutes les autres probabilités sont nulles.</p>
+<p>En appliquant la formule : <span class="math display">\[H = - (p_0 \log_2(p_0) + p_{255} \log_2(p_{255}))\]</span> <span class="math display">\[H = - (0,5 \cdot \log_2(0,5) + 0,5 \cdot \log_2(0,5))\]</span></p>
+<p>Puisque <span class="math inline">\(\log_2(0,5) = -1\)</span> : <span class="math display">\[H = - (0,5 \cdot (-1) + 0,5 \cdot (-1)) = - (-0,5 - 0,5) = 1 \text{ bit}\]</span></p>
+<p><strong>Conclusion :</strong> Il suffit d’exactement <span class="math inline">\(1\)</span> bit d’information pour coder chaque pixel de cette image (noir ou blanc).</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir la solution 2 : Entropie du Dégradé (Équiprobable)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir la solution 2 : Entropie du Dégradé (Équiprobable)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Calcul pour le Dégradé Linéaire :</strong> Ici, les 256 niveaux de gris sont présents en quantité égale. La probabilité d’apparition de chaque niveau de gris est donc constante : <span class="math inline">\(p_i = \frac{1}{256}\)</span>.</p>
+<p>En appliquant la formule sur les 256 termes : <span class="math display">\[H = - \sum_{i=0}^{255} \frac{1}{256} \log_2\left(\frac{1}{256}\right)\]</span></p>
+<p>Puisque <span class="math inline">\(\log_2\left(\frac{1}{256}\right) = -8\)</span> : <span class="math display">\[H = - \sum_{i=0}^{255} \frac{1}{256} \cdot (-8)\]</span> <span class="math display">\[H = - 256 \cdot \left( \frac{-8}{256} \right) = 8 \text{ bits}\]</span></p>
+<p><strong>Conclusion :</strong> L’entropie est maximale. Le désordre (la variété des niveaux de gris) est total. L’image contient 8 bits d’information par pixel, ce qui signifie qu’elle ne peut pas être compressée sans perte d’information.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Implémentation Python (Vérification algorithmique)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Implémentation Python (Vérification algorithmique)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>En TP, le calcul de l’entropie nécessite une petite précaution technique : il faut retirer les probabilités nulles de l’histogramme avant de calculer le logarithme, pour éviter l’erreur mathématique <code>math domain error</code> (log de 0 n’existe pas).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculer_entropie(chemin_image):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> cv2.imread(chemin_image, cv2.IMREAD_GRAYSCALE)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Calcul de l'histogramme normalisé (Probabilités)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    valeurs, occurrences <span class="op">=</span> np.unique(img, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    probabilites <span class="op">=</span> occurrences <span class="op">/</span> img.size</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. On filtre les probabilités strictement supérieures à 0</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> probabilites[probabilites <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Formule de Shannon</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    entropie <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(p <span class="op">*</span> np.log2(p))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> entropie</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Entropie du Damier : </span><span class="sc">{</span>calculer_entropie(<span class="st">'mire_damier.png'</span>)<span class="sc">:.2f}</span><span class="ss"> bits"</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Entropie du Dégradé : </span><span class="sc">{</span>calculer_entropie(<span class="st">'mire_degrade.png'</span>)<span class="sc">:.2f}</span><span class="ss"> bits"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1013,188 +1610,7 @@ Figure&nbsp;3.9: Profils de projection verticale de la matrice.
         <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Opérations ponctuelles</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Opérations statistiques</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">### Opérations statistiques</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>Les **opérations statistiques** (comme le calcul de l'histogramme ou des projections) n'altèrent pas directement l'image, mais en extraient des informations mathématiques globales sur la distribution et la géométrie des images. Elles constituent une étape d'analyse primordiale en vision industrielle pour automatiser la prise de décision, qu'il s'agisse de déterminer le seuil optimal d'une binarisation ou de localiser rapidement des anomalies de surface.</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Considèrons une image comme étant définie par une matrice $N \times M$ de coordonnées $(n,m)$ avec $n=0,1,\dots,N-1$ et $m=0,1,\dots,M-1$ et que la valeur des pixels est établie par une échelle de gris notée $$g(n,m)$. </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## L'histogramme</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>Un graphique illustrant la probabilité d'apparition de chaque valeur de pixel dans une image est appelé un histogramme. Pour construire un histogramme, il faut d'abord compter le nombre total de pixels pour chaque valeur possible présente dans l'image (noté $n_f$). Ensuite, on divise chacun de ces décomptes par le nombre total de pixels de l'image ($N \times M$) pour obtenir la valeur de probabilité. Toutes ces valeurs sont représentées dans un graphique $\text{probabilité} = h_f(f)$, où $f$ représente le niveau de gris :</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>$$h_f(f) = \frac{n_f}{N \times M} \quad (6.1)$$</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>Cette méthode est généralement appliquée à une échelle de gris mais peut également être appliquée à une seule composante d'une couleur. Nous verrons plus tard que l'histogramme permet, par exemple, de choisir une table de correspondance (LookUpTable) ou une palette de couleurs.</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>Nous pouvons également définir l'histogramme cumulé $H_f(f)$ qui représente le pourcentage de pixels ayant un niveau de gris inférieur ou égal à $f$ :</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>$$H_f(f) = \sum_{j=0}^{f} h_f(j) \quad (6.2)$$</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>**Exemple :** À partir de maintenant, les exemples utiliseront cette matrice de nombres (qui peut représenter les niveaux de gris d'une image) :</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  100 100 100 100 100 100 100 100 100</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  100 100 100 100 100 100 100 100 100</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  100 100 100 100 100 100 100 100 100</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  100 100 100 100 100 100 100 100 100</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250 250 250 250 250</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250 250 250 250 250</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250 250 250 250 250</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250 250 250 250 250</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250   0 250 250 250</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250 250 250 250 250</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250   0 250 250 250 250 250 250</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250 250 250 250 250</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="in"> 10  25  30  45  50  69  70  71  90  250 250 250 250 250 250 250 250 250</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="al">![Histogramme de la matrice d'exemple. On observe clairement un pic à 250 (le fond quasi blanc) et un groupe de pixels sombres formant le dégradé de gauche.](images_dans_le_cours/histogram.png)</span>{#fig-histogramme-exemple}</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Créer des images de test en niveaux de gris</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>Pour faire des exercices, nous allons créer trois images de test :</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol="2"}</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="al">![Mire de dégradé linéaire](images_dans_le_cours/mire_degrade.png)</span>{#fig-mire-degrade}</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol="2"}</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="al">![Mire à 8 paliers de gris](images_dans_le_cours/mire_paliers.png)</span>{#fig-mire-paliers}</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol="2"}</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="al">![Mire en damier binaire](images_dans_le_cours/mire_damier.png)</span>{#fig-mire-damier}</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Dessiner la LUT pour ces trois images</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>A partir des trois images précédemment créées, calculer et dessiner leur LUT respective.</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="al">![Histogramme plat (équiprobabilité)](images_dans_le_cours/hist_degrade.png)</span>{#fig-hist-degrade}</span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>*Le dégradé linéaire parfait distribue les pixels uniformément sur les 256 niveaux.*</span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="al">![Histogramme quantifié (8 impulsions)](images_dans_le_cours/hist_paliers.png)</span>{#fig-hist-paliers}</span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>*L'échelle à paliers illustre le phénomène de quantification spatiale.*</span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="al">![Histogramme bimodal (noir et blanc pur)](images_dans_le_cours/hist_damier.png)</span>{#fig-hist-damier}</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>*Le damier représente une distribution bimodale absolue, idéale pour démontrer le principe du seuillage.*</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Projection</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>La projection d'une image consiste à accumuler (sommer) ou moyenner les valeurs des amplitudes de pixels le long d'un axe spécifique (lignes ou colonnes). Cette opération permet de réduire une image bidimensionnelle en un profil unidimensionnel (une dimension). En vision industrielle, les projections sont extrêmement utiles pour détecter des décalages, segmenter des lignes de texte (OCR), redresser des grilles, ou identifier rapidement des anomalies de surface avec un coût de calcul très faible.</span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>Mathématiquement, pour une image $u_{n,m}$ définie sur une grille $N \times M$ :</span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>La **projection verticale** (somme le long de chaque ligne $n$) est définie par :</span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>$$P_v(n) = \sum_{m=0}^{M-1} u_{n,m}$$</span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>La **projection horizontale** (somme le long de chaque colonne $m$) est définie par :</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>$$P_h(m) = \sum_{n=0}^{N-1} u_{n,m}$$</span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>**Exemple d'application sur notre matrice :**</span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>Reprenons notre matrice de 13 lignes ($N=13$) et 18 colonnes ($M=18$). Calculons la projection verticale $P_v(n)$, c'est-à-dire la somme de l'intensité des pixels pour chaque ligne :</span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Lignes 1 à 4 :** $10 + 25 + ... + 90 + (9 \times 100) = 1360$</span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Lignes 5 à 8, 10, 12 et 13 :** $10 + 25 + ... + 90 + (9 \times 250) = 2710$</span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Ligne 9 :** Contient un 0 à la place d'un 250. Sa somme est donc $2710 - 250 = 2460$</span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Ligne 11 :** Contient également un 0. Sa somme est de $2460$</span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="al">![Profils de projection horizontale de la matrice.](images_dans_le_cours/projection_horizontale.png)</span>{#fig-projections-horiz}</span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="al">![Profils de projection verticale de la matrice.](images_dans_le_cours/projection_verticale.png)</span>{#fig-projections-vertic}</span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="L'intérêt des projections pour l'inspection industrielle"}</span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>Dans cet exemple, sans avoir à analyser mathématiquement chaque pixel individuellement, la simple lecture du profil de projection verticale $P_v(n)$ montre une chute brutale de l'intensité aux lignes 9 et 11.</span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>Si nous calculons la projection horizontale $P_h(m)$, nous observerons la même chute d'intensité (passant de 2650 à 2400) sur les colonnes 12 et 15. L'intersection de ces "creux" dans les profils 1D nous donne instantanément les coordonnées exactes des défauts (les pixels à 0) dans l'image 2D, ce qui est une méthode classique et ultra-rapide pour le contrôle qualité !</span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon="false"}</span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice : Réaliser des projections</span></span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>Calculer et dessiner les projections horizontales et verticales des trois images de test créées précedement</span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>Outre l'histogramme et les projections, la vision industrielle (contrôle qualité, tri automatisé, guidage de robots) s'appuie massivement sur trois autres catégories de descripteurs statistiques. Dans un contexte industriel, l'objectif est toujours le même : réduire une matrice de plusieurs millions de pixels à quelques valeurs numériques scalaires pour qu'un automate puisse prendre une décision binaire (Accepter/Rejeter) en quelques millisecondes.</span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>Voici les concepts incontournables que vous pouvez ajouter à votre cours <span class="in">`.qmd`</span> :</span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## Les moments statistiques globaux (Analyse de la luminance)</span></span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>Plutôt que d'analyser tout l'histogramme, on se contente souvent d'en extraire les moments statistiques fondamentaux. Ils permettent de vérifier instantanément si l'éclairage de l'usine a varié (dérive machine) ou si la caméra s'est déréglée.</span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>Pour une image $u_{n,m}$ de taille $N \times M$ :</span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**La Moyenne (Moment d'ordre 1) :**</span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>Elle représente la luminosité globale de l'image (la composante continue).</span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>$$\mu = \frac{1}{N \cdot M} \sum_{n=0}^{N-1} \sum_{m=0}^{M-1} u_{n,m}$$</span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**L'Écart-type (Moment d'ordre 2 centré) :**</span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>Il quantifie la dispersion des niveaux de gris autour de la moyenne, c'est-à-dire le **contraste macroscopique** de l'image. Une image "délavée" aura un écart-type très faible.</span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>$$\sigma = \sqrt{\frac{1}{N \cdot M} \sum_{n=0}^{N-1} \sum_{m=0}^{M-1} (u_{n,m} - \mu)^2}$$</span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a><span class="fu">## Les moments spatiaux (Analyse de "Blobs")</span></span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>C'est l'outil roi en vision industrielle. Une fois l'image binarisée (les objets d'intérêt sont à 1, le fond est à 0), on calcule les statistiques spatiales de ces taches blanches (appelées *Blobs* pour *Binary Large Objects*).</span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>Pour une image binaire $B(x,y)$, le moment spatial d'ordre $(p,q)$ est défini par :</span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>$$M_{pq} = \sum_{x} \sum_{y} x^p y^q B(x,y)$$</span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>À partir de cette formule unique, l'industrie extrait les caractéristiques géométriques :</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**L'Aire (Surface du défaut ou de la pièce) :**</span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>C'est simplement le moment d'ordre zéro. Si $M_{00}$ est inférieur à un seuil $S$, on considère qu'il s'agit d'une poussière (bruit) et non d'une pièce.</span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>$$Aire = M_{00}$$</span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Le Centre de Gravité (Centroid) :**</span>
-<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>Fondamental pour transmettre les coordonnées $(X_c, Y_c)$ à un bras robotique (Pick &amp; Place) afin qu'il vienne saisir la pièce au bon endroit.</span>
-<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>$$X_c = \frac{M_{10}}{M_{00}} \quad \text{et} \quad Y_c = \frac{M_{01}}{M_{00}}$$</span>
-<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Implémentation logicielle"}</span>
-<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>Dans l'industrie, le calcul de ces moments spatiaux est tellement critique qu'il est optimisé au niveau matériel. Sous Python, la fonction <span class="in">`cv2.moments(contour)`</span> d'OpenCV calcule instantanément tous les moments spatiaux (jusqu'à l'ordre 3) d'une forme binaire.</span>
-<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## L'Entropie (Mesure de l'information et de la texture)</span></span>
-<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>Issue de la théorie de l'information de Shannon, l'entropie mesure le degré de désordre ou d'imprévisibilité des pixels dans l'image.</span>
-<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>Si $p_i$ est la probabilité d'apparition du niveau de gris $i$ (valeur issue de l'histogramme normalisé), l'entropie $H$ est :</span>
-<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>$$H = - \sum_{i=0}^{255} p_i \log_2(p_i)$$</span>
-<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a>**Usage industriel :**</span>
-<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>L'entropie est très utilisée pour la **détection de flou** ou l'inspection de surfaces texturées (bois, textile, métal brossé). Une image parfaitement nette d'un circuit imprimé aura une forte entropie (beaucoup de variations nettes, d'arêtes et de détails), tandis que si la caméra est floue, l'image devient lisse, les niveaux de gris se moyennent, et l'entropie chute drastiquement. L'automate peut alors déclencher une alarme de perte de focus.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
 
 
