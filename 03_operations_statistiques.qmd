@@ -77,6 +77,26 @@ A partir des trois images précédemment créées, calculer et dessiner leur LUT
 *Le damier représente une distribution bimodale absolue, idéale pour démontrer le principe du seuillage.*
 
 
+Plutôt que de compter les pixels avec des boucles imbriquées, vous pouvez directement utiliser la fonction `calcHist()` d’OpenCV :
+
+```python
+hist = cv2.calcHist([img], [0], None, [256], [0, 256])
+```
+
+Dans ce code, la variable `hist` est un tableau de 256 valeurs correspondant au nombre de pixels pour chaque niveau de gris (l'indice du tableau). Par exemple, `hist[134]` donne le nombre exact de pixels ayant comme niveau de gris 134.
+
+::: {.callout-note icon="false"}
+### Exercices complémentaires
+1. Affichez l’histogramme d’un des exemples fournis sous forme d’une image en utilisant la fonction `calcHist()` ci-dessus.
+2. Comparez cette méthode avec celle des exercices précédents (boucles imbriquées) et estimez le temps d'exécution algorithmique pour voir laquelle est la plus rapide.
+:::
+
+
+::: {.callout-note title="Remarque sur les outils de visualisation"}
+Il existe des bibliothèques Python dédiées qui simplifient grandement la création et l’affichage de graphiques, dont les histogrammes. Vous pouvez, par exemple, vous servir de **Matplotlib**. L’apprentissage spécifique de cette bibliothèque ne fait pas partie intégrante de ce cours, mais vous êtes tout à fait libres de l'utiliser si vous le souhaitez pour vos TPs.
+:::
+
+
 ## Projection
 
 La projection d'une image consiste à accumuler (sommer) ou moyenner les valeurs des amplitudes de pixels le long d'un axe spécifique (lignes ou colonnes). Cette opération permet de réduire une image bidimensionnelle en un profil unidimensionnel (une dimension). En vision industrielle, les projections sont extrêmement utiles pour détecter des décalages, segmenter des lignes de texte (OCR), redresser des grilles, ou identifier rapidement des anomalies de surface avec un coût de calcul très faible.
@@ -244,6 +264,7 @@ $$H = - 256 \cdot \left( \frac{-8}{256} \right) = 8 \text{ bits}$$
 ::: {.callout-note collapse="true" title="Implémentation Python (Vérification algorithmique)"}
 En TP, le calcul de l'entropie nécessite une petite précaution technique : il faut retirer les probabilités nulles de l'histogramme avant de calculer le logarithme, pour éviter l'erreur mathématique `math domain error` (log de 0 n'existe pas).
 
+
 ```python
 import cv2
 import numpy as np
@@ -264,3 +285,5 @@ def calculer_entropie(chemin_image):
 
 print(f"Entropie du Damier : {calculer_entropie('mire_damier.png'):.2f} bits")
 print(f"Entropie du Dégradé : {calculer_entropie('mire_degrade.png'):.2f} bits")
+```
+:::

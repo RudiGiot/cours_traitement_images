@@ -1,0 +1,168 @@
+# Opérations géométriques
+
+Dans ce chapitre, nous allons étudier les transformations géométriques qui impliquent des modifications spatiales de l'image. En traitement d’images, redimensionner ou recadrer une image est souvent une étape préliminaire indispensable pour diminuer la charge mémoire, accélérer les calculs processeur ou isoler une région d'intérêt (ROI). Nous aborderons ensuite les transformations affines de base (translation, retournement, rotation), qui sont particulièrement utiles pour normaliser des données, recadrer une image numérisée "de travers" ou faire de l'augmentation de données (Data Augmentation) en apprentissage automatique.
+
+## Redimensionnement (Resize)
+
+Pour modifier la taille d'une image, on utilise la fonction `cv2.resize()`. Ses paramètres principaux sont l’image source, un tuple définissant la nouvelle taille absolue en pixels `(largeur, hauteur)`, et la méthode d'interpolation mathématique à utiliser pour calculer la valeur des nouveaux pixels créés.
+
+```python
+import cv2
+
+# Redimensionnement absolu à 200x200 pixels
+nouvelle_taille = (200, 200)
+img_resized = cv2.resize(img, nouvelle_taille, interpolation=cv2.INTER_AREA)
+
+```
+
+::: {.callout-note title="Les méthodes d'interpolation"}
+Le choix de l'interpolation est crucial selon l'opération :
+
+* `cv2.INTER_NEAREST` : Plus proche voisin. Très rapide, mais crée un effet d'escalier (crénelage). Utile pour zoomer sur des pixels bruts ou des masques binaires.
+* `cv2.INTER_LINEAR` : Bilinéaire (par défaut). Bon compromis vitesse/qualité pour les agrandissements.
+* `cv2.INTER_CUBIC` : Bicubique. Plus lent, mais offre le meilleur rendu visuel pour agrandir une image sans la flouter excessivement.
+* `cv2.INTER_AREA` : Ré-échantillonnage de surface. C'est la méthode recommandée pour **réduire** la taille d'une image sans générer de motifs d'interférences (moiré).
+:::
+
+::: {.callout-important title="Exercices : Redimensionnement"}
+
+1. Appliquez différents types d’interpolations (particulièrement `INTER_CUBIC` et `INTER_NEAREST`) pour réduire, agrandir, écraser et étirer une image de test. Zoomez sur les résultats et observez les différences de rendu sur les contours.
+2. Écrivez une fonction personnalisée `redimensionner_pourcentage(img, scale_percent)` qui redimensionne l’image de manière proportionnelle en fonction d'un pourcentage donné. *Indice : Utilisez les propriétés `img.shape[0]` (hauteur) et `img.shape[1]` (largeur).*
+:::
+
+## Extraction (Crop)
+
+Contrairement à d'autres langages, OpenCV en Python ne possède pas de fonction `crop()` spécifique. Puisqu'une image est une matrice NumPy, l'extraction d'une sous-région se fait via le découpage standard des tableaux (Slicing).
+
+**Attention à l'ordre des axes :** En NumPy, la syntaxe est `matrice[lignes, colonnes]`, ce qui correspond géométriquement à `image[y_debut:y_fin, x_debut:x_fin]`.
+
+```python
+# Extrait un carré contenant les 200 premières lignes et 200 premières colonnes
+img_cropped = img[0:200, 0:200]
+
+```
+
+::: {.callout-important title="Exercice : Extraction"}
+Par essai-erreur (en ajustant les coordonnées), extrayez uniquement la tête du chat sur l'image [du chat](images_pour_les_exercices/cat.bmp)
+ fournie en TP, puis affichez le résultat à l’écran.
+:::
+
+## Inversion et Retournement (Flip)
+
+L'inversion géométrique (effet miroir) d'une image s'effectue via la fonction `cv2.flip(img, flipCode)`. Le paramètre `flipCode` détermine l'axe de symétrie :
+
+* `0` : Inversion verticale (autour de l'axe X).
+* `1` : Inversion horizontale (autour de l'axe Y).
+* `-1` : Inversion sur les deux axes simultanément (équivaut à une rotation de 180°).
+
+```python
+# Applique un effet miroir horizontal
+img_miroir = cv2.flip(img, 1)
+
+```
+
+::: {.callout-important title="Exercice : Effet miroir"}
+Testez la fonction `cv2.flip` avec les trois codes possibles (0, 1, -1) pour réaliser toutes les inversions géométriques d’une image test.
+:::
+
+## Translation
+
+La translation consiste à déplacer tous les pixels d’une image d’un vecteur de déplacement $(t_x, t_y)$ vers le haut, le bas, la gauche ou la droite. En vision par ordinateur, cette opération est modélisée par une **matrice de transformation affine** de taille $2 \times 3$ :
+
+$$M = \begin{bmatrix} 1 & 0 & t_x \\ 0 & 1 & t_y \end{bmatrix}$$
+
+::: {.callout-important title="Exercice : Translation manuelle et matricielle"}
+
+1. Imaginez et implémentez une fonction naïve avec des boucles `for` pour réaliser une translation de 50 pixels vers la droite et 30 vers le bas. Que se passe-t-il pour les pixels qui "sortent" de l'image ?
+2. OpenCV utilise la fonction `cv2.warpAffine(img, M, (largeur, hauteur))` pour appliquer cette matrice. Documentez-vous sur cette fonction et utilisez-la pour réaliser la même translation de manière optimisée.
+:::
+
+## Rotation
+
+La rotation mathématique est une transformation affine complexe. Pour faire tourner un point $(x, y)$ autour de l'origine $(0,0)$ d'un angle $\theta$, on applique les équations trigonométriques suivantes pour trouver ses nouvelles coordonnées $(x', y')$ :
+
+$$x' = x \cdot \cos(\theta) - y \cdot \sin(\theta)$$
+
+$$y' = x \cdot \sin(\theta) + y \cdot \cos(\theta)$$
+
+::: {.callout-important title="Exercices : Algorithmique de la rotation"}
+Implémentez le système d'équations ci-dessus dans une fonction Python :
+
+1. Faites tourner une image d'un angle donné en calculant la nouvelle position de chaque pixel.
+2. Essayez différents angles et visualisez les résultats. **Discutez des deux problèmes majeurs qui apparaissent** (Indice : regardez ce qu'il se passe autour des bords de l'image, et observez la texture de l'image générée).
+3. Faites subir à une image une rotation de 65°, puis prenez le résultat et appliquez une rotation inverse de -65°. Observez et commentez la dégradation de l'information (flou, perte de pixels) par rapport à l'image originale.
+:::
+
+### Résolution des problèmes de pixélisation (Holes)
+
+Lorsqu'on applique la formule mathématique directe (Forward Mapping), un pixel d'origine est projeté vers de nouvelles coordonnées à virgule flottante. L'écran ne pouvant afficher que des pixels entiers, on arrondit ces coordonnées. Cela crée des "trous" (pixels noirs non affectés) et un effet de pixélisation sévère dans l'image de destination.
+
+Pour éviter cela, les bibliothèques industrielles comme OpenCV utilisent le **Backward Mapping** (Rétro-projection) :
+Au lieu de chercher où va le pixel d'entrée, l'algorithme parcourt chaque pixel de l'image de *destination*, applique la **rotation inverse**, et regarde où il "tombe" sur l'image source. On utilise ensuite une interpolation (bilinéaire ou bicubique) des 4 pixels voisins de la source pour calculer la couleur exacte à rapatrier.
+
+::: {.callout-important title="Exercice : La rotation optimisée avec OpenCV"}
+Il existe évidemment une approche intégrée dans OpenCV pour réaliser des rotations parfaites sans "trous", en générant une matrice de rotation autour d'un centre arbitraire.
+
+1. Cherchez la fonction `cv2.getRotationMatrix2D()` dans la documentation.
+2. Appliquez cette matrice avec `cv2.warpAffine()`.
+3. Commentez la différence de qualité avec votre fonction manuelle, et documentez comment éviter que l'image ne soit rognée lors de sa rotation.
+:::
+
+Voici la section sur le redressement de perspective, rédigée dans le même esprit académique et pratique que le reste de votre chapitre. J'y ai inclus la théorie mathématique de l'homographie et des exercices pratiques utilisant une grille (ou un document) comme exemple d'école.
+
+Vous pouvez copier-coller ce bloc directement à la suite de la section sur les rotations :
+
+
+## Redressement de perspective (Homographie)
+
+Jusqu'à présent, nous avons étudié des transformations **affines** (translation, redimensionnement, rotation). La particularité d'une transformation affine est qu'elle préserve toujours le parallélisme : deux lignes parallèles dans l'image d'origine resteront parallèles dans l'image d'arrivée. 
+
+Cependant, lorsque l'on photographie une scène réelle (comme une grille au sol, un ticket de caisse ou une plaque d'immatriculation) avec un certain angle, l'effet de perspective (ou erreur de parallaxe) fait converger les lignes parallèles vers un point de fuite. 
+
+Pour "redresser" l'image et obtenir une vue parfaitement frontale (orthogonale), nous devons appliquer une **transformation de perspective** (aussi appelée homographie). 
+
+Mathématiquement, cette opération utilise une matrice de transformation $3 \times 3$ (notée $H$) appliquée aux coordonnées homogènes des pixels :
+
+$$\begin{bmatrix} x' \\ y' \\ w' \end{bmatrix} = \begin{bmatrix} h_{11} & h_{12} & h_{13} \\ h_{21} & h_{22} & h_{23} \\ h_{31} & h_{32} & h_{33} \end{bmatrix} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}$$
+
+*Les nouvelles coordonnées finales du pixel sur l'écran seront $x_{final} = x'/w'$ et $y_{final} = y'/w'$.*
+
+### Implémentation avec OpenCV
+
+Pour calculer cette matrice de transformation $H$, l'algorithme a besoin de connaître la position exacte de **4 points spécifiques** dans l'image source (formant un quadrilatère quelconque) et leur position souhaitée dans l'image de destination (formant généralement un rectangle parfait).
+
+```python
+import cv2
+import numpy as np
+
+# 1. Définition des 4 coins de l'objet déformé dans l'image source
+# Ordre : Haut-Gauche, Haut-Droite, Bas-Gauche, Bas-Droite
+pts_source = np.float32([[56, 65], [368, 52], [28, 387], [389, 390]])
+
+# 2. Définition des 4 coins géométriques parfaits de l'image d'arrivée
+# On veut redresser l'objet pour qu'il rentre dans un carré de 300x300
+pts_destination = np.float32([[0, 0], [300, 0], [0, 300], [300, 300]])
+
+# 3. Calcul de la matrice d'homographie 3x3
+M_perspective = cv2.getPerspectiveTransform(pts_source, pts_destination)
+
+# 4. Application de la déformation à l'image complète
+img_redressee = cv2.warpPerspective(img, M_perspective, (300, 300))
+
+```
+
+::: {.callout-note title="L'importance de l'ordre des points"}
+Il est crucial que l'ordre des points source corresponde exactement à l'ordre des points de destination. Si vous inversez deux points, la matrice va virtuellement "plier" ou "tordre" l'image sur elle-même (comme un sablier).
+:::
+
+::: {.callout-important title="Exercices : Redressement d'une grille"}
+Pour cet exercice, utilisez l'image d'une grille (par exemple une grille de Sudoku ou un échiquier) photographiée avec un fort angle de biais.
+
+1. **Méthode manuelle :** Ouvrez l'image dans un logiciel d'édition (comme Paint, GIMP ou l'aperçu de votre OS) et notez manuellement les coordonnées $(x,y)$ des 4 coins géométriques de la grille déformée.
+2. **Redressement :** Utilisez ces coordonnées dans un script Python avec `cv2.getPerspectiveTransform` et `cv2.warpPerspective` pour générer une nouvelle image où la grille apparaît sous forme d'un carré plat et frontal de 500x500 pixels.
+3. **Analyse de l'interpolation :** Zoomez fortement sur les lignes de votre grille redressée. Que remarquez-vous sur la netteté des pixels de la zone qui était la plus éloignée de l'objectif par rapport à la zone qui était la plus proche ? Expliquez ce phénomène (création mathématique d'information).
+:::
+
+::: {.callout-tip title="Aller plus loin : Détection automatique des coins (Vision Avancée)"}
+Dans les applications industrielles (comme les applications de scan de documents sur smartphone), on ne rentre pas les coordonnées à la main. On couple cette transformation géométrique avec des algorithmes de détection de contours (Filtre de Canny) et de détection de polygones (`cv2.approxPolyDP`) pour localiser automatiquement les 4 coins de la feuille ou de la grille avant d'appliquer la matrice.
+:::

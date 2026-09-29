@@ -20,6 +20,7 @@ book:
         - 03_operations_statistiques.qmd
         - 04_operations_pixel_vers_pixel.qmd
         - 05_operations_voisinage.qmd
+        - 06_operations_geometriques.qmd
     - part: "III. Cas d'Utilisation"
       chapters:
         - 10_use_cases_industrie.qmd
