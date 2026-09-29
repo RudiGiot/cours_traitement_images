@@ -234,6 +234,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_operations_geometriques.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Opérations géométriques</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -248,7 +254,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./10_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
   </div>
 </li>
       </ul>
@@ -265,6 +271,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#opérations-monadiques" id="toc-opérations-monadiques" class="nav-link active" data-scroll-target="#opérations-monadiques"><span class="header-section-number">4.1</span> Opérations monadiques</a></li>
   <li><a href="#opérations-dyadiques" id="toc-opérations-dyadiques" class="nav-link" data-scroll-target="#opérations-dyadiques"><span class="header-section-number">4.2</span> Opérations dyadiques</a></li>
+  <li><a href="#opérations-arithmétiques-dyadiques" id="toc-opérations-arithmétiques-dyadiques" class="nav-link" data-scroll-target="#opérations-arithmétiques-dyadiques"><span class="header-section-number">4.3</span> Opérations arithmétiques (Dyadiques)</a></li>
   </ul>
 </nav>
     </div>
@@ -401,6 +408,93 @@ Figure&nbsp;4.1: Représentations graphiques de quatre opérations ponctuelles (
 </figcaption>
 </figure>
 </div>
+<p>Dans OpenCV, l’opération vectorisée de LUT s’effectue grâce à la fonction :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>img_modifiee <span class="op">=</span> cv2.LUT(img_source, table_lut)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="exercice-1-linversion-dimage-le-négatif" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="exercice-1-linversion-dimage-le-négatif"><span class="header-section-number">4.1.3</span> Exercice 1 : L’inversion d’image (Le Négatif)</h3>
+<p>L’inversion vidéo (ou négatif) d’une image consiste à remplacer le noir par du blanc, et inversement. Mathématiquement, la nouvelle valeur d’un pixel <span class="math inline">\(p'\)</span> à partir de sa valeur d’origine <span class="math inline">\(p\)</span> est : <span class="math inline">\(p' = 255 - p\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercice : Création d'une LUT simple">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercice : Création d’une LUT simple
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>En utilisant la bibliothèque NumPy, générez un tableau de 256 éléments (de type <code>uint8</code>) qui contiendra notre LUT.</li>
+<li>Remplissez ce tableau pour qu’à l’indice <code>0</code>, la valeur stockée soit <code>255</code>, et qu’à l’indice <code>255</code>, la valeur stockée soit <code>0</code>.</li>
+<li>Appliquez cette LUT sur une image de votre choix avec <code>cv2.LUT()</code> et affichez le résultat.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Voir un indice pour la création du tableau NumPy">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Voir un indice pour la création du tableau NumPy
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Vous pouvez créer la table de base avec <code>lut = np.arange(256, dtype=np.uint8)</code> puis appliquer votre opération vectorielle directement sur ce tableau de 256 valeurs avant de le passer à <code>cv2.LUT</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-2-la-correction-gamma-et-le-benchmarking" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="exercice-2-la-correction-gamma-et-le-benchmarking"><span class="header-section-number">4.1.4</span> Exercice 2 : La Correction Gamma et le “Benchmarking”</h3>
+<p>La correction Gamma est une transformation non-linéaire utilisée pour corriger la luminance d’une image (notamment pour l’adapter à la perception de l’œil humain ou aux caractéristiques d’un écran). La formule appliquée à chaque pixel d’intensité <span class="math inline">\(I\)</span> est :</p>
+<p><span class="math display">\[O = 255 \times \left( \frac{I}{255} \right)^{\gamma}\]</span></p>
+<p><em>(Si <span class="math inline">\(\gamma &lt; 1\)</span>, l’image s’éclaircit. Si <span class="math inline">\(\gamma &gt; 1\)</span>, l’image s’assombrit).</em></p>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercice : Preuve de l'optimisation (Benchmark)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercice : Preuve de l’optimisation (Benchmark)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Votre objectif est de prouver empiriquement l’avantage algorithmique des LUTs.</p>
+<ol type="1">
+<li><strong>Méthode naïve :</strong> Écrivez une fonction qui parcourt l’image avec une double boucle <code>for</code> (lignes, colonnes) et applique la formule mathématique du Gamma sur chaque pixel un par un avec <code>math.pow()</code>.</li>
+<li><strong>Méthode optimisée :</strong> Créez un tableau LUT de 256 valeurs contenant les résultats précalculés de la formule Gamma, puis appliquez-le avec <code>cv2.LUT()</code>.</li>
+<li><strong>Benchmark :</strong> Utilisez le module Python <code>time</code> pour chronométrer l’exécution des deux méthodes sur une grande image haute résolution (ex: 4K). Calculez le ratio d’accélération (Speedup). Que concluez-vous sur l’implémentation industrielle du traitement d’images ?</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="exercice-3-limagerie-thermique-pseudo-couleurs" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="exercice-3-limagerie-thermique-pseudo-couleurs"><span class="header-section-number">4.1.5</span> Exercice 3 : L’imagerie thermique (Pseudo-couleurs)</h3>
+<p>Une autre utilisation majeure des LUTs se trouve en imagerie médicale (radiographie) ou industrielle (caméras thermiques). Ces capteurs produisent des images en niveaux de gris (1 canal). L’œil humain distinguant beaucoup plus de nuances de couleurs que de nuances de gris, on applique une “Fausse couleur” (Pseudo-color) pour mettre en évidence certaines plages de valeurs.</p>
+<p>Dans ce cas, la LUT ne remplace pas un gris par un autre gris, mais associe à chaque valeur de gris (de 0 à 255) un triplet <span class="math inline">\((Bleu, Vert, Rouge)\)</span>. L’image de sortie devient alors une image couleur à 3 canaux.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercice : Les Colormaps">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercice : Les Colormaps
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>OpenCV propose des LUTs de pseudo-couleurs prêtes à l’emploi via la fonction <code>cv2.applyColorMap()</code>.</p>
+<ol type="1">
+<li>Chargez une image en niveaux de gris.</li>
+<li>Utilisez la fonction <code>cv2.applyColorMap()</code> avec la constante <code>cv2.COLORMAP_JET</code> (qui fait passer les valeurs sombres en bleu et les valeurs claires en rouge).</li>
+<li>Sauvegardez le résultat. C’est exactement le principe utilisé par les caméras thermiques (ex: FLIR) pour afficher la chaleur sur les chantiers ou les circuits imprimés industriels.</li>
+<li>(<em>Optionnel</em>) Cherchez dans la documentation OpenCV les autres tables de correspondance disponibles (comme <code>COLORMAP_HOT</code> ou <code>COLORMAP_BONE</code>) et testez-les.</li>
+</ol>
+</div>
+</div>
 <hr>
 </section>
 </section>
@@ -408,20 +502,53 @@ Figure&nbsp;4.1: Représentations graphiques de quatre opérations ponctuelles (
 <h2 data-number="4.2" class="anchored" data-anchor-id="opérations-dyadiques"><span class="header-section-number">4.2</span> Opérations dyadiques</h2>
 <p>Les opérations dyadiques sont des opérations pixel par pixel impliquant deux images opérandes (les deux images sont supposées avoir même largeur et même hauteur) :</p>
 <p><span class="math display">\[g(x,y) = f_1(x,y) \circ f_2(x,y) \quad (6.3)\]</span></p>
-<section id="la-somme" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="la-somme"><span class="header-section-number">4.2.1</span> La somme</h3>
-<p>La somme de deux images est calculée par l’addition des valeurs des pixels correspondants de chaque image. Nous pouvons également attribuer un facteur d’échelle à chaque image (<span class="math inline">\(s_1\)</span> et <span class="math inline">\(s_2\)</span>) :</p>
-<p><span class="math display">\[g(x,y) = s_1 f_1(x,y) + s_2 f_2(x,y) \quad (6.4)\]</span></p>
 </section>
-<section id="minimum-et-maximum" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="minimum-et-maximum"><span class="header-section-number">4.2.2</span> Minimum et maximum</h3>
+<section id="opérations-arithmétiques-dyadiques" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="opérations-arithmétiques-dyadiques"><span class="header-section-number">4.3</span> Opérations arithmétiques (Dyadiques)</h2>
+<p>Contrairement aux opérations ponctuelles classiques qui transforment un pixel en fonction de sa propre valeur, les opérations dyadiques prennent en entrée <strong>deux images</strong> (de mêmes dimensions) pour produire une troisième image, en combinant mathématiquement leurs pixels correspondants : <span class="math display">\[I_{out}(x,y) = I_1(x,y) \text{ [opérateur] } I_2(x,y)\]</span></p>
+<p>Bien que triviales d’un point de vue mathématique, ces opérations constituent le socle de nombreuses applications de pointe en vision par ordinateur.</p>
+<section id="laddition-réduction-de-bruit-image-averaging" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="laddition-réduction-de-bruit-image-averaging"><span class="header-section-number">4.3.1</span> L’Addition : Réduction de Bruit (Image Averaging)</h3>
+<p>L’addition de deux images (ou plus) est très utilisée pour le débruitage en astrophotographie, en imagerie médicale (rayons X), ou en photographie de nuit sur smartphone (mode “Night Sight”). La somme de deux images est calculée par l’addition des valeurs des pixels correspondants de chaque image. Nous pouvons éventuellement attribuer un facteur d’échelle à chaque image (<span class="math inline">\(s_1\)</span> et <span class="math inline">\(s_2\)</span>) :</p>
+<p><span class="math display">\[g(x,y) = s_1 f_1(x,y) + s_2 f_2(x,y) \quad (6.4)\]</span></p>
+<p><strong>Exemple concret d’utilisation :</strong> Les capteurs numériques génèrent un “bruit thermique” aléatoire. Ce bruit (une sorte de grésillement sur l’image) change à chaque capture, tandis que l’objet réel photographié reste constant. Si l’on photographie une même scène <span class="math inline">\(N\)</span> fois de suite très rapidement, et que l’on additionne ces images (puis qu’on divise la somme par <span class="math inline">\(N\)</span> pour faire une moyenne), le signal réel de l’objet s’accumule, tandis que le bruit aléatoire s’annule statistiquement (sa moyenne tend vers zéro). On obtient alors une image finale extrêmement nette dans des conditions de très faible luminosité.</p>
+<p><em>Exemple OpenCV :</em> <code>cv2.addWeighted(img1, 0.5, img2, 0.5, 0)</code> permet d’additionner deux images avec un poids égal de 50%.</p>
+</section>
+<section id="la-soustraction-détection-de-mouvement-et-de-défauts" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="la-soustraction-détection-de-mouvement-et-de-défauts"><span class="header-section-number">4.3.2</span> La Soustraction : Détection de mouvement et de défauts</h3>
+<p>La soustraction (<span class="math inline">\(I_1 - I_2\)</span>) calcule la différence absolue entre deux images. C’est sans doute l’opération dyadique la plus utilisée dans l’industrie.</p>
+<p><strong>Exemples concrets d’utilisation :</strong> * <strong>Détection d’intrusion (Vidéosurveillance) :</strong> On capture l’image d’un parking vide (l’image de fond ou <em>background</em>). Chaque nouvelle image provenant de la caméra se voit soustraire cette image de fond. Si le résultat est proche de zéro (noir), rien n’a bougé. Si une silhouette apparaît en blanc dans l’image résultante, cela signifie qu’un objet (une personne, une voiture) vient de s’ajouter à la scène. * <strong>Contrôle Qualité (Vision Industrielle) :</strong> Sur une ligne de production, on compare la photographie d’un circuit imprimé sortant de l’usine avec la photographie de la “pièce parfaite de référence” (le Golden Master). La soustraction des deux images fera ressortir instantanément le moindre défaut (un composant manquant ou une soudure mal placée). * <strong>Imagerie médicale (Angiographie) :</strong> On prend une radio des vaisseaux sanguins avant l’injection d’un produit de contraste, puis une seconde après l’injection. La soustraction de la première image par la seconde fait disparaître les os et les tissus, ne laissant apparaître avec une clarté absolue que le réseau sanguin rempli par le produit.</p>
+<p><em>Attention :</em> En traitement d’images 8 bits, il ne peut pas y avoir de pixels négatifs. On utilise généralement la valeur absolue de la soustraction : <code>cv2.absdiff(img1, img2)</code>.</p>
+</section>
+<section id="la-multiplication-le-masquage-image-masking" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="la-multiplication-le-masquage-image-masking"><span class="header-section-number">4.3.3</span> La Multiplication : Le Masquage (Image Masking)</h3>
+<p>La multiplication pixel par pixel n’est quasiment jamais utilisée entre deux vraies photographies (le résultat serait visuellement chaotique et sombre). Son intérêt réside dans la multiplication d’une photographie par un <strong>masque binaire</strong>.</p>
+<p><strong>L’intérêt concret :</strong> Un masque binaire est une image contenant uniquement des pixels noirs (valeur logique <span class="math inline">\(0\)</span>) et des pixels blancs (valeur logique <span class="math inline">\(1\)</span>). En multipliant une photographie par ce masque, les zones correspondant au blanc (<span class="math inline">\(I(x,y) \times 1 = I(x,y)\)</span>) sont conservées intactes, tandis que les zones correspondant au noir (<span class="math inline">\(I(x,y) \times 0 = 0\)</span>) sont totalement effacées.</p>
+<p>C’est la base du : * <strong>Détourage et composition (Chroma Keying) :</strong> La technologie du fond vert au cinéma. Une fois le vert identifié, on génère un masque binaire pour multiplier et effacer le fond, avant d’additionner un nouveau décor. * <strong>Traitement localisé (Region of Interest - ROI) :</strong> En imagerie satellitaire, si un algorithme doit analyser uniquement l’eau, on multiplie la vue satellite par un masque géographique qui met les terres émergées à zéro. L’algorithme ne traitera ensuite que les pixels non nuls, économisant ainsi des temps de calcul massifs.</p>
+</section>
+<section id="le-minimum-et-le-maximum-fusion-sélective" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="le-minimum-et-le-maximum-fusion-sélective"><span class="header-section-number">4.3.4</span> Le Minimum et le Maximum (Fusion sélective)</h3>
 <p>Ces opérations découlent d’une comparaison entre deux images ou plus. Cela peut être utilisé, par exemple, pour extraire les valeurs maximales et minimales apparaissant au sein d’une séquence vidéo d’un objet filmé sur une période donnée.</p>
 <p><span class="math display">\[g(x,y) = \min(f_1(x,y), f_2(x,y)) \quad (6.5)\]</span></p>
 <p><span class="math display">\[g(x,y) = \max(f_1(x,y), f_2(x,y)) \quad (6.6)\]</span></p>
+<p><strong>Exemples concrets :</strong></p>
+<ul>
+<li><strong>Le Maximum (Génération de filés d’étoiles / Star Trails) :</strong> En astrophotographie, si l’on prend des centaines de photos du ciel nocturne depuis un trépied fixe, la Terre tourne mais le fond du ciel reste noir. En appliquant un opérateur <code>MAX</code> sur toute la pile d’images, on ne conserve à chaque position que le pixel le plus lumineux (l’étoile). Le résultat est une image montrant la trajectoire circulaire des étoiles sans pour autant surexposer le ciel de fond (ce qui arriverait avec une simple addition).</li>
+<li><strong>Le Minimum (Extraction de fond) :</strong> À l’inverse, imaginez une caméra filmant une rue passante en plein jour. Si l’on compile 100 images de cette rue avec l’opérateur <code>MIN</code>, les voitures blanches ou claires qui passent seront ignorées au profit de l’asphalte gris foncé qui se trouve derrière elles. C’est une technique redoutable pour “effacer” les objets clairs en mouvement et reconstituer le décor vide.</li>
+</ul>
+<p><em>Exemples OpenCV :</em> <code>cv2.max(img1, img2)</code> et <code>cv2.min(img1, img2)</code>.</p>
 </section>
-<section id="opérations-logiques" class="level3" data-number="4.2.3">
-<h3 data-number="4.2.3" class="anchored" data-anchor-id="opérations-logiques"><span class="header-section-number">4.2.3</span> Opérations logiques</h3>
+<section id="les-opérateurs-logiques-and-or-xor" class="level3" data-number="4.3.5">
+<h3 data-number="4.3.5" class="anchored" data-anchor-id="les-opérateurs-logiques-and-or-xor"><span class="header-section-number">4.3.5</span> Les Opérateurs Logiques (AND, OR, XOR)</h3>
 <p>Tout comme les opérations arithmétiques standard, les opérations logiques bit à bit (bitwise) peuvent être appliquées pixel par pixel. Celles-ci incluent les opérateurs ET (AND), OU (OR), OU exclusif (XOR) et NON (NOT). Dans chaque cas, l’opération s’applique bit à bit sur les pixels correspondants et le résultat est placé à la position identique dans l’image résultante.</p>
+<p>En traitement d’images, on les utilise donc presque exclusivement sur des <strong>images binaires</strong> (noir et blanc).</p>
+<p>Pour un informaticien, ces opérations sont fondamentales car elles sont exécutées directement par l’ALU (Unité Arithmétique et Logique) du processeur. Elles sont donc infiniment plus rapides qu’une multiplication arithmétique.</p>
+<p><strong>L’intérêt concret de l’opérateur ET (AND) : L’Extraction optimisée</strong></p>
+<p>L’opérateur <code>AND</code> logique est la méthode standard dans l’industrie pour appliquer un masque (plutôt que la multiplication abordée précédemment). * <span class="math inline">\(1 \text{ AND } 1 = 1\)</span> (Le pixel est conservé) * <span class="math inline">\(1 \text{ AND } 0 = 0\)</span> (Le pixel est effacé) * <em>Application :</em> Pour isoler un visage détecté par un algorithme IA, on crée un masque binaire en forme d’ellipse autour du visage. Un simple <code>cv2.bitwise_and(img_originale, img_originale, mask=masque_visage)</code> permet de mettre à zéro tout le reste de l’image de manière ultra-optimisée, préparant l’image pour un algorithme de reconnaissance faciale.</p>
+<p><strong>L’intérêt concret de l’opérateur OU (OR) : La fusion de masques</strong></p>
+<p>L’opérateur <code>OR</code> permet d’additionner des conditions géométriques ou des régions d’intérêt. * <em>Application :</em> Supposons qu’un algorithme de vision pour véhicule autonome génère un masque binaire contenant les piétons (Masque A) et un autre algorithme génère un masque contenant les cyclistes (Masque B). Pour obtenir la carte globale des “humains à éviter”, on ne fait pas une addition mathématique (qui risquerait de créer des dépassements de capacité si un piéton et un vélo se superposent), on utilise un OU logique : <code>cv2.bitwise_or(masque_A, masque_B)</code>. Les deux régions fusionnent parfaitement.</p>
+<p><strong>L’intérêt concret du OU EXCLUSIF (XOR) : La détection de changement</strong></p>
+<p>L’opérateur <code>XOR</code> renvoie vrai uniquement si les deux pixels sont différents. * <em>Application :</em> Si on compare le masque binaire d’une tumeur médicale généré au mois de janvier avec celui du même patient au mois de mars, un <code>cv2.bitwise_xor(masque_janvier, masque_mars)</code> affichera uniquement les zones où la tumeur a grossi ou rétréci. Les zones restées identiques (qu’elles soient de la tumeur ou du tissu sain) s’annuleront et deviendront noires.</p>
 
 
 <!-- -->
@@ -893,113 +1020,236 @@ Figure&nbsp;4.1: Représentations graphiques de quatre opérations ponctuelles (
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Opérations ponctuelles</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Les « opérations ponctuelles », également appelées opérations « pixel vers pixel », sont des transformations d'images dans lesquelles les valeurs des pixels individuels sont modifiées selon une opération notée :</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>$$g(n,m) = T_{n,m}(f(n,m))$$</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>*(si l'opérateur $T_{n,m}$ dépend de la position du pixel)*</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ou par :</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>$$g(n,m) = T(f(n,m))$$</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>*(si la règle ne dépend pas de la position)*</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Opérations monadiques</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>Les opérations monadiques (ou unaires) sont des opérations pixel par pixel n'utilisant qu'une seule image en opérande.</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">### Le seuillage (Thresholding)</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>L'un des besoins les plus courants en transformation de pixels est la génération d'une représentation binaire d'une image. Les applications évidentes sont l'impression et l'analyse d'images. Cela consiste simplement à attribuer à chaque pixel un bit $0$ ou un bit $1$ (noir ou blanc). De nombreuses techniques existent (essentiellement pour l'impression), mais la plus simple consiste à définir un seuil. Si la valeur du pixel est supérieure au seuil, le bit devient $1$, sinon il devient $0$.</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>Pour une image d'entrée $u_{n,m}$ et un seuil défini $t$, l'opération ponctuelle de binarisation génère une image de sortie $v_{n,m}$ (composée classiquement de valeurs binaires 0 et 1) selon la règle mathématique suivante :</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>$$v_{n,m} = \begin{cases}  1 &amp; \text{si } u_{n,m} &gt; t <span class="sc">\\</span>  0 &amp; \text{si } u_{n,m} \le t  \end{cases}$$</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>*(Note : Dans la pratique informatique sur 8 bits, comme illustré dans l'exemple de votre matrice, la valeur maximale 1 est généralement rééchelonnée à 255 pour correspondre au blanc pur).*</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>L'histogramme ou la projection peut nous aider à trouver une valeur de seuil. En regardant notre exemple précédent, il semble qu'une valeur située entre $120$ et $240$ sera probablement le bon seuil pour binariser cette image.</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>**Exemple d'application d'un seuil de 180 :**</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255   0 255 255 255</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255   0 255 255 255 255 255 255</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Les tables de correspondance (LUT - Look Up Tables)</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>Ces tables de correspondance permettent d'associer une valeur d'entrée à une valeur de sortie. La fonction $T$ est utilisée pour faire la liaison, permettant de modifier chaque valeur de pixel exactement selon nos besoins. Si nous traitons une image couleur, nous utiliserons trois tables (selon le mode de représentation TSL, RVB, etc.).</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>Sur une image en niveaux de gris non modifiée par une LUT, la fonction de transfert serait une simple ligne inclinée à 45°. Une LUT qui inverse l'image (effet négatif) serait représentée par une ligne inclinée à -45°.</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>Les avantages de l'utilisation d'une LUT par rapport à d'autres implémentations sont sa flexibilité et sa rapidité. Il suffit de recharger la table pour modifier l'opération. De plus, la LUT est une méthode très rapide puisqu'elle ne nécessite qu'un seul adressage indirect par pixel en mémoire.</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>Cette implémentation peut également être matérielle. Les circuits de sortie vidéo d'un système de vision industrielle sont souvent équipés de LUT matérielles, permettant de manipuler les contrastes et les couleurs instantanément.</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>**Exemples de LUT :**</span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Nom de l'opération <span class="pp">|</span> Description mathématique <span class="pp">|</span> Paramètres <span class="pp">|</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="pp">| ---</span> <span class="pp">| ---</span> <span class="pp">| ---</span> <span class="pp">|</span></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Seuillage** (Thresholding) <span class="pp">|</span> $g(x,y) = \begin{cases} 255 &amp; \text{si } f(x,y) &gt; t <span class="sc">\\</span> 0 &amp; \text{sinon} \end{cases}$ <span class="pp">|</span> $t$ : seuil <span class="pp">|</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Seuillage multiple** (Multi-thresholding) <span class="pp">|</span> Différents paliers de sortie conditionnés <span class="pp">|</span> $t_i$ : i-ème seuil, $l_i$ : i-ème niveau ($t_i &lt; t_{i+1}$) <span class="pp">|</span></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Plancher** (Floor) <span class="pp">|</span> $g(x,y) = \max(f(x,y), c_f)$ <span class="pp">|</span> $c_f$ : plancher <span class="pp">|</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Plafond** (Ceiling) <span class="pp">|</span> $g(x,y) = \min(f(x,y), c_c)$ <span class="pp">|</span> $c_c$ : plafond <span class="pp">|</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Écrêtage** (Clip) <span class="pp">|</span> $g(x,y) = \min(\max(f(x,y), c_f), c_c)$ <span class="pp">|</span> $c_f$ : plancher, $c_c$ : plafond <span class="pp">|</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Décalage** (Offset) <span class="pp">|</span> $g(x,y) = f(x,y) + \text{offset}$ <span class="pp">|</span> offset <span class="pp">|</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Mise à l'échelle** (Scale) <span class="pp">|</span> $g(x,y) = \text{scale} \times f(x,y)$ <span class="pp">|</span> scale <span class="pp">|</span></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Carré** (Square) <span class="pp">|</span> $g(x,y) = f(x,y)^2$ <span class="pp">|</span>  <span class="pp">|</span></span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Racine carrée** (Square root) <span class="pp">|</span> $g(x,y) = \sqrt{f(x,y)}$ <span class="pp">|</span>  <span class="pp">|</span></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="al">![Représentations graphiques de quatre opérations ponctuelles (LUT) usuelles. L'axe des abscisses représente l'intensité du pixel en entrée ($u$), et l'axe des ordonnées l'intensité recalculée en sortie ($v$).](images_dans_le_cours/lut.png)</span>{#fig-exemples-lut}</span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="fu">## Opérations dyadiques</span></span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>Les opérations dyadiques sont des opérations pixel par pixel impliquant deux images opérandes (les deux images sont supposées avoir même largeur et même hauteur) :</span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = f_1(x,y) \circ f_2(x,y) \quad (6.3)$$</span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### La somme</span></span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>La somme de deux images est calculée par l'addition des valeurs des pixels correspondants de chaque image. Nous pouvons également attribuer un facteur d'échelle à chaque image ($s_1$ et $s_2$) :</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = s_1 f_1(x,y) + s_2 f_2(x,y) \quad (6.4)$$</span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### Minimum et maximum</span></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>Ces opérations découlent d'une comparaison entre deux images ou plus. Cela peut être utilisé, par exemple, pour extraire les valeurs maximales et minimales apparaissant au sein d'une séquence vidéo d'un objet filmé sur une période donnée.</span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = \min(f_1(x,y), f_2(x,y)) \quad (6.5)$$</span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = \max(f_1(x,y), f_2(x,y)) \quad (6.6)$$</span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="fu">### Opérations logiques</span></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>Tout comme les opérations arithmétiques standard, les opérations logiques bit à bit (bitwise) peuvent être appliquées pixel par pixel. Celles-ci incluent les opérateurs ET (AND), OU (OR), OU exclusif (XOR) et NON (NOT). Dans chaque cas, l'opération s'applique bit à bit sur les pixels correspondants et le résultat est placé à la position identique dans l'image résultante.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Opérations ponctuelles</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Les « opérations ponctuelles », également appelées opérations « pixel vers pixel », sont des transformations d'images dans lesquelles les valeurs des pixels individuels sont modifiées selon une opération notée :</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>$$g(n,m) = T_{n,m}(f(n,m))$$</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>*(si l'opérateur $T_{n,m}$ dépend de la position du pixel)*</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>ou par :</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>$$g(n,m) = T(f(n,m))$$</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>*(si la règle ne dépend pas de la position)*</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Opérations monadiques</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>Les opérations monadiques (ou unaires) sont des opérations pixel par pixel n'utilisant qu'une seule image en opérande.</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">### Le seuillage (Thresholding)</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>L'un des besoins les plus courants en transformation de pixels est la génération d'une représentation binaire d'une image. Les applications évidentes sont l'impression et l'analyse d'images. Cela consiste simplement à attribuer à chaque pixel un bit $0$ ou un bit $1$ (noir ou blanc). De nombreuses techniques existent (essentiellement pour l'impression), mais la plus simple consiste à définir un seuil. Si la valeur du pixel est supérieure au seuil, le bit devient $1$, sinon il devient $0$.</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>Pour une image d'entrée $u_{n,m}$ et un seuil défini $t$, l'opération ponctuelle de binarisation génère une image de sortie $v_{n,m}$ (composée classiquement de valeurs binaires 0 et 1) selon la règle mathématique suivante :</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>$$v_{n,m} = \begin{cases}  1 &amp; \text{si } u_{n,m} &gt; t <span class="sc">\\</span>  0 &amp; \text{si } u_{n,m} \le t  \end{cases}$$</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>*(Note : Dans la pratique informatique sur 8 bits, comme illustré dans l'exemple de votre matrice, la valeur maximale 1 est généralement rééchelonnée à 255 pour correspondre au blanc pur).*</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>L'histogramme ou la projection peut nous aider à trouver une valeur de seuil. En regardant notre exemple précédent, il semble qu'une valeur située entre $120$ et $240$ sera probablement le bon seuil pour binariser cette image.</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>**Exemple d'application d'un seuil de 180 :**</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255   0 255 255 255</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255   0 255 255 255 255 255 255</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="in">  0   0   0   0   0   0   0   0   0  255 255 255 255 255 255 255 255 255</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Les tables de correspondance (LUT - Look Up Tables)</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>Ces tables de correspondance permettent d'associer une valeur d'entrée à une valeur de sortie. La fonction $T$ est utilisée pour faire la liaison, permettant de modifier chaque valeur de pixel exactement selon nos besoins. Si nous traitons une image couleur, nous utiliserons trois tables (selon le mode de représentation TSL, RVB, etc.).</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>Sur une image en niveaux de gris non modifiée par une LUT, la fonction de transfert serait une simple ligne inclinée à 45°. Une LUT qui inverse l'image (effet négatif) serait représentée par une ligne inclinée à -45°.</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>Les avantages de l'utilisation d'une LUT par rapport à d'autres implémentations sont sa flexibilité et sa rapidité. Il suffit de recharger la table pour modifier l'opération. De plus, la LUT est une méthode très rapide puisqu'elle ne nécessite qu'un seul adressage indirect par pixel en mémoire.</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>Cette implémentation peut également être matérielle. Les circuits de sortie vidéo d'un système de vision industrielle sont souvent équipés de LUT matérielles, permettant de manipuler les contrastes et les couleurs instantanément.</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>**Exemples de LUT :**</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Nom de l'opération <span class="pp">|</span> Description mathématique <span class="pp">|</span> Paramètres <span class="pp">|</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="pp">| ---</span> <span class="pp">| ---</span> <span class="pp">| ---</span> <span class="pp">|</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Seuillage** (Thresholding) <span class="pp">|</span> $g(x,y) = \begin{cases} 255 &amp; \text{si } f(x,y) &gt; t <span class="sc">\\</span> 0 &amp; \text{sinon} \end{cases}$ <span class="pp">|</span> $t$ : seuil <span class="pp">|</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Seuillage multiple** (Multi-thresholding) <span class="pp">|</span> Différents paliers de sortie conditionnés <span class="pp">|</span> $t_i$ : i-ème seuil, $l_i$ : i-ème niveau ($t_i &lt; t_{i+1}$) <span class="pp">|</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Plancher** (Floor) <span class="pp">|</span> $g(x,y) = \max(f(x,y), c_f)$ <span class="pp">|</span> $c_f$ : plancher <span class="pp">|</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Plafond** (Ceiling) <span class="pp">|</span> $g(x,y) = \min(f(x,y), c_c)$ <span class="pp">|</span> $c_c$ : plafond <span class="pp">|</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Écrêtage** (Clip) <span class="pp">|</span> $g(x,y) = \min(\max(f(x,y), c_f), c_c)$ <span class="pp">|</span> $c_f$ : plancher, $c_c$ : plafond <span class="pp">|</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Décalage** (Offset) <span class="pp">|</span> $g(x,y) = f(x,y) + \text{offset}$ <span class="pp">|</span> offset <span class="pp">|</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Mise à l'échelle** (Scale) <span class="pp">|</span> $g(x,y) = \text{scale} \times f(x,y)$ <span class="pp">|</span> scale <span class="pp">|</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Carré** (Square) <span class="pp">|</span> $g(x,y) = f(x,y)^2$ <span class="pp">|</span>  <span class="pp">|</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Racine carrée** (Square root) <span class="pp">|</span> $g(x,y) = \sqrt{f(x,y)}$ <span class="pp">|</span>  <span class="pp">|</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="al">![Représentations graphiques de quatre opérations ponctuelles (LUT) usuelles. L'axe des abscisses représente l'intensité du pixel en entrée ($u$), et l'axe des ordonnées l'intensité recalculée en sortie ($v$).](images_dans_le_cours/lut.png)</span>{#fig-exemples-lut}</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>Dans OpenCV, l'opération vectorisée de LUT s'effectue grâce à la fonction :</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>img_modifiee <span class="op">=</span> cv2.LUT(img_source, table_lut)</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 1 : L'inversion d'image (Le Négatif)</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>L'inversion vidéo (ou négatif) d'une image consiste à remplacer le noir par du blanc, et inversement. Mathématiquement, la nouvelle valeur d'un pixel $p'$ à partir de sa valeur d'origine $p$ est : $p' = 255 - p$.</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercice : Création d'une LUT simple"}</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>En utilisant la bibliothèque NumPy, générez un tableau de 256 éléments (de type <span class="in">`uint8`</span>) qui contiendra notre LUT.</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Remplissez ce tableau pour qu'à l'indice <span class="in">`0`</span>, la valeur stockée soit <span class="in">`255`</span>, et qu'à l'indice <span class="in">`255`</span>, la valeur stockée soit <span class="in">`0`</span>.</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Appliquez cette LUT sur une image de votre choix avec <span class="in">`cv2.LUT()`</span> et affichez le résultat.</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip collapse="true" title="Voir un indice pour la création du tableau NumPy"}</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>Vous pouvez créer la table de base avec <span class="in">`lut = np.arange(256, dtype=np.uint8)`</span> puis appliquer votre opération vectorielle directement sur ce tableau de 256 valeurs avant de le passer à <span class="in">`cv2.LUT`</span>.</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 2 : La Correction Gamma et le "Benchmarking"</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>La correction Gamma est une transformation non-linéaire utilisée pour corriger la luminance d'une image (notamment pour l'adapter à la perception de l'œil humain ou aux caractéristiques d'un écran). La formule appliquée à chaque pixel d'intensité $I$ est :</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>$$O = 255 \times \left( \frac{I}{255} \right)^{\gamma}$$</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>*(Si $\gamma &lt; 1$, l'image s'éclaircit. Si $\gamma &gt; 1$, l'image s'assombrit).*</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercice : Preuve de l'optimisation (Benchmark)"}</span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>Votre objectif est de prouver empiriquement l'avantage algorithmique des LUTs.</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Méthode naïve :** Écrivez une fonction qui parcourt l'image avec une double boucle <span class="in">`for`</span> (lignes, colonnes) et applique la formule mathématique du Gamma sur chaque pixel un par un avec <span class="in">`math.pow()`</span>.</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Méthode optimisée :** Créez un tableau LUT de 256 valeurs contenant les résultats précalculés de la formule Gamma, puis appliquez-le avec <span class="in">`cv2.LUT()`</span>.</span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Benchmark :** Utilisez le module Python <span class="in">`time`</span> pour chronométrer l'exécution des deux méthodes sur une grande image haute résolution (ex: 4K). Calculez le ratio d'accélération (Speedup). Que concluez-vous sur l'implémentation industrielle du traitement d'images ?</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a><span class="fu">### Exercice 3 : L'imagerie thermique (Pseudo-couleurs)</span></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>Une autre utilisation majeure des LUTs se trouve en imagerie médicale (radiographie) ou industrielle (caméras thermiques). Ces capteurs produisent des images en niveaux de gris (1 canal). L'œil humain distinguant beaucoup plus de nuances de couleurs que de nuances de gris, on applique une "Fausse couleur" (Pseudo-color) pour mettre en évidence certaines plages de valeurs.</span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>Dans ce cas, la LUT ne remplace pas un gris par un autre gris, mais associe à chaque valeur de gris (de 0 à 255) un triplet $(Bleu, Vert, Rouge)$. L'image de sortie devient alors une image couleur à 3 canaux.</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercice : Les Colormaps"}</span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>OpenCV propose des LUTs de pseudo-couleurs prêtes à l'emploi via la fonction <span class="in">`cv2.applyColorMap()`</span>.</span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Chargez une image en niveaux de gris.</span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Utilisez la fonction <span class="in">`cv2.applyColorMap()`</span> avec la constante <span class="in">`cv2.COLORMAP_JET`</span> (qui fait passer les valeurs sombres en bleu et les valeurs claires en rouge).</span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Sauvegardez le résultat. C'est exactement le principe utilisé par les caméras thermiques (ex: FLIR) pour afficher la chaleur sur les chantiers ou les circuits imprimés industriels.</span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>(*Optionnel*) Cherchez dans la documentation OpenCV les autres tables de correspondance disponibles (comme <span class="in">`COLORMAP_HOT`</span> ou <span class="in">`COLORMAP_BONE`</span>) et testez-les.</span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## Opérations dyadiques</span></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>Les opérations dyadiques sont des opérations pixel par pixel impliquant deux images opérandes (les deux images sont supposées avoir même largeur et même hauteur) :</span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = f_1(x,y) \circ f_2(x,y) \quad (6.3)$$</span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Opérations arithmétiques (Dyadiques)</span></span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>Contrairement aux opérations ponctuelles classiques qui transforment un pixel en fonction de sa propre valeur, les opérations dyadiques prennent en entrée **deux images** (de mêmes dimensions) pour produire une troisième image, en combinant mathématiquement leurs pixels correspondants : </span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>$$I_{out}(x,y) = I_1(x,y) \text{ <span class="co">[</span><span class="ot">opérateur</span><span class="co">]</span> } I_2(x,y)$$</span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>Bien que triviales d'un point de vue mathématique, ces opérations constituent le socle de nombreuses applications de pointe en vision par ordinateur.</span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a><span class="fu">### L'Addition : Réduction de Bruit (Image Averaging)</span></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>L'addition de deux images (ou plus) est très utilisée pour le débruitage en astrophotographie, en imagerie médicale (rayons X), ou en photographie de nuit sur smartphone (mode "Night Sight").</span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>La somme de deux images est calculée par l'addition des valeurs des pixels correspondants de chaque image. Nous pouvons éventuellement attribuer un facteur d'échelle à chaque image ($s_1$ et $s_2$) :</span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = s_1 f_1(x,y) + s_2 f_2(x,y) \quad (6.4)$$</span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a>**Exemple concret d'utilisation :**</span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>Les capteurs numériques génèrent un "bruit thermique" aléatoire. Ce bruit (une sorte de grésillement sur l'image) change à chaque capture, tandis que l'objet réel photographié reste constant.</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>Si l'on photographie une même scène $N$ fois de suite très rapidement, et que l'on additionne ces images (puis qu'on divise la somme par $N$ pour faire une moyenne), le signal réel de l'objet s'accumule, tandis que le bruit aléatoire s'annule statistiquement (sa moyenne tend vers zéro). On obtient alors une image finale extrêmement nette dans des conditions de très faible luminosité.</span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>*Exemple OpenCV :* <span class="in">`cv2.addWeighted(img1, 0.5, img2, 0.5, 0)`</span> permet d'additionner deux images avec un poids égal de 50%.</span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a><span class="fu">### La Soustraction : Détection de mouvement et de défauts</span></span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>La soustraction ($I_1 - I_2$) calcule la différence absolue entre deux images. C'est sans doute l'opération dyadique la plus utilisée dans l'industrie.</span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>**Exemples concrets d'utilisation :**</span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Détection d'intrusion (Vidéosurveillance) :** On capture l'image d'un parking vide (l'image de fond ou *background*). Chaque nouvelle image provenant de la caméra se voit soustraire cette image de fond. Si le résultat est proche de zéro (noir), rien n'a bougé. Si une silhouette apparaît en blanc dans l'image résultante, cela signifie qu'un objet (une personne, une voiture) vient de s'ajouter à la scène.</span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Contrôle Qualité (Vision Industrielle) :** Sur une ligne de production, on compare la photographie d'un circuit imprimé sortant de l'usine avec la photographie de la "pièce parfaite de référence" (le Golden Master). La soustraction des deux images fera ressortir instantanément le moindre défaut (un composant manquant ou une soudure mal placée).</span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Imagerie médicale (Angiographie) :** On prend une radio des vaisseaux sanguins avant l'injection d'un produit de contraste, puis une seconde après l'injection. La soustraction de la première image par la seconde fait disparaître les os et les tissus, ne laissant apparaître avec une clarté absolue que le réseau sanguin rempli par le produit.</span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>*Attention :* En traitement d'images 8 bits, il ne peut pas y avoir de pixels négatifs. On utilise généralement la valeur absolue de la soustraction : <span class="in">`cv2.absdiff(img1, img2)`</span>.</span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a><span class="fu">### La Multiplication : Le Masquage (Image Masking)</span></span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a>La multiplication pixel par pixel n'est quasiment jamais utilisée entre deux vraies photographies (le résultat serait visuellement chaotique et sombre). Son intérêt réside dans la multiplication d'une photographie par un **masque binaire**.</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a>**L'intérêt concret :**</span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a>Un masque binaire est une image contenant uniquement des pixels noirs (valeur logique $0$) et des pixels blancs (valeur logique $1$).</span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>En multipliant une photographie par ce masque, les zones correspondant au blanc ($I(x,y) \times 1 = I(x,y)$) sont conservées intactes, tandis que les zones correspondant au noir ($I(x,y) \times 0 = 0$) sont totalement effacées.</span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>C'est la base du :</span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Détourage et composition (Chroma Keying) :** La technologie du fond vert au cinéma. Une fois le vert identifié, on génère un masque binaire pour multiplier et effacer le fond, avant d'additionner un nouveau décor.</span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Traitement localisé (Region of Interest - ROI) :** En imagerie satellitaire, si un algorithme doit analyser uniquement l'eau, on multiplie la vue satellite par un masque géographique qui met les terres émergées à zéro. L'algorithme ne traitera ensuite que les pixels non nuls, économisant ainsi des temps de calcul massifs.</span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a><span class="fu">### Le Minimum et le Maximum (Fusion sélective)</span></span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a>Ces opérations découlent d'une comparaison entre deux images ou plus. Cela peut être utilisé, par exemple, pour extraire les valeurs maximales et minimales apparaissant au sein d'une séquence vidéo d'un objet filmé sur une période donnée.</span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = \min(f_1(x,y), f_2(x,y)) \quad (6.5)$$</span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a>$$g(x,y) = \max(f_1(x,y), f_2(x,y)) \quad (6.6)$$</span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a>**Exemples concrets :**</span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Le Maximum (Génération de filés d'étoiles / Star Trails) :** En astrophotographie, si l'on prend des centaines de photos du ciel nocturne depuis un trépied fixe, la Terre tourne mais le fond du ciel reste noir. En appliquant un opérateur <span class="in">`MAX`</span> sur toute la pile d'images, on ne conserve à chaque position que le pixel le plus lumineux (l'étoile). Le résultat est une image montrant la trajectoire circulaire des étoiles sans pour autant surexposer le ciel de fond (ce qui arriverait avec une simple addition).</span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>**Le Minimum (Extraction de fond) :** À l'inverse, imaginez une caméra filmant une rue passante en plein jour. Si l'on compile 100 images de cette rue avec l'opérateur <span class="in">`MIN`</span>, les voitures blanches ou claires qui passent seront ignorées au profit de l'asphalte gris foncé qui se trouve derrière elles. C'est une technique redoutable pour "effacer" les objets clairs en mouvement et reconstituer le décor vide.</span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a>*Exemples OpenCV :* <span class="in">`cv2.max(img1, img2)`</span> et <span class="in">`cv2.min(img1, img2)`</span>.</span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a><span class="fu">### Les Opérateurs Logiques (AND, OR, XOR)</span></span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a>Tout comme les opérations arithmétiques standard, les opérations logiques bit à bit (bitwise) peuvent être appliquées pixel par pixel. Celles-ci incluent les opérateurs ET (AND), OU (OR), OU exclusif (XOR) et NON (NOT). </span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a>Dans chaque cas, l'opération s'applique bit à bit sur les pixels correspondants et le résultat est placé à la position identique dans l'image résultante.</span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a>En traitement d'images, on les utilise donc presque exclusivement sur des **images binaires** (noir et blanc). </span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>Pour un informaticien, ces opérations sont fondamentales car elles sont exécutées directement par l'ALU (Unité Arithmétique et Logique) du processeur. Elles sont donc infiniment plus rapides qu'une multiplication arithmétique.</span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>**L'intérêt concret de l'opérateur ET (AND) : L'Extraction optimisée**</span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a>L'opérateur <span class="in">`AND`</span> logique est la méthode standard dans l'industrie pour appliquer un masque (plutôt que la multiplication abordée précédemment). </span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>$1 \text{ AND } 1 = 1$ (Le pixel est conservé)</span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>$1 \text{ AND } 0 = 0$ (Le pixel est effacé)</span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>*Application :* Pour isoler un visage détecté par un algorithme IA, on crée un masque binaire en forme d'ellipse autour du visage. Un simple <span class="in">`cv2.bitwise_and(img_originale, img_originale, mask=masque_visage)`</span> permet de mettre à zéro tout le reste de l'image de manière ultra-optimisée, préparant l'image pour un algorithme de reconnaissance faciale.</span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a>**L'intérêt concret de l'opérateur OU (OR) : La fusion de masques**</span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a>L'opérateur <span class="in">`OR`</span> permet d'additionner des conditions géométriques ou des régions d'intérêt.</span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>*Application :* Supposons qu'un algorithme de vision pour véhicule autonome génère un masque binaire contenant les piétons (Masque A) et un autre algorithme génère un masque contenant les cyclistes (Masque B). </span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a>Pour obtenir la carte globale des "humains à éviter", on ne fait pas une addition mathématique (qui risquerait de créer des dépassements de capacité si un piéton et un vélo se superposent), on utilise un OU logique : <span class="in">`cv2.bitwise_or(masque_A, masque_B)`</span>. Les deux régions fusionnent parfaitement.</span>
+<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a>**L'intérêt concret du OU EXCLUSIF (XOR) : La détection de changement**</span>
+<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a>L'opérateur <span class="in">`XOR`</span> renvoie vrai uniquement si les deux pixels sont différents. </span>
+<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a><span class="ss">*   </span>*Application :* Si on compare le masque binaire d'une tumeur médicale généré au mois de janvier avec celui du même patient au mois de mars, un <span class="in">`cv2.bitwise_xor(masque_janvier, masque_mars)`</span> affichera uniquement les zones où la tumeur a grossi ou rétréci. Les zones restées identiques (qu'elles soient de la tumeur ou du tissu sain) s'annuleront et deviendront noires.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

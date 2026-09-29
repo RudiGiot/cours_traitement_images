@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Opérations géométriques – Traitement d'Images</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./10_use_cases_industrie.html" rel="next">
+<link href="./05_operations_voisinage.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-fd0503e23dce65854c81c5baaade3bdf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_operations_statistiques.html">II. Traitements de Base</a></li><li class="breadcrumb-item"><a href="./06_operations_geometriques.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Opérations géométriques</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Traitement d’Images</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Une introduction au traitement d’images</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">I. Fondamentaux</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_images_numeriques.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Images numériques</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_codage_couleurs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Le codage des couleurs</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">II. Traitements de Base</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_operations_statistiques.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Opérations statistiques</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_operations_pixel_vers_pixel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Opérations ponctuelles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_operations_voisinage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_operations_geometriques.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Opérations géométriques</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">III. Cas d’Utilisation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_use_cases_industrie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Use cases</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#redimensionnement-resize" id="toc-redimensionnement-resize" class="nav-link active" data-scroll-target="#redimensionnement-resize"><span class="header-section-number">6.1</span> Redimensionnement (Resize)</a></li>
+  <li><a href="#extraction-crop" id="toc-extraction-crop" class="nav-link" data-scroll-target="#extraction-crop"><span class="header-section-number">6.2</span> Extraction (Crop)</a></li>
+  <li><a href="#inversion-et-retournement-flip" id="toc-inversion-et-retournement-flip" class="nav-link" data-scroll-target="#inversion-et-retournement-flip"><span class="header-section-number">6.3</span> Inversion et Retournement (Flip)</a></li>
+  <li><a href="#translation" id="toc-translation" class="nav-link" data-scroll-target="#translation"><span class="header-section-number">6.4</span> Translation</a></li>
+  <li><a href="#rotation" id="toc-rotation" class="nav-link" data-scroll-target="#rotation"><span class="header-section-number">6.5</span> Rotation</a></li>
+  <li><a href="#redressement-de-perspective-homographie" id="toc-redressement-de-perspective-homographie" class="nav-link" data-scroll-target="#redressement-de-perspective-homographie"><span class="header-section-number">6.6</span> Redressement de perspective (Homographie)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_operations_statistiques.html">II. Traitements de Base</a></li><li class="breadcrumb-item"><a href="./06_operations_geometriques.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Opérations géométriques</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Opérations géométriques</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Dans ce chapitre, nous allons étudier les transformations géométriques qui impliquent des modifications spatiales de l’image. En traitement d’images, redimensionner ou recadrer une image est souvent une étape préliminaire indispensable pour diminuer la charge mémoire, accélérer les calculs processeur ou isoler une région d’intérêt (ROI). Nous aborderons ensuite les transformations affines de base (translation, retournement, rotation), qui sont particulièrement utiles pour normaliser des données, recadrer une image numérisée “de travers” ou faire de l’augmentation de données (Data Augmentation) en apprentissage automatique.</p>
+<section id="redimensionnement-resize" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="redimensionnement-resize"><span class="header-section-number">6.1</span> Redimensionnement (Resize)</h2>
+<p>Pour modifier la taille d’une image, on utilise la fonction <code>cv2.resize()</code>. Ses paramètres principaux sont l’image source, un tuple définissant la nouvelle taille absolue en pixels <code>(largeur, hauteur)</code>, et la méthode d’interpolation mathématique à utiliser pour calculer la valeur des nouveaux pixels créés.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Redimensionnement absolu à 200x200 pixels</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>nouvelle_taille <span class="op">=</span> (<span class="dv">200</span>, <span class="dv">200</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>img_resized <span class="op">=</span> cv2.resize(img, nouvelle_taille, interpolation<span class="op">=</span>cv2.INTER_AREA)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Les méthodes d'interpolation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Les méthodes d’interpolation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Le choix de l’interpolation est crucial selon l’opération :</p>
+<ul>
+<li><code>cv2.INTER_NEAREST</code> : Plus proche voisin. Très rapide, mais crée un effet d’escalier (crénelage). Utile pour zoomer sur des pixels bruts ou des masques binaires.</li>
+<li><code>cv2.INTER_LINEAR</code> : Bilinéaire (par défaut). Bon compromis vitesse/qualité pour les agrandissements.</li>
+<li><code>cv2.INTER_CUBIC</code> : Bicubique. Plus lent, mais offre le meilleur rendu visuel pour agrandir une image sans la flouter excessivement.</li>
+<li><code>cv2.INTER_AREA</code> : Ré-échantillonnage de surface. C’est la méthode recommandée pour <strong>réduire</strong> la taille d’une image sans générer de motifs d’interférences (moiré).</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercices : Redimensionnement">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercices : Redimensionnement
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Appliquez différents types d’interpolations (particulièrement <code>INTER_CUBIC</code> et <code>INTER_NEAREST</code>) pour réduire, agrandir, écraser et étirer une image de test. Zoomez sur les résultats et observez les différences de rendu sur les contours.</li>
+<li>Écrivez une fonction personnalisée <code>redimensionner_pourcentage(img, scale_percent)</code> qui redimensionne l’image de manière proportionnelle en fonction d’un pourcentage donné. <em>Indice : Utilisez les propriétés <code>img.shape[0]</code> (hauteur) et <code>img.shape[1]</code> (largeur).</em></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="extraction-crop" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="extraction-crop"><span class="header-section-number">6.2</span> Extraction (Crop)</h2>
+<p>Contrairement à d’autres langages, OpenCV en Python ne possède pas de fonction <code>crop()</code> spécifique. Puisqu’une image est une matrice NumPy, l’extraction d’une sous-région se fait via le découpage standard des tableaux (Slicing).</p>
+<p><strong>Attention à l’ordre des axes :</strong> En NumPy, la syntaxe est <code>matrice[lignes, colonnes]</code>, ce qui correspond géométriquement à <code>image[y_debut:y_fin, x_debut:x_fin]</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extrait un carré contenant les 200 premières lignes et 200 premières colonnes</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>img_cropped <span class="op">=</span> img[<span class="dv">0</span>:<span class="dv">200</span>, <span class="dv">0</span>:<span class="dv">200</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercice : Extraction">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercice : Extraction
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Par essai-erreur (en ajustant les coordonnées), extrayez uniquement la tête du chat sur l’image <a href="images_pour_les_exercices/cat.bmp">du chat</a> fournie en TP, puis affichez le résultat à l’écran.</p>
+</div>
+</div>
+</section>
+<section id="inversion-et-retournement-flip" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="inversion-et-retournement-flip"><span class="header-section-number">6.3</span> Inversion et Retournement (Flip)</h2>
+<p>L’inversion géométrique (effet miroir) d’une image s’effectue via la fonction <code>cv2.flip(img, flipCode)</code>. Le paramètre <code>flipCode</code> détermine l’axe de symétrie :</p>
+<ul>
+<li><code>0</code> : Inversion verticale (autour de l’axe X).</li>
+<li><code>1</code> : Inversion horizontale (autour de l’axe Y).</li>
+<li><code>-1</code> : Inversion sur les deux axes simultanément (équivaut à une rotation de 180°).</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Applique un effet miroir horizontal</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>img_miroir <span class="op">=</span> cv2.flip(img, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercice : Effet miroir">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercice : Effet miroir
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Testez la fonction <code>cv2.flip</code> avec les trois codes possibles (0, 1, -1) pour réaliser toutes les inversions géométriques d’une image test.</p>
+</div>
+</div>
+</section>
+<section id="translation" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="translation"><span class="header-section-number">6.4</span> Translation</h2>
+<p>La translation consiste à déplacer tous les pixels d’une image d’un vecteur de déplacement <span class="math inline">\((t_x, t_y)\)</span> vers le haut, le bas, la gauche ou la droite. En vision par ordinateur, cette opération est modélisée par une <strong>matrice de transformation affine</strong> de taille <span class="math inline">\(2 \times 3\)</span> :</p>
+<p><span class="math display">\[M = \begin{bmatrix} 1 &amp; 0 &amp; t_x \\ 0 &amp; 1 &amp; t_y \end{bmatrix}\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercice : Translation manuelle et matricielle">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercice : Translation manuelle et matricielle
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Imaginez et implémentez une fonction naïve avec des boucles <code>for</code> pour réaliser une translation de 50 pixels vers la droite et 30 vers le bas. Que se passe-t-il pour les pixels qui “sortent” de l’image ?</li>
+<li>OpenCV utilise la fonction <code>cv2.warpAffine(img, M, (largeur, hauteur))</code> pour appliquer cette matrice. Documentez-vous sur cette fonction et utilisez-la pour réaliser la même translation de manière optimisée.</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="rotation" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="rotation"><span class="header-section-number">6.5</span> Rotation</h2>
+<p>La rotation mathématique est une transformation affine complexe. Pour faire tourner un point <span class="math inline">\((x, y)\)</span> autour de l’origine <span class="math inline">\((0,0)\)</span> d’un angle <span class="math inline">\(\theta\)</span>, on applique les équations trigonométriques suivantes pour trouver ses nouvelles coordonnées <span class="math inline">\((x', y')\)</span> :</p>
+<p><span class="math display">\[x' = x \cdot \cos(\theta) - y \cdot \sin(\theta)\]</span></p>
+<p><span class="math display">\[y' = x \cdot \sin(\theta) + y \cdot \cos(\theta)\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercices : Algorithmique de la rotation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercices : Algorithmique de la rotation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implémentez le système d’équations ci-dessus dans une fonction Python :</p>
+<ol type="1">
+<li>Faites tourner une image d’un angle donné en calculant la nouvelle position de chaque pixel.</li>
+<li>Essayez différents angles et visualisez les résultats. <strong>Discutez des deux problèmes majeurs qui apparaissent</strong> (Indice : regardez ce qu’il se passe autour des bords de l’image, et observez la texture de l’image générée).</li>
+<li>Faites subir à une image une rotation de 65°, puis prenez le résultat et appliquez une rotation inverse de -65°. Observez et commentez la dégradation de l’information (flou, perte de pixels) par rapport à l’image originale.</li>
+</ol>
+</div>
+</div>
+<section id="résolution-des-problèmes-de-pixélisation-holes" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="résolution-des-problèmes-de-pixélisation-holes"><span class="header-section-number">6.5.1</span> Résolution des problèmes de pixélisation (Holes)</h3>
+<p>Lorsqu’on applique la formule mathématique directe (Forward Mapping), un pixel d’origine est projeté vers de nouvelles coordonnées à virgule flottante. L’écran ne pouvant afficher que des pixels entiers, on arrondit ces coordonnées. Cela crée des “trous” (pixels noirs non affectés) et un effet de pixélisation sévère dans l’image de destination.</p>
+<p>Pour éviter cela, les bibliothèques industrielles comme OpenCV utilisent le <strong>Backward Mapping</strong> (Rétro-projection) : Au lieu de chercher où va le pixel d’entrée, l’algorithme parcourt chaque pixel de l’image de <em>destination</em>, applique la <strong>rotation inverse</strong>, et regarde où il “tombe” sur l’image source. On utilise ensuite une interpolation (bilinéaire ou bicubique) des 4 pixels voisins de la source pour calculer la couleur exacte à rapatrier.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercice : La rotation optimisée avec OpenCV">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercice : La rotation optimisée avec OpenCV
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Il existe évidemment une approche intégrée dans OpenCV pour réaliser des rotations parfaites sans “trous”, en générant une matrice de rotation autour d’un centre arbitraire.</p>
+<ol type="1">
+<li>Cherchez la fonction <code>cv2.getRotationMatrix2D()</code> dans la documentation.</li>
+<li>Appliquez cette matrice avec <code>cv2.warpAffine()</code>.</li>
+<li>Commentez la différence de qualité avec votre fonction manuelle, et documentez comment éviter que l’image ne soit rognée lors de sa rotation.</li>
+</ol>
+</div>
+</div>
+<p>Voici la section sur le redressement de perspective, rédigée dans le même esprit académique et pratique que le reste de votre chapitre. J’y ai inclus la théorie mathématique de l’homographie et des exercices pratiques utilisant une grille (ou un document) comme exemple d’école.</p>
+<p>Vous pouvez copier-coller ce bloc directement à la suite de la section sur les rotations :</p>
+</section>
+</section>
+<section id="redressement-de-perspective-homographie" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="redressement-de-perspective-homographie"><span class="header-section-number">6.6</span> Redressement de perspective (Homographie)</h2>
+<p>Jusqu’à présent, nous avons étudié des transformations <strong>affines</strong> (translation, redimensionnement, rotation). La particularité d’une transformation affine est qu’elle préserve toujours le parallélisme : deux lignes parallèles dans l’image d’origine resteront parallèles dans l’image d’arrivée.</p>
+<p>Cependant, lorsque l’on photographie une scène réelle (comme une grille au sol, un ticket de caisse ou une plaque d’immatriculation) avec un certain angle, l’effet de perspective (ou erreur de parallaxe) fait converger les lignes parallèles vers un point de fuite.</p>
+<p>Pour “redresser” l’image et obtenir une vue parfaitement frontale (orthogonale), nous devons appliquer une <strong>transformation de perspective</strong> (aussi appelée homographie).</p>
+<p>Mathématiquement, cette opération utilise une matrice de transformation <span class="math inline">\(3 \times 3\)</span> (notée <span class="math inline">\(H\)</span>) appliquée aux coordonnées homogènes des pixels :</p>
+<p><span class="math display">\[\begin{bmatrix} x' \\ y' \\ w' \end{bmatrix} = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; h_{33} \end{bmatrix} \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}\]</span></p>
+<p><em>Les nouvelles coordonnées finales du pixel sur l’écran seront <span class="math inline">\(x_{final} = x'/w'\)</span> et <span class="math inline">\(y_{final} = y'/w'\)</span>.</em></p>
+<section id="implémentation-avec-opencv" class="level3" data-number="6.6.1">
+<h3 data-number="6.6.1" class="anchored" data-anchor-id="implémentation-avec-opencv"><span class="header-section-number">6.6.1</span> Implémentation avec OpenCV</h3>
+<p>Pour calculer cette matrice de transformation <span class="math inline">\(H\)</span>, l’algorithme a besoin de connaître la position exacte de <strong>4 points spécifiques</strong> dans l’image source (formant un quadrilatère quelconque) et leur position souhaitée dans l’image de destination (formant généralement un rectangle parfait).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Définition des 4 coins de l'objet déformé dans l'image source</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordre : Haut-Gauche, Haut-Droite, Bas-Gauche, Bas-Droite</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>pts_source <span class="op">=</span> np.float32([[<span class="dv">56</span>, <span class="dv">65</span>], [<span class="dv">368</span>, <span class="dv">52</span>], [<span class="dv">28</span>, <span class="dv">387</span>], [<span class="dv">389</span>, <span class="dv">390</span>]])</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Définition des 4 coins géométriques parfaits de l'image d'arrivée</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># On veut redresser l'objet pour qu'il rentre dans un carré de 300x300</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>pts_destination <span class="op">=</span> np.float32([[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">300</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">300</span>], [<span class="dv">300</span>, <span class="dv">300</span>]])</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Calcul de la matrice d'homographie 3x3</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>M_perspective <span class="op">=</span> cv2.getPerspectiveTransform(pts_source, pts_destination)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Application de la déformation à l'image complète</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>img_redressee <span class="op">=</span> cv2.warpPerspective(img, M_perspective, (<span class="dv">300</span>, <span class="dv">300</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="L'importance de l'ordre des points">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>L’importance de l’ordre des points
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Il est crucial que l’ordre des points source corresponde exactement à l’ordre des points de destination. Si vous inversez deux points, la matrice va virtuellement “plier” ou “tordre” l’image sur elle-même (comme un sablier).</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Exercices : Redressement d'une grille">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Exercices : Redressement d’une grille
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pour cet exercice, utilisez l’image d’une grille (par exemple une grille de Sudoku ou un échiquier) photographiée avec un fort angle de biais.</p>
+<ol type="1">
+<li><strong>Méthode manuelle :</strong> Ouvrez l’image dans un logiciel d’édition (comme Paint, GIMP ou l’aperçu de votre OS) et notez manuellement les coordonnées <span class="math inline">\((x,y)\)</span> des 4 coins géométriques de la grille déformée.</li>
+<li><strong>Redressement :</strong> Utilisez ces coordonnées dans un script Python avec <code>cv2.getPerspectiveTransform</code> et <code>cv2.warpPerspective</code> pour générer une nouvelle image où la grille apparaît sous forme d’un carré plat et frontal de 500x500 pixels.</li>
+<li><strong>Analyse de l’interpolation :</strong> Zoomez fortement sur les lignes de votre grille redressée. Que remarquez-vous sur la netteté des pixels de la zone qui était la plus éloignée de l’objectif par rapport à la zone qui était la plus proche ? Expliquez ce phénomène (création mathématique d’information).</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Aller plus loin : Détection automatique des coins (Vision Avancée)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Aller plus loin : Détection automatique des coins (Vision Avancée)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dans les applications industrielles (comme les applications de scan de documents sur smartphone), on ne rentre pas les coordonnées à la main. On couple cette transformation géométrique avec des algorithmes de détection de contours (Filtre de Canny) et de détection de polygones (<code>cv2.approxPolyDP</code>) pour localiser automatiquement les 4 coins de la feuille ou de la grille avant d’appliquer la matrice.</p>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./05_operations_voisinage.html" class="pagination-link" aria-label="Opérations de voisinage">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Opérations de voisinage</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./10_use_cases_industrie.html" class="pagination-link" aria-label="Use cases">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Use cases</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Opérations géométriques</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Dans ce chapitre, nous allons étudier les transformations géométriques qui impliquent des modifications spatiales de l'image. En traitement d’images, redimensionner ou recadrer une image est souvent une étape préliminaire indispensable pour diminuer la charge mémoire, accélérer les calculs processeur ou isoler une région d'intérêt (ROI). Nous aborderons ensuite les transformations affines de base (translation, retournement, rotation), qui sont particulièrement utiles pour normaliser des données, recadrer une image numérisée "de travers" ou faire de l'augmentation de données (Data Augmentation) en apprentissage automatique.</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Redimensionnement (Resize)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>Pour modifier la taille d'une image, on utilise la fonction <span class="in">`cv2.resize()`</span>. Ses paramètres principaux sont l’image source, un tuple définissant la nouvelle taille absolue en pixels <span class="in">`(largeur, hauteur)`</span>, et la méthode d'interpolation mathématique à utiliser pour calculer la valeur des nouveaux pixels créés.</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Redimensionnement absolu à 200x200 pixels</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>nouvelle_taille <span class="op">=</span> (<span class="dv">200</span>, <span class="dv">200</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>img_resized <span class="op">=</span> cv2.resize(img, nouvelle_taille, interpolation<span class="op">=</span>cv2.INTER_AREA)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Les méthodes d'interpolation"}</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>Le choix de l'interpolation est crucial selon l'opération :</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`cv2.INTER_NEAREST`</span> : Plus proche voisin. Très rapide, mais crée un effet d'escalier (crénelage). Utile pour zoomer sur des pixels bruts ou des masques binaires.</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`cv2.INTER_LINEAR`</span> : Bilinéaire (par défaut). Bon compromis vitesse/qualité pour les agrandissements.</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`cv2.INTER_CUBIC`</span> : Bicubique. Plus lent, mais offre le meilleur rendu visuel pour agrandir une image sans la flouter excessivement.</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`cv2.INTER_AREA`</span> : Ré-échantillonnage de surface. C'est la méthode recommandée pour **réduire** la taille d'une image sans générer de motifs d'interférences (moiré).</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercices : Redimensionnement"}</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Appliquez différents types d’interpolations (particulièrement <span class="in">`INTER_CUBIC`</span> et <span class="in">`INTER_NEAREST`</span>) pour réduire, agrandir, écraser et étirer une image de test. Zoomez sur les résultats et observez les différences de rendu sur les contours.</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Écrivez une fonction personnalisée <span class="in">`redimensionner_pourcentage(img, scale_percent)`</span> qui redimensionne l’image de manière proportionnelle en fonction d'un pourcentage donné. *Indice : Utilisez les propriétés `img.shape[0]` (hauteur) et `img.shape[1]` (largeur).*</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extraction (Crop)</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>Contrairement à d'autres langages, OpenCV en Python ne possède pas de fonction <span class="in">`crop()`</span> spécifique. Puisqu'une image est une matrice NumPy, l'extraction d'une sous-région se fait via le découpage standard des tableaux (Slicing).</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>**Attention à l'ordre des axes :** En NumPy, la syntaxe est <span class="in">`matrice[lignes, colonnes]`</span>, ce qui correspond géométriquement à <span class="in">`image[y_debut:y_fin, x_debut:x_fin]`</span>.</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Extrait un carré contenant les 200 premières lignes et 200 premières colonnes</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>img_cropped <span class="op">=</span> img[<span class="dv">0</span>:<span class="dv">200</span>, <span class="dv">0</span>:<span class="dv">200</span>]</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercice : Extraction"}</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>Par essai-erreur (en ajustant les coordonnées), extrayez uniquement la tête du chat sur l'image <span class="co">[</span><span class="ot">du chat</span><span class="co">](images_pour_les_exercices/cat.bmp)</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a> fournie en TP, puis affichez le résultat à l’écran.</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inversion et Retournement (Flip)</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>L'inversion géométrique (effet miroir) d'une image s'effectue via la fonction <span class="in">`cv2.flip(img, flipCode)`</span>. Le paramètre <span class="in">`flipCode`</span> détermine l'axe de symétrie :</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`0`</span> : Inversion verticale (autour de l'axe X).</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`1`</span> : Inversion horizontale (autour de l'axe Y).</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`-1`</span> : Inversion sur les deux axes simultanément (équivaut à une rotation de 180°).</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Applique un effet miroir horizontal</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>img_miroir <span class="op">=</span> cv2.flip(img, <span class="dv">1</span>)</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercice : Effet miroir"}</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>Testez la fonction <span class="in">`cv2.flip`</span> avec les trois codes possibles (0, 1, -1) pour réaliser toutes les inversions géométriques d’une image test.</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Translation</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>La translation consiste à déplacer tous les pixels d’une image d’un vecteur de déplacement $(t_x, t_y)$ vers le haut, le bas, la gauche ou la droite. En vision par ordinateur, cette opération est modélisée par une **matrice de transformation affine** de taille $2 \times 3$ :</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>$$M = \begin{bmatrix} 1 &amp; 0 &amp; t_x <span class="sc">\\</span> 0 &amp; 1 &amp; t_y \end{bmatrix}$$</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercice : Translation manuelle et matricielle"}</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Imaginez et implémentez une fonction naïve avec des boucles <span class="in">`for`</span> pour réaliser une translation de 50 pixels vers la droite et 30 vers le bas. Que se passe-t-il pour les pixels qui "sortent" de l'image ?</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>OpenCV utilise la fonction <span class="in">`cv2.warpAffine(img, M, (largeur, hauteur))`</span> pour appliquer cette matrice. Documentez-vous sur cette fonction et utilisez-la pour réaliser la même translation de manière optimisée.</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rotation</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>La rotation mathématique est une transformation affine complexe. Pour faire tourner un point $(x, y)$ autour de l'origine $(0,0)$ d'un angle $\theta$, on applique les équations trigonométriques suivantes pour trouver ses nouvelles coordonnées $(x', y')$ :</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>$$x' = x \cdot \cos(\theta) - y \cdot \sin(\theta)$$</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>$$y' = x \cdot \sin(\theta) + y \cdot \cos(\theta)$$</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercices : Algorithmique de la rotation"}</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>Implémentez le système d'équations ci-dessus dans une fonction Python :</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Faites tourner une image d'un angle donné en calculant la nouvelle position de chaque pixel.</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Essayez différents angles et visualisez les résultats. **Discutez des deux problèmes majeurs qui apparaissent** (Indice : regardez ce qu'il se passe autour des bords de l'image, et observez la texture de l'image générée).</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Faites subir à une image une rotation de 65°, puis prenez le résultat et appliquez une rotation inverse de -65°. Observez et commentez la dégradation de l'information (flou, perte de pixels) par rapport à l'image originale.</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### Résolution des problèmes de pixélisation (Holes)</span></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>Lorsqu'on applique la formule mathématique directe (Forward Mapping), un pixel d'origine est projeté vers de nouvelles coordonnées à virgule flottante. L'écran ne pouvant afficher que des pixels entiers, on arrondit ces coordonnées. Cela crée des "trous" (pixels noirs non affectés) et un effet de pixélisation sévère dans l'image de destination.</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>Pour éviter cela, les bibliothèques industrielles comme OpenCV utilisent le **Backward Mapping** (Rétro-projection) :</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>Au lieu de chercher où va le pixel d'entrée, l'algorithme parcourt chaque pixel de l'image de *destination*, applique la **rotation inverse**, et regarde où il "tombe" sur l'image source. On utilise ensuite une interpolation (bilinéaire ou bicubique) des 4 pixels voisins de la source pour calculer la couleur exacte à rapatrier.</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercice : La rotation optimisée avec OpenCV"}</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>Il existe évidemment une approche intégrée dans OpenCV pour réaliser des rotations parfaites sans "trous", en générant une matrice de rotation autour d'un centre arbitraire.</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Cherchez la fonction <span class="in">`cv2.getRotationMatrix2D()`</span> dans la documentation.</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Appliquez cette matrice avec <span class="in">`cv2.warpAffine()`</span>.</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Commentez la différence de qualité avec votre fonction manuelle, et documentez comment éviter que l'image ne soit rognée lors de sa rotation.</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>Voici la section sur le redressement de perspective, rédigée dans le même esprit académique et pratique que le reste de votre chapitre. J'y ai inclus la théorie mathématique de l'homographie et des exercices pratiques utilisant une grille (ou un document) comme exemple d'école.</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>Vous pouvez copier-coller ce bloc directement à la suite de la section sur les rotations :</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a><span class="fu">## Redressement de perspective (Homographie)</span></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>Jusqu'à présent, nous avons étudié des transformations **affines** (translation, redimensionnement, rotation). La particularité d'une transformation affine est qu'elle préserve toujours le parallélisme : deux lignes parallèles dans l'image d'origine resteront parallèles dans l'image d'arrivée. </span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>Cependant, lorsque l'on photographie une scène réelle (comme une grille au sol, un ticket de caisse ou une plaque d'immatriculation) avec un certain angle, l'effet de perspective (ou erreur de parallaxe) fait converger les lignes parallèles vers un point de fuite. </span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>Pour "redresser" l'image et obtenir une vue parfaitement frontale (orthogonale), nous devons appliquer une **transformation de perspective** (aussi appelée homographie). </span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>Mathématiquement, cette opération utilise une matrice de transformation $3 \times 3$ (notée $H$) appliquée aux coordonnées homogènes des pixels :</span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>$$\begin{bmatrix} x' <span class="sc">\\</span> y' <span class="sc">\\</span> w' \end{bmatrix} = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} <span class="sc">\\</span> h_{21} &amp; h_{22} &amp; h_{23} <span class="sc">\\</span> h_{31} &amp; h_{32} &amp; h_{33} \end{bmatrix} \begin{bmatrix} x <span class="sc">\\</span> y <span class="sc">\\</span> 1 \end{bmatrix}$$</span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>*Les nouvelles coordonnées finales du pixel sur l'écran seront $x_{final} = x'/w'$ et $y_{final} = y'/w'$.*</span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="fu">### Implémentation avec OpenCV</span></span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>Pour calculer cette matrice de transformation $H$, l'algorithme a besoin de connaître la position exacte de **4 points spécifiques** dans l'image source (formant un quadrilatère quelconque) et leur position souhaitée dans l'image de destination (formant généralement un rectangle parfait).</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Définition des 4 coins de l'objet déformé dans l'image source</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordre : Haut-Gauche, Haut-Droite, Bas-Gauche, Bas-Droite</span></span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>pts_source <span class="op">=</span> np.float32([[<span class="dv">56</span>, <span class="dv">65</span>], [<span class="dv">368</span>, <span class="dv">52</span>], [<span class="dv">28</span>, <span class="dv">387</span>], [<span class="dv">389</span>, <span class="dv">390</span>]])</span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Définition des 4 coins géométriques parfaits de l'image d'arrivée</span></span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a><span class="co"># On veut redresser l'objet pour qu'il rentre dans un carré de 300x300</span></span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>pts_destination <span class="op">=</span> np.float32([[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">300</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">300</span>], [<span class="dv">300</span>, <span class="dv">300</span>]])</span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Calcul de la matrice d'homographie 3x3</span></span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>M_perspective <span class="op">=</span> cv2.getPerspectiveTransform(pts_source, pts_destination)</span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Application de la déformation à l'image complète</span></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>img_redressee <span class="op">=</span> cv2.warpPerspective(img, M_perspective, (<span class="dv">300</span>, <span class="dv">300</span>))</span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="L'importance de l'ordre des points"}</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>Il est crucial que l'ordre des points source corresponde exactement à l'ordre des points de destination. Si vous inversez deux points, la matrice va virtuellement "plier" ou "tordre" l'image sur elle-même (comme un sablier).</span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Exercices : Redressement d'une grille"}</span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>Pour cet exercice, utilisez l'image d'une grille (par exemple une grille de Sudoku ou un échiquier) photographiée avec un fort angle de biais.</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Méthode manuelle :** Ouvrez l'image dans un logiciel d'édition (comme Paint, GIMP ou l'aperçu de votre OS) et notez manuellement les coordonnées $(x,y)$ des 4 coins géométriques de la grille déformée.</span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Redressement :** Utilisez ces coordonnées dans un script Python avec <span class="in">`cv2.getPerspectiveTransform`</span> et <span class="in">`cv2.warpPerspective`</span> pour générer une nouvelle image où la grille apparaît sous forme d'un carré plat et frontal de 500x500 pixels.</span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Analyse de l'interpolation :** Zoomez fortement sur les lignes de votre grille redressée. Que remarquez-vous sur la netteté des pixels de la zone qui était la plus éloignée de l'objectif par rapport à la zone qui était la plus proche ? Expliquez ce phénomène (création mathématique d'information).</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Aller plus loin : Détection automatique des coins (Vision Avancée)"}</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>Dans les applications industrielles (comme les applications de scan de documents sur smartphone), on ne rentre pas les coordonnées à la main. On couple cette transformation géométrique avec des algorithmes de détection de contours (Filtre de Canny) et de détection de polygones (<span class="in">`cv2.approxPolyDP`</span>) pour localiser automatiquement les 4 coins de la feuille ou de la grille avant d'appliquer la matrice.</span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
