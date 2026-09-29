@@ -137,35 +137,60 @@ Il quantifie la dispersion des niveaux de gris autour de la moyenne, c'est-à-di
 
 $$\sigma = \sqrt{\frac{1}{N \cdot M} \sum_{n=0}^{N-1} \sum_{m=0}^{M-1} (u_{n,m} - \mu)^2}$$
 
+### Attention au dépassement de capacité (Overflow)
 
+Lorsqu'on applique la formule naïve de la moyenne ($\sum u_{n,m}$) sur une image de grande dimension, on accumule des millions de valeurs. 
 
-## Les moments spatiaux (Analyse de "Blobs")
+Prenons une image moderne en résolution 4K ($3840 \times 2160$ pixels), soit environ 8,3 millions de pixels. Si l'image est très claire (pixels proches de 255), la somme totale atteindra environ $2,1 \times 10^9$. 
+Cette valeur frôle la limite absolue d'un entier signé sur 32 bits ($2^{31}-1 \approx 2,14 \times 10^9$). Sur une image de taille supérieure, la variable d'accumulation va déborder (overflow), repasser en négatif, et fausser totalement le calcul de la moyenne et de l'écart-type.
 
-C'est l'outil roi en vision industrielle. Une fois l'image binarisée (les objets d'intérêt sont à 1, le fond est à 0), on calcule les statistiques spatiales de ces taches blanches (appelées *Blobs* pour *Binary Large Objects*).
+En vision par ordinateur, il existe trois méthodes pour contourner ce problème matériel :
 
-Pour une image binaire $B(x,y)$, le moment spatial d'ordre $(p,q)$ est défini par :
+#### L'approche "Data Science" : L'élévation de type (Casting)
+C'est la solution de force brute utilisée par défaut dans les langages de haut niveau. Avant de commencer l'addition, on convertit la matrice d'entiers 8 bits (`uint8`) vers un type flottant 64 bits (`float64`). C'est exactement ce que fait la fonction `np.mean()` de NumPy sous le capot. L'inconvénient est que l'on multiplie par 8 la consommation de mémoire vive lors du calcul.
 
+#### L'approche "Traitement d'images" : L'utilisation de l'histogramme
+C'est la méthode la plus élégante et la plus optimisée. Puisque nous manipulons des images quantifiées sur 8 bits, il n'y a que 256 valeurs d'intensité possibles. Plutôt que d'additionner 8 millions de pixels un par un, il est mathématiquement équivalent, et beaucoup plus sûr, de se servir de l'histogramme $h(i)$ (qui contient le nombre de pixels pour chaque niveau de gris $i$).
 
-$$M_{pq} = \sum_{x} \sum_{y} x^p y^q B(x,y)$$
+La moyenne devient la somme de 256 termes seulement :
+$$\mu = \frac{1}{N \cdot M} \sum_{i=0}^{255} i \cdot h(i)$$
 
-À partir de cette formule unique, l'industrie extrait les caractéristiques géométriques :
+L'écart-type se déduit de la même manière à partir de l'histogramme :
+$$\sigma = \sqrt{\frac{1}{N \cdot M} \sum_{i=0}^{255} (i - \mu)^2 \cdot h(i)}$$
+Cette méthode garantit qu'aucun débordement arithmétique ne se produira, tout en étant des milliers de fois plus rapide sur un processeur bas niveau.
 
-* **L'Aire (Surface du défaut ou de la pièce) :**
-C'est simplement le moment d'ordre zéro. Si $M_{00}$ est inférieur à un seuil $S$, on considère qu'il s'agit d'une poussière (bruit) et non d'une pièce.
+#### L'approche "Streaming" : L'algorithme de Welford
+Pour les flux vidéo en temps réel ou les systèmes très contraints en mémoire (où l'on ne peut stocker ni l'image complète ni l'histogramme), on calcule la moyenne et la variance itérativement. À chaque nouveau pixel $x_k$ reçu, la moyenne $\mu_k$ est mise à jour selon la différence avec la moyenne précédente :
+$$\mu_k = \mu_{k-1} + \frac{x_k - \mu_{k-1}}{k}$$
+Ici, la variable d'accumulation ne dépasse jamais la valeur 255.
 
-$$Aire = M_{00}$$
+### Exercices
 
+::: {.callout-note icon="false"}
+### Calcul de la moyenne et de l'écart type
+Nous avons vu que la moyenne et l'écart-type mesurent deux caractéristiques distinctes d'une image (respectivement la luminosité globale et le contraste macroscopique/dispersion). 
 
-* **Le Centre de Gravité (Centroid) :**
-Fondamental pour transmettre les coordonnées $(X_c, Y_c)$ à un bras robotique (Pick & Place) afin qu'il vienne saisir la pièce au bon endroit.
-
-$$X_c = \frac{M_{10}}{M_{00}} \quad \text{et} \quad Y_c = \frac{M_{01}}{M_{00}}$$
-
-
-
-::: {.callout-note title="Implémentation logicielle"}
-Dans l'industrie, le calcul de ces moments spatiaux est tellement critique qu'il est optimisé au niveau matériel. Sous Python, la fonction `cv2.moments(contour)` d'OpenCV calcule instantanément tous les moments spatiaux (jusqu'à l'ordre 3) d'une forme binaire.
+Imaginez et décrivez la structure de deux images en niveaux de gris différentes qui possèdent *exactement* la même valeur moyenne, mais dont les écarts-types sont aux antipodes l'un de l'autre. Proposez deux approches différentes pour justifier votre réponse.
 :::
+
+::: {.callout-tip collapse="true" title="Voir la solution 1 : L'approche théorique (Cas d'école)"}
+**Image A (Écart-type nul) :** 
+Il suffit de concevoir une image parfaitement uniforme où tous les pixels possèdent exactement la même valeur (par exemple, la valeur 127 pour un gris parfait). La moyenne est de 127, et puisqu'il n'y a aucune dispersion autour de cette moyenne, l'écart-type est strictement égal à 0.
+
+**Image B (Écart-type maximal) :** 
+Il suffit de concevoir une image composée de 50 % de pixels noirs purs (0) et de 50 % de pixels blancs purs (254 ou 255). Peu importe leur disposition (damier géométrique ou bruit binaire aléatoire), la moyenne globale restera de 127. En revanche, tous les pixels étant situés aux extrêmes absolus de l'histogramme, la variance explose et l'écart-type atteint sa valeur maximale possible.
+:::
+
+::: {.callout-tip collapse="true" title="Voir la solution 2 : L'approche par dégradation (Bruit centré)"}
+**Image A (Image d'origine) :** 
+On choisit n'importe quelle photographie classique en niveaux de gris, qui possède donc une certaine moyenne et un certain écart-type de base.
+
+**Image B (Image bruitée) :** 
+On prend cette même photographie et on lui additionne un bruit artificiel (comme un bruit gaussien) très puissant, mais **strictement centré sur zéro** ($\mu_{bruit} = 0$). 
+L'astuce mathématique est ici : l'ajout d'une matrice de bruit dont la moyenne est nulle ne modifie absolument pas la luminosité globale de l'image (la moyenne globale reste identique). Par contre, ce bruit disperse aléatoirement l'intensité de chaque pixel par rapport à sa valeur d'origine, ce qui fait inévitablement croître la variance et donc l'écart-type.
+:::
+
+
 
 ## L'Entropie (Mesure de l'information et de la texture)
 
@@ -173,8 +198,69 @@ Issue de la théorie de l'information de Shannon, l'entropie mesure le degré de
 
 Si $p_i$ est la probabilité d'apparition du niveau de gris $i$ (valeur issue de l'histogramme normalisé), l'entropie $H$ est :
 
-
 $$H = - \sum_{i=0}^{255} p_i \log_2(p_i)$$
+
+*Convention mathématique : si $p_i = 0$, on considère que $p_i \log_2(p_i) = 0$.*
 
 **Usage industriel :**
 L'entropie est très utilisée pour la **détection de flou** ou l'inspection de surfaces texturées (bois, textile, métal brossé). Une image parfaitement nette d'un circuit imprimé aura une forte entropie (beaucoup de variations nettes, d'arêtes et de détails), tandis que si la caméra est floue, l'image devient lisse, les niveaux de gris se moyennent, et l'entropie chute drastiquement. L'automate peut alors déclencher une alarme de perte de focus.
+
+::: {.callout-note icon="false"}
+### Exercice : Calcul de l'entropie de Shannon
+Sans utiliser de code informatique, déduisez l'entropie théorique exacte des deux images de test que nous avons générées précédemment :
+
+1. La `mire_damier.png` (50% de pixels noirs à 0, 50% de pixels blancs à 255).
+2. La `mire_degrade.png` (Dégradé linéaire parfait où chaque niveau de gris de 0 à 255 est présent en quantité strictement égale).
+::: 
+
+::: {.callout-tip collapse="true" title="Voir la solution 1 : Entropie du Damier (Bimodal)"}
+**Calcul pour le Damier :**
+L'image ne contient que deux valeurs. La probabilité de tirer un pixel noir est $p_0 = 0,5$ et celle de tirer un pixel blanc est $p_{255} = 0,5$. Toutes les autres probabilités sont nulles.
+
+En appliquant la formule :
+$$H = - (p_0 \log_2(p_0) + p_{255} \log_2(p_{255}))$$
+$$H = - (0,5 \cdot \log_2(0,5) + 0,5 \cdot \log_2(0,5))$$
+
+Puisque $\log_2(0,5) = -1$ :
+$$H = - (0,5 \cdot (-1) + 0,5 \cdot (-1)) = - (-0,5 - 0,5) = 1 \text{ bit}$$
+
+**Conclusion :** Il suffit d'exactement $1$ bit d'information pour coder chaque pixel de cette image (noir ou blanc).
+:::
+
+::: {.callout-tip collapse="true" title="Voir la solution 2 : Entropie du Dégradé (Équiprobable)"}
+**Calcul pour le Dégradé Linéaire :**
+Ici, les 256 niveaux de gris sont présents en quantité égale. La probabilité d'apparition de chaque niveau de gris est donc constante : $p_i = \frac{1}{256}$.
+
+En appliquant la formule sur les 256 termes :
+$$H = - \sum_{i=0}^{255} \frac{1}{256} \log_2\left(\frac{1}{256}\right)$$
+
+Puisque $\log_2\left(\frac{1}{256}\right) = -8$ :
+$$H = - \sum_{i=0}^{255} \frac{1}{256} \cdot (-8)$$
+$$H = - 256 \cdot \left( \frac{-8}{256} \right) = 8 \text{ bits}$$
+
+**Conclusion :** L'entropie est maximale. Le désordre (la variété des niveaux de gris) est total. L'image contient 8 bits d'information par pixel, ce qui signifie qu'elle ne peut pas être compressée sans perte d'information.
+:::
+
+::: {.callout-note collapse="true" title="Implémentation Python (Vérification algorithmique)"}
+En TP, le calcul de l'entropie nécessite une petite précaution technique : il faut retirer les probabilités nulles de l'histogramme avant de calculer le logarithme, pour éviter l'erreur mathématique `math domain error` (log de 0 n'existe pas).
+
+```python
+import cv2
+import numpy as np
+
+def calculer_entropie(chemin_image):
+    img = cv2.imread(chemin_image, cv2.IMREAD_GRAYSCALE)
+    
+    # 1. Calcul de l'histogramme normalisé (Probabilités)
+    valeurs, occurrences = np.unique(img, return_counts=True)
+    probabilites = occurrences / img.size
+    
+    # 2. On filtre les probabilités strictement supérieures à 0
+    p = probabilites[probabilites > 0]
+    
+    # 3. Formule de Shannon
+    entropie = -np.sum(p * np.log2(p))
+    return entropie
+
+print(f"Entropie du Damier : {calculer_entropie('mire_damier.png'):.2f} bits")
+print(f"Entropie du Dégradé : {calculer_entropie('mire_degrade.png'):.2f} bits")

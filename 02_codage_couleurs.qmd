@@ -84,7 +84,7 @@ Créez une image de neuf cases avec les couleurs : Rouge, Verte, Bleue, Cyan, Ma
 
 ::: {.callout-note icon="false"}
 ### Exercice : Décomposition des canaux RGB
-Chargez d'abord une image en couleur (par exemple, la mire céée précédement et ensuite le `clown.png`), décomposez-les en trois composantes R, G et B que vous affichez dans trois fenêtres différentes.
+Chargez d'abord une image en couleur (par exemple, la mire céée précédement et ensuite [l'image du clown](images_pour_les_exercices/clown.png)), décomposez-les en trois composantes R, G et B que vous affichez dans trois fenêtres différentes.
 :::
 
 ## Les modèles CMJ (CMY) et CMJN (CMYK)
@@ -251,5 +251,10 @@ Refaites l'exercice précédent en utilisant la librairie opencv. Comparez et co
 
 ::: {.callout-note icon="false"}
 ### Exercice : Décomposition des canaux HSL en utilisant opencv
-Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge (H=0, S=1, L=1). Comparez avec l'image rouge générée plus haut.
+Créez en utilisant la librairie opencv et les paramètres HSL, une image toute rouge avec le H à zéro degré, la saturation au maximum et la luminance à 50%. Comparez avec l'image rouge générée plus haut.
+:::
+
+::: {.callout-note icon="false"}
+### Exercice : "Effet Sin City"
+A partir de l'image issue de [l'affiche du film Sin City](images_pour_les_exercices/SinCity.jpg) créer un effet qui transforme toutes les couleurs de l'image en niveaux de gris, sauf les couleurs de pixels rouges qui doit rester rouges et qui doivent en plus être saturées.
 :::

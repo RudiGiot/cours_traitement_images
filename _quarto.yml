@@ -19,9 +19,10 @@ book:
       chapters:
         - 03_operations_statistiques.qmd
         - 04_operations_pixel_vers_pixel.qmd
+        - 05_operations_voisinage.qmd
     - part: "III. Cas d'Utilisation"
       chapters:
-        - 04_use_cases_industrie.qmd
+        - 10_use_cases_industrie.qmd
 
 format:
   html:

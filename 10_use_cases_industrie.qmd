@@ -1,0 +1,29 @@
+# Use cases
+
+## Les moments spatiaux (Analyse de "Blobs")
+
+C'est l'outil roi en vision industrielle. Une fois l'image binarisée (les objets d'intérêt sont à 1, le fond est à 0), on calcule les statistiques spatiales de ces taches blanches (appelées *Blobs* pour *Binary Large Objects*).
+
+Pour une image binaire $B(x,y)$, le moment spatial d'ordre $(p,q)$ est défini par :
+
+
+$$M_{pq} = \sum_{x} \sum_{y} x^p y^q B(x,y)$$
+
+À partir de cette formule unique, l'industrie extrait les caractéristiques géométriques :
+
+* **L'Aire (Surface du défaut ou de la pièce) :**
+C'est simplement le moment d'ordre zéro. Si $M_{00}$ est inférieur à un seuil $S$, on considère qu'il s'agit d'une poussière (bruit) et non d'une pièce.
+
+$$Aire = M_{00}$$
+
+
+* **Le Centre de Gravité (Centroid) :**
+Fondamental pour transmettre les coordonnées $(X_c, Y_c)$ à un bras robotique (Pick & Place) afin qu'il vienne saisir la pièce au bon endroit.
+
+$$X_c = \frac{M_{10}}{M_{00}} \quad \text{et} \quad Y_c = \frac{M_{01}}{M_{00}}$$
+
+
+
+::: {.callout-note title="Implémentation logicielle"}
+Dans l'industrie, le calcul de ces moments spatiaux est tellement critique qu'il est optimisé au niveau matériel. Sous Python, la fonction `cv2.moments(contour)` d'OpenCV calcule instantanément tous les moments spatiaux (jusqu'à l'ordre 3) d'une forme binaire.
+:::
